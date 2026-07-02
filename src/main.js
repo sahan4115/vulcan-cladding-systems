@@ -473,7 +473,7 @@ if (floatField) {
       const dt = Math.min(dtMs, 100) / 1000;
       items.forEach((it) => {
         it.y -= it.speed * dt;
-        if (it.y < -it.h - 60) it.y = fieldH + 60; /* wrap: exit top, re-enter bottom */
+        if (it.y < -it.h - 60) it.y = fieldH + 20; /* wrap: exit top, re-enter beneath the footer wedge */
         it.el.style.transform = `translate3d(0, ${it.y}px, 0)`;
       });
     });

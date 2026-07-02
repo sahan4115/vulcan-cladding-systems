@@ -658,12 +658,15 @@ html.js.reduced .statement-text .w { opacity: 1; }
 /* ---------- Contact (floating gallery finale) ---------- */
 .contact { padding: 0 0 clamp(4.5rem, 9vw, 8rem); }
 .contact-stage {
-  position: relative; min-height: clamp(540px, 78vh, 720px); overflow: hidden;
+  position: relative; min-height: clamp(540px, 78vh, 720px);
   display: grid; place-items: center; text-align: center;
   padding: clamp(4rem, 8vh, 6rem) var(--pad);
 }
-/* the field: cards drift upward continuously in three depth layers */
-.float-field { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+/* the field: cards drift upward continuously in three depth layers.
+   It extends below the stage, under the footer wedge, so cards emerge
+   from behind the navy diagonal instead of popping into white space
+   (the footer paints above — later positioned sibling). */
+.float-field { position: absolute; inset: 0 0 -220px 0; pointer-events: none; overflow: hidden; }
 .fcard { position: absolute; top: 0; left: var(--x); margin: 0; will-change: transform; }
 .fcard img {
   width: 100%; height: 100%; object-fit: cover; display: block;
