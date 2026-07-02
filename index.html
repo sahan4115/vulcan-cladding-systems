@@ -403,29 +403,37 @@
       </div>
     </section>
 
-    <!-- ============ CONTACT CTA (constellation finale) ============ -->
+    <!-- ============ CONTACT CTA (floating gallery finale) ============ -->
     <section class="contact" id="contact">
       <div class="contact-stage">
-        <div class="contact-bg" aria-hidden="true"></div>
-        <div class="contact-cards" aria-hidden="true">
-          <figure class="ccard far  cc-a"><span class="ccard-par"><img src="/assets/img/factory.jpg" alt="" loading="lazy" /></span></figure>
-          <figure class="ccard near cc-b"><span class="ccard-par"><img src="/assets/img/case-knights.jpg" alt="" loading="lazy" /></span></figure>
-          <figure class="ccard near cc-c"><span class="ccard-par"><img src="/assets/img/vulcalap.jpg" alt="" loading="lazy" /></span></figure>
-          <figure class="ccard far  cc-d"><span class="ccard-par"><img src="/assets/img/finish-macro.jpg" alt="" loading="lazy" /></span></figure>
-          <figure class="ccard near cc-e"><span class="ccard-par"><img src="/assets/img/tower-vert.jpg" alt="" loading="lazy" /></span></figure>
-          <figure class="ccard far  cc-f"><span class="ccard-par"><img src="/assets/img/series400.jpg" alt="" loading="lazy" /></span></figure>
-          <figure class="ccard near cc-g"><span class="ccard-par"><img src="/assets/img/case-leamington.jpg" alt="" loading="lazy" /></span></figure>
-          <figure class="ccard far  cc-h"><span class="ccard-par"><img src="/assets/img/vulcabar.jpg" alt="" loading="lazy" /></span></figure>
+        <!-- the field: project imagery drifting upward in three depth layers -->
+        <div class="float-field" aria-hidden="true">
+          <figure class="fcard fl-1 fa-sq" data-layer="1" style="--x: 8%"><img src="/assets/img/factory.jpg" alt="" loading="lazy" /></figure>
+          <figure class="fcard fl-1 fa-p"  data-layer="1" style="--x: 27%"><img src="/assets/img/tower-vert.jpg" alt="" loading="lazy" /></figure>
+          <figure class="fcard fl-1 fa-l"  data-layer="1" style="--x: 49%"><img src="/assets/img/case-knights.jpg" alt="" loading="lazy" /></figure>
+          <figure class="fcard fl-1 fa-sq" data-layer="1" style="--x: 71%"><img src="/assets/img/finish-macro.jpg" alt="" loading="lazy" /></figure>
+          <figure class="fcard fl-1 fa-p"  data-layer="1" style="--x: 92%"><img src="/assets/img/series400.jpg" alt="" loading="lazy" /></figure>
+          <figure class="fcard fl-2 fa-p"  data-layer="2" style="--x: 13%"><img src="/assets/img/vulcalap.jpg" alt="" loading="lazy" /></figure>
+          <figure class="fcard fl-2 fa-l"  data-layer="2" style="--x: 35%"><img src="/assets/img/case-leamington.jpg" alt="" loading="lazy" /></figure>
+          <figure class="fcard fl-2 fa-sq" data-layer="2" style="--x: 58%"><img src="/assets/img/hero.jpg" alt="" loading="lazy" /></figure>
+          <figure class="fcard fl-2 fa-p"  data-layer="2" style="--x: 79%"><img src="/assets/img/vulcabar.jpg" alt="" loading="lazy" /></figure>
+          <figure class="fcard fl-2 fa-l"  data-layer="2" style="--x: 44%"><img src="/assets/img/factory.jpg" alt="" loading="lazy" /></figure>
+          <figure class="fcard fl-3 fa-p"  data-layer="3" style="--x: 3%"><img src="/assets/img/case-knights.jpg" alt="" loading="lazy" /></figure>
+          <figure class="fcard fl-3 fa-sq" data-layer="3" style="--x: 21%"><img src="/assets/img/series400.jpg" alt="" loading="lazy" /></figure>
+          <figure class="fcard fl-3 fa-l"  data-layer="3" style="--x: 55%"><img src="/assets/img/case-leamington.jpg" alt="" loading="lazy" /></figure>
+          <figure class="fcard fl-3 fa-p"  data-layer="3" style="--x: 75%"><img src="/assets/img/tower-vert.jpg" alt="" loading="lazy" /></figure>
+          <figure class="fcard fl-3 fa-sq" data-layer="3" style="--x: 89%"><img src="/assets/img/vulcalap.jpg" alt="" loading="lazy" /></figure>
         </div>
         <div class="contact-inner">
           <h2 class="contact-title">
-            <span class="line"><span class="line-inner">Have a project</span></span>
-            <span class="line"><span class="line-inner"><strong>in mind?</strong></span></span>
+            <span class="ct-line ct-l1" data-reveal>A system built</span>
+            <span class="ct-line ct-l2" data-reveal>for every</span>
+            <span class="ct-line ct-l3" data-reveal><strong>skyline.</strong></span>
           </h2>
-          <p>Tell us about your scheme and we will point you to the right system, finish and evidence pack.</p>
+          <p data-reveal>Tell us about your scheme and we will point you to the right system, finish and evidence pack.</p>
           <!-- Placeholder CTA: contact page + name/number capture to Pipedrive at dev stage -->
-          <div class="contact-cta-wrap">
-            <button type="button" class="btn btn-solid btn-xl" data-magnetic>Start a conversation</button>
+          <div class="contact-cta-wrap" data-reveal>
+            <button type="button" class="btn btn-solid btn-xl btn-pill" data-magnetic>Start a conversation <span class="pill-arrow" aria-hidden="true">&rarr;</span></button>
           </div>
         </div>
       </div>

@@ -436,73 +436,49 @@ if (!reduce && stepsSec && dialStage) {
   });
 }
 
-/* ---------- Contact: pinned constellation finale (desktop, motion allowed) ---------- */
-mm.add('(min-width: 861px) and (prefers-reduced-motion: no-preference)', () => {
-  const stage = document.querySelector('.contact-stage');
-  splitTitle(document.querySelector('.contact-title'));
-  const cards = gsap.utils.toArray('.ccard');
-
-  /* scroll assembly: depth first, type, cards drift in, copy, then the CTA */
-  const tl = gsap.timeline({
-    defaults: { ease: 'power3.out' },
-    scrollTrigger: { trigger: stage, start: 'top top', end: '+=75%', pin: true, scrub: 0.6 },
-  });
-  tl.from('.contact-bg', { scale: 1.18, opacity: 0, duration: 0.4 }, 0)
-    .from('.contact-title .ch', { yPercent: 120, duration: 0.45, stagger: 0.012 }, 0.05)
-    .from(cards, {
-      x: (i) => (i % 2 ? 170 : -170) * (1 + (i % 3) * 0.3),
-      y: (i) => 90 + (i % 4) * 45,
-      opacity: 0,
-      rotation: (i) => (i % 2 ? 9 : -8),
-      duration: 0.5,
-      stagger: 0.05,
-    }, 0.1)
-    .from('.contact-inner p', { y: 28, opacity: 0, duration: 0.3 }, 0.55)
-    .from('.contact-cta-wrap', { y: 42, opacity: 0, duration: 0.32 }, 0.7);
-
-  /* idle drift on the images, so the wall never feels frozen */
-  const floats = cards.map((c, i) =>
-    gsap.to(c.querySelector('img'), {
-      y: `+=${9 + (i % 3) * 5}`,
-      duration: 3.2 + (i % 4) * 0.8,
-      yoyo: true,
-      repeat: -1,
-      ease: 'sine.inOut',
-      delay: (i % 5) * 0.35,
-    })
-  );
-
-  /* mouse-follow parallax, depth-weighted */
-  const layers = cards.map((c, i) => ({
-    qx: gsap.quickTo(c.querySelector('.ccard-par'), 'x', { duration: 1.1, ease: 'power3.out' }),
-    qy: gsap.quickTo(c.querySelector('.ccard-par'), 'y', { duration: 1.1, ease: 'power3.out' }),
-    depth: (c.classList.contains('near') ? 26 : 12) * (i % 2 ? 1 : -1),
+/* ---------- Contact: floating gallery field — cards drift upward forever ---------- */
+const floatField = document.querySelector('.float-field');
+if (floatField) {
+  const fcards = gsap.utils.toArray('.fcard');
+  const SPEED = { 1: 14, 2: 26, 3: 42 }; /* px per second, by depth layer */
+  let fieldH = 0;
+  const items = fcards.map((el, i) => ({
+    el,
+    /* small deterministic variance so same-layer cards don't move in lockstep */
+    speed: SPEED[el.dataset.layer] * (1 + ((i % 3) - 1) * 0.14),
+    y: 0,
+    h: 120,
   }));
-  const bgx = gsap.quickTo('.contact-bg', 'x', { duration: 1.4, ease: 'power3.out' });
-  const bgy = gsap.quickTo('.contact-bg', 'y', { duration: 1.4, ease: 'power3.out' });
-  const onMove = (e) => {
-    const nx = e.clientX / window.innerWidth - 0.5;
-    const ny = e.clientY / window.innerHeight - 0.5;
-    layers.forEach(({ qx, qy, depth }) => {
-      qx(nx * depth * 1.6);
-      qy(ny * depth);
+  const fieldLayout = () => {
+    fieldH = floatField.offsetHeight;
+    items.forEach((it, i) => {
+      it.h = it.el.offsetHeight || 120;
+      /* golden-ratio scatter spreads cards evenly but non-uniformly down the field */
+      it.y = ((i * 0.618034) % 1) * (fieldH + 240) - 120;
+      it.el.style.transform = `translate3d(0, ${it.y}px, 0)`;
     });
-    bgx(nx * -14);
-    bgy(ny * -10);
   };
-  stage.addEventListener('pointermove', onMove);
+  fieldLayout();
+  window.addEventListener('resize', fieldLayout);
 
-  return () => {
-    stage.removeEventListener('pointermove', onMove);
-    floats.forEach((f) => f.kill());
-    if (tl.scrollTrigger) tl.scrollTrigger.kill();
-    tl.kill();
-    gsap.set(
-      ['.ccard', '.ccard-par', '.ccard img', '.contact-bg', '.contact-title .ch', '.contact-inner p', '.contact-cta-wrap'],
-      { clearProps: 'all' }
-    );
-  };
-});
+  if (!reduce) {
+    /* run only while the section is on screen */
+    let fieldVisible = false;
+    const fio = new IntersectionObserver((es) => {
+      fieldVisible = es.some((e) => e.isIntersecting);
+    });
+    fio.observe(floatField);
+    gsap.ticker.add((t, dtMs) => {
+      if (!fieldVisible) return;
+      const dt = Math.min(dtMs, 100) / 1000;
+      items.forEach((it) => {
+        it.y -= it.speed * dt;
+        if (it.y < -it.h - 60) it.y = fieldH + 60; /* wrap: exit top, re-enter bottom */
+        it.el.style.transform = `translate3d(0, ${it.y}px, 0)`;
+      });
+    });
+  }
+}
 
 /* ---------- Case studies: expanding gallery ---------- */
 const cols = gsap.utils.toArray('.exp-col');
