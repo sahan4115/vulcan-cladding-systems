@@ -96,7 +96,7 @@ html.js.reduced .preloader, html.js .preloader.done { display: none; }
 .pre-bar:nth-child(2) { background: var(--lblue); }
 .pre-bar:nth-child(3) { background: var(--grey); }
 .pre-bar:nth-child(4) { background: var(--white); }
-.pre-logo { background: var(--white); padding: 8px 12px; opacity: 0; }
+.pre-logo { width: 150px; height: auto; color: var(--white); opacity: 0; }
 
 /* ---------- Nav ---------- */
 .nav {
@@ -108,7 +108,9 @@ html.js.reduced .preloader, html.js .preloader.done { display: none; }
   display: flex; align-items: center; gap: 2.2rem;
   padding: 0 var(--pad);
 }
-.nav-logo img { width: 132px; height: auto; background: var(--white); padding: 6px 10px; }
+.nav-logo { display: flex; }
+.logo-mark { width: 140px; height: auto; display: block; }
+.nav-logo .logo-mark { color: var(--white); transition: color 0.3s var(--ease); }
 .nav-links { display: flex; gap: 1.9rem; margin-left: auto; align-items: center; }
 .nav-links a, .nav-soon {
   font-size: 0.92rem; font-weight: 600; text-decoration: none; color: var(--white);
@@ -120,7 +122,7 @@ html.js.reduced .preloader, html.js .preloader.done { display: none; }
 .nav-cta { padding: 0.7rem 1.3rem; font-size: 0.88rem; }
 .nav.scrolled { background: var(--white); box-shadow: 0 1px 0 var(--hairline); }
 .nav.scrolled .nav-links a, .nav.scrolled .nav-soon { color: var(--ink); }
-.nav.scrolled .nav-logo img { background: transparent; padding: 6px 0; }
+.nav.scrolled .nav-logo .logo-mark { color: var(--blue); }
 
 .nav-burger { display: none; background: none; border: 0; cursor: pointer; padding: 10px 4px; margin-left: auto; }
 .nav-burger span { display: block; width: 26px; height: 2px; background: var(--white); margin: 6px 0; transition: transform 0.3s var(--ease); }
@@ -456,7 +458,8 @@ html.js.reduced .marquee-track { animation: none; }
   display: flex; justify-content: space-between; align-items: center;
   gap: 2rem; flex-wrap: wrap;
 }
-.footer-logo img { width: 132px; height: auto; background: var(--white); padding: 6px 10px; }
+.footer-logo { display: flex; }
+.footer-logo .logo-mark { width: 140px; color: var(--white); }
 .footer-nav { display: flex; gap: clamp(1.4rem, 3vw, 2.6rem); flex-wrap: wrap; }
 .footer-nav a { text-decoration: none; color: var(--white); font-size: 0.95rem; font-weight: 600; transition: color 0.25s; }
 .footer-nav a:hover { color: var(--lblue); }
@@ -487,7 +490,7 @@ html.js.reduced [data-clip] { clip-path: none; }
   .nav-links, .nav-cta { display: none; }
   .nav-burger { display: block; }
   .nav-inner { height: 64px; }
-  .nav-logo img { width: 112px; }
+  .nav-logo .logo-mark { width: 118px; }
 
   .benefits ul { grid-template-columns: 1fr 1fr; }
   .benefits li { border-left: 0; border-top: 1px solid var(--hairline); }
