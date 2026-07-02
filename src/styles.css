@@ -295,28 +295,32 @@ html.js:not(.reduced) .hero-title.filled strong { color: var(--hero-fg); }
   body.hero-a .nav-logo .logo-mark { color: var(--blue); }
 }
 
-/* ---------- USP ticker (after the hero) ---------- */
+/* ---------- USP ticker (after the hero): navy rail, engineered uppercase ---------- */
 .marquee {
-  overflow: hidden; background: var(--white);
-  border-block: 1px solid var(--hairline);
-  padding: clamp(1.6rem, 3.2vw, 2.6rem) 0;
+  position: relative; overflow: hidden;
+  background: var(--navy); padding: 1.15rem 0;
 }
-.marquee-track { display: flex; width: max-content; animation: marquee 38s linear infinite; }
+/* edge fades so the line dissolves in and out of the band */
+.marquee::before, .marquee::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: clamp(48px, 9vw, 140px);
+  z-index: 2; pointer-events: none;
+}
+.marquee::before { left: 0; background: linear-gradient(90deg, var(--navy), transparent); }
+.marquee::after { right: 0; background: linear-gradient(-90deg, var(--navy), transparent); }
+.marquee-track { display: flex; width: max-content; animation: marquee 30s linear infinite; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
 .marquee-track span {
   display: flex; align-items: center; white-space: nowrap;
-  font-size: clamp(1.5rem, 3.2vw, 2.6rem); font-weight: 700; letter-spacing: -0.02em;
-  color: transparent; -webkit-text-stroke: 1.25px var(--blue); text-stroke: 1.25px var(--blue);
-  padding-right: 0.45em;
+  font-size: 0.92rem; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--white);
 }
+/* the brand's skewed plank as the separator */
 .marquee-track i {
-  display: inline-block; width: 0.13em; height: 0.5em;
-  background: var(--lblue); margin: 0 0.45em; transform: skewX(-14deg);
+  display: inline-block; width: 0.5em; height: 1.05em;
+  background: var(--lblue); margin: 0 1.7em; transform: skewX(-18deg);
 }
 @keyframes marquee { to { transform: translateX(-50%); } }
 html.js.reduced .marquee-track { animation: none; }
-@supports not (-webkit-text-stroke: 1px black) {
-  .marquee-track span { color: rgba(0, 87, 150, 0.28); }
-}
 
 /* ---------- Statement ---------- */
 .statement { padding: clamp(6rem, 13vw, 11rem) var(--pad) clamp(4rem, 8vw, 7rem); }
