@@ -40,8 +40,16 @@ if (reduce && heroVideo) heroVideo.pause();
 const heroTitle = document.querySelector('.hero-title');
 if (!reduce && heroTitle) {
   heroTitle.setAttribute('aria-label', heroTitle.textContent.trim().replace(/\s+/g, ' '));
+  /* wrap each word so letters never break mid-word, chars still animate individually */
   const spanify = (text) =>
-    [...text].map((ch) => (ch === ' ' ? ' ' : `<span class="ch">${ch}</span>`)).join('');
+    text
+      .split(/(\s+)/)
+      .map((tok) =>
+        /^\s+$/.test(tok)
+          ? ' '
+          : `<span class="word">${[...tok].map((ch) => `<span class="ch">${ch}</span>`).join('')}</span>`
+      )
+      .join('');
   heroTitle.querySelectorAll('.line-inner').forEach((inner) => {
     inner.setAttribute('aria-hidden', 'true');
     inner.innerHTML = [...inner.childNodes]

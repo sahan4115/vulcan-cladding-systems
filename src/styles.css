@@ -153,8 +153,7 @@ html.js.reduced .preloader, html.js .preloader.done { display: none; }
   display: grid; gap: 2.2rem;
 }
 .hero-title { font-size: clamp(2.7rem, 6.6vw, 6.6rem); color: var(--white); line-height: 1.0; }
-.hero-title .line:nth-child(2) { margin-left: clamp(0px, 5vw, 90px); }
-.hero-title .line:nth-child(3) { margin-left: clamp(0px, 10vw, 180px); }
+.hero-title .word { display: inline-block; white-space: nowrap; }
 .hero-title .ch { display: inline-block; will-change: transform; }
 /* emphasis words land as strokes, then fill */
 html.js:not(.reduced) .hero-title strong {
