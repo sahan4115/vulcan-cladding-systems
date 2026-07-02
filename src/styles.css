@@ -663,15 +663,19 @@ html.js.reduced .statement-text .w { opacity: 1; }
   padding: clamp(5rem, 10vh, 8rem) var(--pad);
 }
 /* the field: cards drift upward continuously in three depth layers */
-.float-field { position: absolute; inset: 0; pointer-events: none; }
+.float-field { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
 .fcard { position: absolute; top: 0; left: var(--x); margin: 0; will-change: transform; }
 .fcard img {
   width: 100%; height: 100%; object-fit: cover; display: block;
   box-shadow: 0 14px 40px rgba(4, 38, 61, 0.16);
 }
-.fl-1 { width: clamp(52px, 5vw, 86px); opacity: 0.45; filter: blur(2.5px) saturate(0.85); }
-.fl-2 { width: clamp(78px, 8vw, 126px); opacity: 0.75; filter: blur(0.8px); }
-.fl-3 { width: clamp(108px, 11vw, 168px); }
+.fl-1 { width: clamp(44px, 4vw, 66px); opacity: 0.45; filter: blur(2.5px) saturate(0.85); }
+.fl-2 { width: clamp(62px, 6vw, 94px); opacity: 0.75; filter: blur(0.8px); }
+.fl-3 { width: clamp(86px, 8.5vw, 126px); }
+/* desktop: the field stops short of the footer so the finale gets air */
+@media (min-width: 861px) {
+  .float-field { inset: 0 0 clamp(5rem, 16vh, 10rem) 0; }
+}
 .fa-sq { aspect-ratio: 1 / 1; }
 .fa-p { aspect-ratio: 4 / 5; }
 .fa-l { aspect-ratio: 5 / 4; }
