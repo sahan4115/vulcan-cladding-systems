@@ -108,10 +108,20 @@ if (reduce) {
 
 /* ---------- Nav: solid after hero, hides down / shows up ---------- */
 const nav = document.querySelector('.nav');
-ScrollTrigger.create({
-  start: 30,
-  onUpdate: (self) => nav.classList.toggle('scrolled', self.scroll() > 30),
-  onToggle: (self) => nav.classList.toggle('scrolled', self.isActive),
+const mm = gsap.matchMedia();
+const navSolid = (on) => nav.classList.toggle('scrolled', on);
+/* desktop+motion: the hero pin drives nav state (see hero timeline below); otherwise at 30px */
+mm.add('(max-width: 860px), (prefers-reduced-motion: reduce)', () => {
+  const st = ScrollTrigger.create({
+    start: 30,
+    end: 'max',
+    onUpdate: (self) => navSolid(self.scroll() > 30),
+  });
+  navSolid(window.scrollY > 30);
+  return () => {
+    st.kill();
+    navSolid(false);
+  };
 });
 if (!reduce) {
   const navTween = gsap.quickTo(nav, 'yPercent', { duration: 0.45, ease: 'power3.out' });
@@ -167,15 +177,54 @@ if (!reduce && fine) {
   });
 }
 
-/* ---------- Hero exits with depth as the story starts ---------- */
-if (!reduce) {
-  gsap.to('.hero-content', {
+/* ---------- Hero: media wedge expands to full bleed, second beat reveals (desktop) ---------- */
+mm.add('(min-width: 861px) and (prefers-reduced-motion: no-preference)', () => {
+  document.body.classList.add('hero-a');
+  const CLIP_A = 'polygon(49% 12%, 96% 12%, 96% 90%, 44% 90%)';
+  const CLIP_B = 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)';
+  gsap.set('.hero-media', { clipPath: CLIP_A });
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: '.hero',
+      start: 'top top',
+      end: '+=130%',
+      pin: true,
+      scrub: 0.6,
+      onUpdate: (self) => {
+        document.body.classList.toggle('hero-a', self.progress < 0.45);
+        navSolid(self.progress >= 1);
+      },
+      onLeave: () => navSolid(true),
+      onEnterBack: () => navSolid(false),
+    },
+  });
+  tl.to('.hero-media', { clipPath: CLIP_B, duration: 0.5, ease: 'power2.inOut' }, 0)
+    .to('.hero-content', { x: -90, opacity: 0, duration: 0.35, ease: 'power1.in' }, 0.02)
+    .to('.hero-scrim', { opacity: 1, duration: 0.35, ease: 'none' }, 0.2)
+    .to('.hero-reveal', { opacity: 1, duration: 0.2, ease: 'none' }, 0.52)
+    .from('.hero-reveal .line-inner', { yPercent: 112, duration: 0.3, stagger: 0.09, ease: 'power2.out' }, 0.55);
+  return () => {
+    document.body.classList.remove('hero-a');
+    if (tl.scrollTrigger) tl.scrollTrigger.kill();
+    tl.kill();
+    gsap.set(['.hero-media', '.hero-content', '.hero-scrim', '.hero-reveal', '.hero-reveal .line-inner'], { clearProps: 'all' });
+  };
+});
+
+/* ---------- Hero exits with depth as the story starts (mobile) ---------- */
+mm.add('(max-width: 860px) and (prefers-reduced-motion: no-preference)', () => {
+  const t = gsap.to('.hero-content', {
     yPercent: -16,
     opacity: 0.15,
     ease: 'none',
     scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom 30%', scrub: true },
   });
-}
+  return () => {
+    if (t.scrollTrigger) t.scrollTrigger.kill();
+    t.kill();
+    gsap.set('.hero-content', { clearProps: 'all' });
+  };
+});
 
 /* ---------- Statement: words light up as they are read ---------- */
 const stmt = document.querySelector('[data-words]');
@@ -217,7 +266,6 @@ if (!reduce) {
 }
 
 /* ---------- Systems: horizontal pan (desktop, motion allowed) ---------- */
-const mm = gsap.matchMedia();
 mm.add('(min-width: 861px) and (prefers-reduced-motion: no-preference)', () => {
   const track = document.querySelector('.hpan-track');
   const bar = document.querySelector('.hpan-progress span');
