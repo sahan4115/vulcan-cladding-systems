@@ -656,11 +656,11 @@ html.js.reduced .statement-text .w { opacity: 1; }
 .finish-chip.is-active { border-color: var(--white); background: rgba(255, 255, 255, 0.16); }
 
 /* ---------- Contact (floating gallery finale) ---------- */
-.contact { padding: 0 0 clamp(8rem, 16vw, 14rem); }
+.contact { padding: 0 0 clamp(4.5rem, 9vw, 8rem); }
 .contact-stage {
-  position: relative; min-height: 100dvh; overflow: hidden;
+  position: relative; min-height: clamp(540px, 78vh, 720px); overflow: hidden;
   display: grid; place-items: center; text-align: center;
-  padding: clamp(5rem, 10vh, 8rem) var(--pad);
+  padding: clamp(4rem, 8vh, 6rem) var(--pad);
 }
 /* the field: cards drift upward continuously in three depth layers */
 .float-field { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
@@ -669,18 +669,14 @@ html.js.reduced .statement-text .w { opacity: 1; }
   width: 100%; height: 100%; object-fit: cover; display: block;
   box-shadow: 0 14px 40px rgba(4, 38, 61, 0.16);
 }
-.fl-1 { width: clamp(44px, 4vw, 66px); opacity: 0.45; filter: blur(2.5px) saturate(0.85); }
-.fl-2 { width: clamp(62px, 6vw, 94px); opacity: 0.75; filter: blur(0.8px); }
-.fl-3 { width: clamp(86px, 8.5vw, 126px); }
-/* desktop: the field stops short of the footer so the finale gets air */
-@media (min-width: 861px) {
-  .float-field { inset: 0 0 clamp(5rem, 16vh, 10rem) 0; }
-}
+.fl-1 { width: clamp(38px, 3.4vw, 56px); opacity: 0.45; filter: blur(2.5px) saturate(0.85); }
+.fl-2 { width: clamp(54px, 5vw, 78px); opacity: 0.75; filter: blur(0.8px); }
+.fl-3 { width: clamp(74px, 7vw, 106px); }
 .fa-sq { aspect-ratio: 1 / 1; }
 .fa-p { aspect-ratio: 4 / 5; }
 .fa-l { aspect-ratio: 5 / 4; }
 .contact-inner { position: relative; z-index: 2; max-width: 1560px; margin: 0 auto; display: grid; justify-items: center; }
-.contact-title { font-size: clamp(3rem, 8.5vw, 8rem); line-height: 1.02; }
+.contact-title { font-size: clamp(2.8rem, 7vw, 6.4rem); line-height: 1.05; }
 /* staggered lines, per the reference */
 .ct-line { display: block; }
 .ct-l1 { translate: -6% 0; }
