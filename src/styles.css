@@ -85,7 +85,8 @@ html.js .preloader {
 }
 html.js.reduced .preloader, html.js .preloader.done { display: none; }
 .pre-slats { position: absolute; inset: 0; display: grid; grid-template-rows: repeat(5, 1fr); }
-.pre-slats span { background: var(--navy); will-change: transform; }
+/* box-shadow bleeds 1.5px of navy around each slat so sub-pixel grid seams never show */
+.pre-slats span { background: var(--navy); box-shadow: 0 0 0 1.5px var(--navy); will-change: transform; }
 .pre-core { position: relative; display: grid; justify-items: center; gap: 2.2rem; }
 .pre-bars { display: grid; gap: 10px; width: min(46vw, 300px); }
 .pre-bar {
