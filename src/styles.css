@@ -747,6 +747,9 @@ html.js.reduced [data-clip] { clip-path: none; }
    ========================================================================== */
 @media (max-width: 1024px) {
   .hero-side { justify-self: start; }
+  /* collapse to the burger before the 5-link row + CTA can overlap (needs ~944px) */
+  .nav-links, .nav-cta { display: none; }
+  .nav-burger { display: block; }
 }
 
 @media (max-width: 860px) {
