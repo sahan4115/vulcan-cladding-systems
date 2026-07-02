@@ -3,6 +3,7 @@ import {
   Scene,
   PerspectiveCamera,
   Shape,
+  Path,
   ExtrudeGeometry,
   Mesh,
   MeshPhysicalMaterial,
@@ -11,13 +12,95 @@ import {
   ACESFilmicToneMapping,
 } from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { gsap } from 'gsap';
 
 /*
- * Rotating VulcaLap tongue-and-groove extrusion.
- * Stands in for the client's CAD plank; swap the procedural profile for the
- * real CAD file (GLTF export) when it arrives.
+ * Rotating system profiles, procedurally extruded.
+ * Stand-ins for the client's CAD sections; swap each shape() for the real
+ * CAD file (GLTF export) when it arrives.
  */
-export function initPlank(canvas, { reduce } = {}) {
+const PROFILES = {
+  /* T&G weatherboard cross-section: tongue on the right edge, groove on the left */
+  vulcalap: {
+    scale: 0.9,
+    depth: 30,
+    shape() {
+      const s = new Shape();
+      s.moveTo(0, 0);
+      s.lineTo(15, 0);
+      s.lineTo(15, 0.45);
+      s.lineTo(15.8, 0.45);
+      s.lineTo(15.8, 0.95);
+      s.lineTo(15, 0.95);
+      s.lineTo(15, 1.4);
+      s.lineTo(0, 1.4);
+      s.lineTo(0, 0.95);
+      s.lineTo(0.7, 0.95);
+      s.lineTo(0.7, 0.45);
+      s.lineTo(0, 0.45);
+      s.closePath();
+      return s;
+    },
+  },
+  /* hollow rectangular bar section — one closed extrusion, nothing hidden */
+  vulcabar: {
+    scale: 1.05,
+    depth: 30,
+    shape() {
+      const s = new Shape();
+      s.moveTo(0, 0);
+      s.lineTo(7, 0);
+      s.lineTo(7, 3);
+      s.lineTo(0, 3);
+      s.closePath();
+      const hole = new Path();
+      hole.moveTo(0.4, 0.4);
+      hole.lineTo(0.4, 2.6);
+      hole.lineTo(6.6, 2.6);
+      hole.lineTo(6.6, 0.4);
+      hole.closePath();
+      s.holes.push(hole);
+      return s;
+    },
+  },
+  /* 400 Series: the wider, bolder plank — same interlock family, fewer lines */
+  s400: {
+    scale: 0.64,
+    depth: 34,
+    shape() {
+      const s = new Shape();
+      s.moveTo(0, 0);
+      s.lineTo(22, 0);
+      s.lineTo(22, 0.5);
+      s.lineTo(22.9, 0.5);
+      s.lineTo(22.9, 1.1);
+      s.lineTo(22, 1.1);
+      s.lineTo(22, 1.6);
+      s.lineTo(0, 1.6);
+      s.lineTo(0, 1.1);
+      s.lineTo(0.8, 1.1);
+      s.lineTo(0.8, 0.5);
+      s.lineTo(0, 0.5);
+      s.closePath();
+      return s;
+    },
+  },
+};
+
+const buildGeo = (key) => {
+  const p = PROFILES[key];
+  const geo = new ExtrudeGeometry(p.shape(), {
+    depth: p.depth,
+    bevelEnabled: true,
+    bevelThickness: 0.05,
+    bevelSize: 0.05,
+    bevelSegments: 2,
+  });
+  geo.center();
+  return geo;
+};
+
+export function initPlank(canvas, { reduce, profile = 'vulcalap' } = {}) {
   const renderer = new WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.toneMapping = ACESFilmicToneMapping;
@@ -31,31 +114,6 @@ export function initPlank(canvas, { reduce } = {}) {
   const pmrem = new PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 
-  /* T&G weatherboard cross-section: tongue on the right edge, groove on the left */
-  const s = new Shape();
-  s.moveTo(0, 0);
-  s.lineTo(15, 0);
-  s.lineTo(15, 0.45);
-  s.lineTo(15.8, 0.45);
-  s.lineTo(15.8, 0.95);
-  s.lineTo(15, 0.95);
-  s.lineTo(15, 1.4);
-  s.lineTo(0, 1.4);
-  s.lineTo(0, 0.95);
-  s.lineTo(0.7, 0.95);
-  s.lineTo(0.7, 0.45);
-  s.lineTo(0, 0.45);
-  s.closePath();
-
-  const geo = new ExtrudeGeometry(s, {
-    depth: 30,
-    bevelEnabled: true,
-    bevelThickness: 0.05,
-    bevelSize: 0.05,
-    bevelSegments: 2,
-  });
-  geo.center();
-
   const mat = new MeshPhysicalMaterial({
     color: 0xaeb6bd,
     metalness: 0.9,
@@ -65,8 +123,9 @@ export function initPlank(canvas, { reduce } = {}) {
     envMapIntensity: 0.8,
   });
 
-  const plank = new Mesh(geo, mat);
-  plank.scale.setScalar(0.9);
+  let active = PROFILES[profile] ? profile : 'vulcalap';
+  const plank = new Mesh(buildGeo(active), mat);
+  plank.scale.setScalar(PROFILES[active].scale);
   const group = new Group();
   group.add(plank);
   group.rotation.set(0.52, 0.85, 0.06);
@@ -85,6 +144,34 @@ export function initPlank(canvas, { reduce } = {}) {
   resize();
   const ro = new ResizeObserver(resize);
   ro.observe(canvas.parentElement);
+
+  /* profile swap: spin the old section out, extrude the next one in */
+  let swapTl = null;
+  const setProfile = (key) => {
+    if (key === active || !PROFILES[key]) return;
+    active = key;
+    const doSwap = () => {
+      plank.geometry.dispose();
+      plank.geometry = buildGeo(key);
+    };
+    const s = PROFILES[key].scale;
+    if (reduce) {
+      doSwap();
+      plank.scale.setScalar(s);
+      renderer.render(scene, camera);
+      return;
+    }
+    if (swapTl) swapTl.kill();
+    swapTl = gsap.timeline()
+      .to(plank.scale, { x: 0.02, y: 0.02, z: 0.02, duration: 0.3, ease: 'power2.in' })
+      .to(plank.rotation, { y: '+=1.3', duration: 0.3, ease: 'power2.in' }, 0)
+      .add(() => {
+        doSwap();
+        plank.rotation.y = -1.1;
+      })
+      .to(plank.scale, { x: s, y: s, z: s, duration: 0.6, ease: 'power3.out' })
+      .to(plank.rotation, { y: 0, duration: 0.6, ease: 'power3.out' }, '<');
+  };
 
   /* drag to turn, with inertia */
   let targetY = group.rotation.y;
@@ -113,7 +200,7 @@ export function initPlank(canvas, { reduce } = {}) {
 
   if (reduce) {
     renderer.render(scene, camera);
-    return;
+    return { setProfile };
   }
 
   /* render only while on screen */
@@ -133,4 +220,6 @@ export function initPlank(canvas, { reduce } = {}) {
     requestAnimationFrame(tick);
   };
   tick();
+
+  return { setProfile };
 }

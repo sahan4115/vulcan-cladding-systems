@@ -67,7 +67,9 @@ const heroIntro = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' }
 heroIntro
   .from('.hero-title .ch', { yPercent: 120, duration: 0.85, stagger: 0.014, ease: 'power4.out' }, 0)
   .add(() => heroTitle.classList.add('filled'), 0.95)
-  .from('.hero-side', { y: 26, opacity: 0, duration: 0.8 }, 0.55)
+  .from('.hero-side > *', { y: 26, opacity: 0, duration: 0.8, stagger: 0.12 }, 0.55)
+  .from('.hero-stamp', { scale: 0.6, opacity: 0, duration: 0.9, ease: 'back.out(1.5)' }, 0.85)
+  .from('.hero-scroll', { opacity: 0, duration: 0.6 }, 1.05)
   .fromTo('.hero-media-el', { scale: 1.12 }, { scale: 1.02, duration: 2.2, ease: 'power2.out' }, 0);
 
 const finishPre = () => {
@@ -77,7 +79,7 @@ const finishPre = () => {
 
 if (reduce) {
   finishPre();
-  gsap.set(['.hero-title .line-inner', '.hero-side'], { clearProps: 'all' });
+  gsap.set(['.hero-title .line-inner', '.hero-side > *', '.hero-stamp', '.hero-scroll'], { clearProps: 'all' });
   heroTitle.classList.add('filled');
 } else {
   if (lenis) lenis.stop();
@@ -180,7 +182,7 @@ if (!reduce && fine) {
 /* ---------- Hero: media wedge expands to full bleed, second beat reveals (desktop) ---------- */
 mm.add('(min-width: 861px) and (prefers-reduced-motion: no-preference)', () => {
   document.body.classList.add('hero-a');
-  const CLIP_A = 'polygon(49% 12%, 96% 12%, 96% 90%, 44% 90%)';
+  const CLIP_A = 'polygon(52% 10%, 96% 10%, 96% 92%, 46% 92%)';
   const CLIP_B = 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)';
   gsap.set('.hero-media', { clipPath: CLIP_A });
   const tl = gsap.timeline({
@@ -200,6 +202,8 @@ mm.add('(min-width: 861px) and (prefers-reduced-motion: no-preference)', () => {
   });
   tl.to('.hero-media', { clipPath: CLIP_B, duration: 0.5, ease: 'power2.inOut' }, 0)
     .to('.hero-content', { x: -90, opacity: 0, duration: 0.35, ease: 'power1.in' }, 0.02)
+    /* fromTo: explicit start so a mid-page reload can't lock these at the intro's opacity 0 */
+    .fromTo(['.hero-stamp', '.hero-scroll'], { opacity: 1 }, { opacity: 0, duration: 0.25, ease: 'power1.in' }, 0.02)
     .to('.hero-scrim', { opacity: 1, duration: 0.35, ease: 'none' }, 0.2)
     .to('.hero-reveal', { opacity: 1, duration: 0.2, ease: 'none' }, 0.52)
     .from('.hero-reveal .line-inner', { yPercent: 112, duration: 0.3, stagger: 0.09, ease: 'power2.out' }, 0.55);
@@ -207,7 +211,7 @@ mm.add('(min-width: 861px) and (prefers-reduced-motion: no-preference)', () => {
     document.body.classList.remove('hero-a');
     if (tl.scrollTrigger) tl.scrollTrigger.kill();
     tl.kill();
-    gsap.set(['.hero-media', '.hero-content', '.hero-scrim', '.hero-reveal', '.hero-reveal .line-inner'], { clearProps: 'all' });
+    gsap.set(['.hero-media', '.hero-content', '.hero-stamp', '.hero-scroll', '.hero-scrim', '.hero-reveal', '.hero-reveal .line-inner'], { clearProps: 'all' });
   };
 });
 
@@ -290,6 +294,129 @@ mm.add('(min-width: 861px) and (prefers-reduced-motion: no-preference)', () => {
     gsap.set(bar, { clearProps: 'transform' });
   };
 });
+
+/* ---------- Steps: why Vulcan on a rotating dial (pinned, scrub + drag) ---------- */
+const stepsSec = document.querySelector('.steps');
+const dialStage = document.getElementById('dialStage');
+if (!reduce && stepsSec && dialStage) {
+  stepsSec.classList.add('dial-mode');
+  const dialEl = document.getElementById('dial');
+  const ticksWrap = document.getElementById('dialTicks');
+  const dcards = gsap.utils.toArray('.dcard');
+  const dialNum = document.getElementById('dialNum');
+
+  /* the tick gauge: a wide arc of plank marks, majors every fifth */
+  const tickEls = [];
+  const tickAngles = [];
+  for (let a = -66; a <= 66; a += 1.65) {
+    const tk = document.createElement('span');
+    tk.className = 'dial-tick' + (tickEls.length % 5 === 0 ? ' major' : '');
+    ticksWrap.appendChild(tk);
+    tickEls.push(tk);
+    tickAngles.push(a);
+  }
+
+  /* cards ride a level horizontal track (upright, equal heights);
+     only the tick gauge below them rotates as the dial */
+  let R, Rtick, stepDeg, cardSpacing, cardY;
+  const rot = { r: 0 };
+  let active = -1;
+  const applyDial = () => {
+    dialEl.style.transform = `rotate(${rot.r}deg)`;
+    const prog = -rot.r / stepDeg; /* 0 .. n-1 */
+    const act = Math.max(0, Math.min(dcards.length - 1, Math.round(prog)));
+    if (act !== active) {
+      active = act;
+      dialNum.textContent = `0${act + 1}`;
+    }
+    dcards.forEach((c, i) => {
+      const d = i - prog;
+      const s = Math.max(0.74, 1 - Math.abs(d) * 0.2);
+      c.style.transform = `translate(-50%,0) translateX(${d * cardSpacing}px) scale(${s})`;
+      c.classList.toggle('on', i === act);
+    });
+    tickEls.forEach((t, i) => t.classList.toggle('fill', tickAngles[i] + rot.r <= 0.01));
+  };
+  const dialLayout = () => {
+    const mob = innerWidth < 700;
+    R = mob ? Math.max(560, innerWidth * 1.45) : Math.min(1100, Math.max(820, innerWidth * 0.78));
+    Rtick = R - (mob ? 115 : 140);
+    stepDeg = mob ? 30 : 21;
+    cardSpacing = mob ? dialStage.offsetWidth * 0.86 : Math.min(540, dialStage.offsetWidth * 0.42);
+    cardY = Math.round(dialStage.offsetHeight * 0.05);
+    dialEl.style.top = `${dialStage.offsetHeight * 0.44 + R}px`;
+    tickEls.forEach((t, i) => {
+      t.style.transform = `rotate(${tickAngles[i]}deg) translateY(${-Rtick}px)`;
+    });
+    dcards.forEach((c) => {
+      c.style.left = '50%';
+      c.style.top = `${cardY}px`;
+    });
+    applyDial();
+  };
+  dialLayout();
+
+  const dialTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: stepsSec,
+      start: 'top top',
+      end: '+=220%',
+      pin: true,
+      scrub: 0.5,
+      anticipatePin: 1,
+      invalidateOnRefresh: true,
+      snap: {
+        snapTo: dcards.map((_, i) => i / (dcards.length - 1)),
+        duration: { min: 0.25, max: 0.7 },
+        ease: 'power2.out',
+        delay: 0.1,
+      },
+    },
+  });
+  dialTl.to(rot, { r: () => -stepDeg * (dcards.length - 1), ease: 'none', onUpdate: applyDial });
+  ScrollTrigger.addEventListener('refreshInit', dialLayout);
+
+  /* drag to rotate: horizontal drag maps onto the pinned scroll span */
+  let dragging = false;
+  let dragX = 0;
+  let dragScroll = 0;
+  let dragMoved = 0;
+  dialStage.addEventListener('pointerdown', (e) => {
+    dragging = true;
+    dragMoved = 0;
+    dragX = e.clientX;
+    dragScroll = window.scrollY;
+    dialStage.classList.add('dragging');
+    try { dialStage.setPointerCapture(e.pointerId); } catch (_) { /* no-op */ }
+  });
+  dialStage.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    const dx = e.clientX - dragX;
+    dragMoved = Math.max(dragMoved, Math.abs(dx));
+    const st = dialTl.scrollTrigger;
+    const span = st.end - st.start;
+    const y = Math.max(st.start, Math.min(st.end, dragScroll - dx * (span / (innerWidth * 0.85))));
+    if (lenis) lenis.scrollTo(y, { immediate: true });
+    else window.scrollTo(0, y);
+  });
+  ['pointerup', 'pointercancel'].forEach((ev) =>
+    dialStage.addEventListener(ev, () => {
+      dragging = false;
+      dialStage.classList.remove('dragging');
+    })
+  );
+
+  /* click an inactive step to travel to it */
+  dcards.forEach((c, i) => {
+    c.addEventListener('click', () => {
+      if (dragMoved > 8 || i === active) return;
+      const st = dialTl.scrollTrigger;
+      const y = st.start + (i / (dcards.length - 1)) * (st.end - st.start);
+      if (lenis) lenis.scrollTo(y, { duration: 1.1 });
+      else window.scrollTo({ top: y, behavior: 'smooth' });
+    });
+  });
+}
 
 /* ---------- Contact: pinned constellation finale (desktop, motion allowed) ---------- */
 mm.add('(min-width: 861px) and (prefers-reduced-motion: no-preference)', () => {
@@ -424,20 +551,53 @@ if (!reduce && fine) {
   });
 }
 
-/* ---------- 3D plank (lazy) ---------- */
+/* ---------- 3D plank (lazy) + profile explorer ---------- */
 const plankStage = document.querySelector('.plank-stage');
 if (plankStage) {
+  let plankApi = null;
+  const plankTabs = gsap.utils.toArray('.plank-tab');
+  const activeProfile = () => document.querySelector('.plank-tab.is-active').dataset.profile;
   const io = new IntersectionObserver(
     (entries) => {
       if (entries.some((e) => e.isIntersecting)) {
         io.disconnect();
-        import('./plank.js').then(({ initPlank }) => initPlank(document.getElementById('plank-canvas'), { reduce }));
+        import('./plank.js').then(({ initPlank }) => {
+          plankApi = initPlank(document.getElementById('plank-canvas'), { reduce, profile: activeProfile() });
+        });
       }
     },
     { rootMargin: '400px' }
   );
   io.observe(plankStage);
+  plankTabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      if (tab.classList.contains('is-active')) return;
+      plankTabs.forEach((t) => {
+        t.classList.toggle('is-active', t === tab);
+        t.setAttribute('aria-pressed', String(t === tab));
+      });
+      if (plankApi) plankApi.setProfile(tab.dataset.profile);
+    });
+  });
 }
 
-/* ---------- Footer year ---------- */
+/* ---------- Footer: staggered entrance + the final course lays plank by plank ---------- */
+if (!reduce) {
+  gsap.from('.footer-grid > *', {
+    y: 34, opacity: 0, duration: 0.9, ease: 'power3.out', stagger: 0.09,
+    scrollTrigger: { trigger: '.footer', start: 'top 80%', once: true },
+  });
+  gsap.from('.footer-course span', {
+    scaleX: 0, duration: 0.85, ease: 'power4.inOut', stagger: 0.11,
+    scrollTrigger: { trigger: '.footer-legal', start: 'top 96%', once: true },
+  });
+}
+document.querySelector('.footer-up').addEventListener('click', () => scrollToPos(0));
+
+/* ---------- Footer clock (the works' local time) + year ---------- */
+const timeEl = document.getElementById('footer-time');
+const timeFmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit' });
+const tickClock = () => (timeEl.textContent = timeFmt.format(new Date()));
+tickClock();
+setInterval(tickClock, 30000);
 document.getElementById('year').textContent = new Date().getFullYear();

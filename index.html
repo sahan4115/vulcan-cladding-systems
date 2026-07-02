@@ -92,19 +92,52 @@
       </div>
       <div class="hero-content">
         <h1 class="hero-title" aria-label="The warmth of timber. The certainty of aluminium.">
-          <span class="line"><span class="line-inner">The warmth of <strong>timber.</strong></span></span>
+          <span class="line"><span class="line-inner">The warmth</span></span>
+          <span class="line"><span class="line-inner">of <strong>timber.</strong></span></span>
           <span class="line hero-line-b"><span class="line-inner">The certainty</span></span>
           <span class="line hero-line-b"><span class="line-inner">of <strong>aluminium.</strong></span></span>
         </h1>
         <div class="hero-side">
-          <p class="hero-sub">Fire-rated aluminium cladding systems for high-rise living, designed and manufactured in Britain.</p>
+          <p class="hero-sub">A2 fire-rated aluminium cladding with the character of natural timber &mdash; designed, extruded and finished in Britain for high-rise living.</p>
           <div class="hero-ctas">
             <a class="btn btn-solid" href="#systems" data-magnetic>Explore the range</a>
             <!-- Placeholder: company overview / warehouse fly-through film pending -->
-            <button type="button" class="btn btn-ghost-light" title="Film in production">Watch the film</button>
+            <button type="button" class="link-cta" title="Film in production">
+              Watch the film
+              <svg class="link-arrow" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 11.5 11.5 2.5M4.5 2.5h7v7" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
+            </button>
+          </div>
+          <!-- Placeholder rating: confirm Vulcan's live Google rating + review count with client -->
+          <div class="hero-proof">
+            <svg class="g-mark" viewBox="0 0 18 18" aria-hidden="true">
+              <path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92a8.78 8.78 0 0 0 2.68-6.62z" />
+              <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.91-2.26c-.8.54-1.84.86-3.05.86-2.34 0-4.33-1.58-5.04-3.71H.96v2.33A9 9 0 0 0 9 18z" />
+              <path fill="#FBBC05" d="M3.96 10.71A5.41 5.41 0 0 1 3.68 9c0-.59.1-1.17.28-1.71V4.96H.96A9 9 0 0 0 0 9c0 1.45.35 2.82.96 4.04l3-2.33z" />
+              <path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.59A9 9 0 0 0 9 0 9 9 0 0 0 .96 4.96l3 2.33C4.67 5.16 6.66 3.58 9 3.58z" />
+            </svg>
+            <span class="stars" aria-hidden="true">
+              <svg viewBox="0 0 13 13"><path d="M6.5 0l1.9 4.1 4.6.5-3.4 3 .9 4.4-4-2.2-4 2.2.9-4.4-3.4-3 4.6-.5z" /></svg>
+              <svg viewBox="0 0 13 13"><path d="M6.5 0l1.9 4.1 4.6.5-3.4 3 .9 4.4-4-2.2-4 2.2.9-4.4-3.4-3 4.6-.5z" /></svg>
+              <svg viewBox="0 0 13 13"><path d="M6.5 0l1.9 4.1 4.6.5-3.4 3 .9 4.4-4-2.2-4 2.2.9-4.4-3.4-3 4.6-.5z" /></svg>
+              <svg viewBox="0 0 13 13"><path d="M6.5 0l1.9 4.1 4.6.5-3.4 3 .9 4.4-4-2.2-4 2.2.9-4.4-3.4-3 4.6-.5z" /></svg>
+              <svg viewBox="0 0 13 13"><path d="M6.5 0l1.9 4.1 4.6.5-3.4 3 .9 4.4-4-2.2-4 2.2.9-4.4-3.4-3 4.6-.5z" /></svg>
+            </span>
+            <span class="proof-note"><strong>4.9</strong> &middot; Google reviews</span>
           </div>
         </div>
       </div>
+      <!-- Rotating stamp badge: straddles the media wedge edge (desktop split state only) -->
+      <div class="hero-stamp" aria-hidden="true">
+        <svg viewBox="0 0 120 120">
+          <circle class="stamp-disc" cx="60" cy="60" r="60" />
+          <g class="stamp-rotor">
+            <defs><path id="stamp-arc" d="M60 60m-44 0a44 44 0 1 1 88 0a44 44 0 1 1 -88 0" /></defs>
+            <text class="stamp-text"><textPath href="#stamp-arc" textLength="276" lengthAdjust="spacingAndGlyphs">A2 FIRE RATED &middot; MADE IN BRITAIN &middot; VULCAN &middot;&#160;</textPath></text>
+          </g>
+          <polygon class="stamp-mark" points="63,45 71,45 57,75 49,75" />
+        </svg>
+      </div>
+      <div class="hero-scroll" aria-hidden="true"><span>Scroll</span><i></i></div>
       <!-- Second beat: revealed as the media wedge expands to full bleed (desktop scroll) -->
       <div class="hero-reveal" aria-hidden="true">
         <p class="reveal-title">
@@ -193,7 +226,18 @@
     <section class="plank" id="plank">
       <div class="plank-copy" data-reveal>
         <h2>One piece of <strong>aluminium.</strong></h2>
-        <p>Every Vulcan profile begins as a single extrusion. Turn it over. There is nothing to hide.</p>
+        <p>Every Vulcan profile begins as a single extrusion. Pick a system, turn it over &mdash; there is nothing to hide.</p>
+      </div>
+      <div class="plank-tabs" data-reveal aria-label="Explore the range">
+        <button type="button" class="plank-tab is-active" data-profile="vulcalap" aria-pressed="true">
+          <strong>VulcaLap<sup>&reg;</sup></strong><span>Plank system</span>
+        </button>
+        <button type="button" class="plank-tab" data-profile="vulcabar" aria-pressed="false">
+          <strong>VulcaBar<sup>&reg;</sup></strong><span>Bar system</span>
+        </button>
+        <button type="button" class="plank-tab" data-profile="s400" aria-pressed="false">
+          <strong>400 Series</strong><span>New generation</span>
+        </button>
       </div>
       <div class="plank-stage" data-reveal>
         <canvas id="plank-canvas" aria-label="Interactive 3D model of a VulcaLap plank profile"></canvas>
@@ -224,6 +268,61 @@
             <span class="cert-sub">Certified sustainability</span>
           </li>
         </ul>
+      </div>
+    </section>
+
+    <!-- ============ STEPS (why Vulcan — rotating dial, pinned) ============ -->
+    <section class="steps" id="process" aria-label="Why choose Vulcan, step by step">
+      <div class="steps-inner">
+        <header class="steps-head">
+          <h2 data-reveal>Why Vulcan, in <strong>three steps.</strong></h2>
+          <span class="steps-hint" data-reveal>Scroll, or drag the dial</span>
+        </header>
+        <div class="dial-stage" id="dialStage">
+          <div class="dial" id="dial">
+            <div class="dial-ticks" id="dialTicks" aria-hidden="true"></div>
+          </div>
+          <article class="dcard on" data-i="0">
+            <div class="dcard-in">
+              <span class="dno">01</span>
+              <h3>Tell us the vision</h3>
+              <p>Share your drawings and the look you want. We come back with samples in hand, spans confirmed and a budget you can hold.</p>
+            </div>
+          </article>
+          <article class="dcard" data-i="1">
+            <div class="dcard-in">
+              <span class="dno">02</span>
+              <h3>Made in our Croydon works</h3>
+              <p>Designed, extruded and finished under one roof &mdash; one accountable name behind every plank that leaves the factory.</p>
+            </div>
+          </article>
+          <article class="dcard" data-i="2">
+            <div class="dcard-in">
+              <span class="dno">03</span>
+              <h3>Certainty on site</h3>
+              <p>Systems arrive A2 fire rated with the paperwork ready for building control, and our team stays with you through install.</p>
+            </div>
+          </article>
+          <div class="dial-counter" aria-hidden="true"><span id="dialNum">01</span><i>&nbsp;/&nbsp;03</i></div>
+        </div>
+        <!-- static fallback: shown when the dial is off (reduced motion / no JS) -->
+        <div class="steps-grid">
+          <div class="step-cell" data-reveal>
+            <span class="step-no">01</span>
+            <h3>Tell us the vision</h3>
+            <p>Share your drawings and the look you want. We come back with samples in hand, spans confirmed and a budget you can hold.</p>
+          </div>
+          <div class="step-cell" data-reveal>
+            <span class="step-no">02</span>
+            <h3>Made in our Croydon works</h3>
+            <p>Designed, extruded and finished under one roof &mdash; one accountable name behind every plank that leaves the factory.</p>
+          </div>
+          <div class="step-cell" data-reveal>
+            <span class="step-no">03</span>
+            <h3>Certainty on site</h3>
+            <p>Systems arrive A2 fire rated with the paperwork ready for building control, and our team stays with you through install.</p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -262,7 +361,7 @@
         <div class="finish-wipe" aria-hidden="true"></div>
         <div class="finish-overlay">
           <h2>Choose the look.<br /><strong>Keep the certainty.</strong></h2>
-          <p>Wood-grain finishes with the character of sawn timber, or solid colours across the full RAL range.</p>
+          <p>Authentic wood-grain finishes on smooth coated aluminium, or solid colours across the full RAL range.</p>
           <div class="finish-controls" role="group" aria-label="Preview finishes">
             <button type="button" class="finish-chip is-active" data-finish="cedar"><i style="--chip:#a26a41"></i>Western Red Cedar</button>
             <button type="button" class="finish-chip" data-finish="oak"><i style="--chip:#4a3423"></i>Dark Oak</button>
@@ -316,25 +415,49 @@
   </main>
 
   <footer class="footer">
-    <div class="footer-top">
-      <a class="footer-logo" href="#top" aria-label="Vulcan Cladding Systems home">
-        <svg class="logo-mark" viewBox="0 0 184 61" role="img" aria-label="Vulcan Cladding Systems"><use href="#vulcan-logo"/></svg>
-      </a>
-      <nav class="footer-nav" aria-label="Footer">
-        <a href="#systems">Products</a>
-        <a href="#story">About</a>
-        <a href="#projects">Case Studies</a>
-        <a href="#finishes">Finishes</a>
-      </nav>
-      <div class="footer-contact">
-        <a href="tel:+442086810617">020 8681 0617</a>
-        <a href="mailto:sales@vulcansystems.co.uk">sales@vulcansystems.co.uk</a>
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-id">
+          <a class="footer-logo" href="#top" aria-label="Vulcan Cladding Systems home">
+            <svg class="logo-mark" viewBox="0 0 184 61" role="img" aria-label="Vulcan Cladding Systems"><use href="#vulcan-logo"/></svg>
+          </a>
+          <p class="footer-tag">The warmth of timber. The certainty of aluminium. Every plank designed, extruded and finished at our Croydon works.</p>
+          <p class="footer-certs">A2 fire rated &middot; CWCT tested &middot; ISO 9001 &middot; ISO 14001</p>
+        </div>
+        <nav class="footer-col" aria-label="Explore">
+          <h3>Explore</h3>
+          <a href="#systems">Products</a>
+          <a href="#story">About</a>
+          <a href="#projects">Case Studies</a>
+          <a href="#finishes">Finishes</a>
+          <!-- Inner page pending: Downloads -->
+          <button type="button" class="f-soon" title="Coming with the inner pages">Downloads</button>
+        </nav>
+        <nav class="footer-col" aria-label="Systems">
+          <h3>Systems</h3>
+          <a href="#systems">VulcaLap<sup>&reg;</sup></a>
+          <a href="#systems">VulcaBar<sup>&reg;</sup></a>
+          <a href="#systems">400 Series</a>
+        </nav>
+        <div class="footer-col footer-works">
+          <h3>The works</h3>
+          <address>4 Imperial Way<br />Croydon CR0 4RR</address>
+          <a href="tel:+442086810617">020 8681 0617</a>
+          <a href="mailto:sales@vulcansystems.co.uk">sales@vulcansystems.co.uk</a>
+          <p class="footer-clock">Croydon, UK &mdash; <span id="footer-time">--:--</span></p>
+        </div>
+        <button type="button" class="footer-up" data-magnetic aria-label="Back to top">
+          <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 12V2M2.5 6.5 7 2l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
+        </button>
+      </div>
+      <div class="footer-legal">
+        <p>VulcaLap and VulcaBar are registered trademarks of Vulcan Cladding Systems.</p>
+        <p>&copy; <span id="year">2026</span> Vulcan Cladding Systems</p>
+        <p>Designed &amp; made in Britain</p>
       </div>
     </div>
-    <div class="footer-legal">
-      <p>VulcaLap and VulcaBar are registered trademarks of Vulcan Cladding Systems. 4 Imperial Way, Croydon CR0 4RR.</p>
-      <p>&copy; <span id="year">2026</span> Vulcan Cladding Systems</p>
-    </div>
+    <!-- The final course: the four brand planks that opened the site close it -->
+    <div class="footer-course" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
   </footer>
 
   <script type="module" src="/src/main.js"></script>

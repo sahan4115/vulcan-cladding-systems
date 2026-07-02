@@ -79,6 +79,18 @@ all inner-page CTAs are intentionally **non-linked `<button>`s** pending homepag
    - **State A (desktop):** paper background, **ink text column on the left**
      ("The warmth of timber." + subtext + CTAs), the hero **video sits in a diagonal
      clip-path wedge on the right**. Nav flips to dark ink over the light half (`body.hero-a`).
+   - **Clean-hero pass (Cheam-style, client request):** CTAs sit **side by side** — solid
+     "Explore the range" + underlined text-link "Watch the film" (`.link-cta`, arrow icon).
+     Below them a **Google reviews proof row** (`.hero-proof`: G mark, 5 stars, "4.9 ·
+     Google reviews" — **rating/count is a placeholder, confirm with client**). Subtext has
+     a left hairline border; text column widened to `min(50%, 720px)`. Two interactive
+     accents: a **rotating stamp badge** (`.hero-stamp`, SVG textPath "A2 FIRE RATED ·
+     MADE IN BRITAIN · VULCAN", 26s spin) straddling the wedge's left edge, and an
+     animated **scroll cue** (`.hero-scroll`) bottom-left. Both fade with the wedge
+     expansion via `fromTo` (explicit start values — a `.to` locked them invisible after
+     a mid-page reload with scroll restoration). Wedge geometry is
+     `polygon(52% 10%, 96% 10%, 96% 92%, 46% 92%)` — defined in BOTH `styles.css`
+     (static State A) and `CLIP_A` in `main.js`; keep them matched.
    - **Pinned scrub** (`end: +=130%`): the wedge **expands to full-bleed**, the first-beat
      text exits left and fades, the scrim deepens, then the **second beat**
      ("The certainty of aluminium.", `.hero-reveal`) mask-reveals over the full film.
@@ -116,16 +128,28 @@ all inner-page CTAs are intentionally **non-linked `<button>`s** pending homepag
     Court — placeholder captions, confirm per project with client). Hover/tap to expand.
 
 11. **Finishes** — full-screen immersive swatcher; switching finish (Cedar / Dark Oak /
-    Anthracite / Any RAL) sweeps a diagonal navy wipe across the plank.
+    Anthracite / Any RAL) sweeps a diagonal navy wipe across the plank. `finish-macro.jpg`
+    was regenerated (client feedback: product is a **smooth aluminium plank**, not rough
+    sawn timber) — it now shows smooth satin woodgrain-coated T&G aluminium planks with
+    visible interlock profiles, warm Western Red Cedar base (the JS tints derive Oak /
+    Anthracite / RAL from it). Section copy updated to "wood-grain finishes on smooth
+    coated aluminium".
 
 12. **Contact ("Have a project in mind?")** — pinned **constellation finale** (Wolverine-
     inspired, Vulcan-flavoured): centred display type with per-character reveal, 8 project
     images float at two depth layers with idle drift + depth-weighted mouse parallax,
     magnetic CTA with soft brand-blue glow. Static text-first fallback on mobile.
 
-13. **Footer** — minimal: real logo left, nav links centre, phone/email right, legal line
-    below. Navy with a diagonal wedge top. (The giant VULCAN wordmark version was removed
-    per client feedback.)
+13. **Footer** — rebuilt as a full "final course" finale (client: previous slim row was
+    too small; giant VULCAN wordmark still banned). Navy wedge-top end-wall with a
+    4-column grid: identity (logo kept small at 128px + brand line + cert list),
+    Explore nav, Systems nav, The Works (address / phone / email / **live Croydon
+    clock**, Europe/London, updates every 30s). Square **magnetic back-to-top** button
+    far right. Link hover = skewed plank marker slides in + link shifts right. Legal row
+    under a hairline. Signature: **the four preloader plank bars return as the site's
+    last course** (`.footer-course` — blue/lblue/grey/white full-width bars that scaleX
+    in, alternating left/right origin, on scroll). Grid entrance staggers in via
+    ScrollTrigger. Downloads is still a non-linked `.f-soon` button.
 
 ---
 
