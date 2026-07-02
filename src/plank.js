@@ -78,7 +78,8 @@ export function initPlank(canvas, { reduce } = {}) {
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     /* pull back on narrow stages so the full plank stays in frame */
-    camera.position.z = camera.aspect < 1 ? 52 : camera.aspect < 1.6 ? 42 : 34;
+    camera.position.z = camera.aspect < 1 ? 58 : camera.aspect < 1.6 ? 48 : 40;
+    camera.lookAt(0, 0, 0);
     camera.updateProjectionMatrix();
   };
   resize();

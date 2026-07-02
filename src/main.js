@@ -35,10 +35,26 @@ const scrollToPos = (target) => {
 const preloader = document.querySelector('.preloader');
 const heroVideo = document.querySelector('.hero-media-el');
 if (reduce && heroVideo) heroVideo.pause();
+
+/* split hero headline into characters (screen readers get the h1 aria-label) */
+const heroTitle = document.querySelector('.hero-title');
+if (!reduce && heroTitle) {
+  heroTitle.setAttribute('aria-label', heroTitle.textContent.trim().replace(/\s+/g, ' '));
+  const spanify = (text) =>
+    [...text].map((ch) => (ch === ' ' ? ' ' : `<span class="ch">${ch}</span>`)).join('');
+  heroTitle.querySelectorAll('.line-inner').forEach((inner) => {
+    inner.setAttribute('aria-hidden', 'true');
+    inner.innerHTML = [...inner.childNodes]
+      .map((n) => (n.nodeType === 3 ? spanify(n.textContent) : `<strong>${spanify(n.textContent)}</strong>`))
+      .join('');
+  });
+}
+
 const heroIntro = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
 heroIntro
-  .from('.hero-title .line-inner', { yPercent: 112, duration: 1.0, stagger: 0.1 }, 0)
-  .from('.hero-side', { y: 26, opacity: 0, duration: 0.8 }, 0.45)
+  .from('.hero-title .ch', { yPercent: 120, duration: 0.85, stagger: 0.014, ease: 'power4.out' }, 0)
+  .add(() => heroTitle.classList.add('filled'), 0.95)
+  .from('.hero-side', { y: 26, opacity: 0, duration: 0.8 }, 0.55)
   .fromTo('.hero-media-el', { scale: 1.12 }, { scale: 1.02, duration: 2.2, ease: 'power2.out' }, 0);
 
 const finishPre = () => {
@@ -49,6 +65,7 @@ const finishPre = () => {
 if (reduce) {
   finishPre();
   gsap.set(['.hero-title .line-inner', '.hero-side'], { clearProps: 'all' });
+  heroTitle.classList.add('filled');
 } else {
   if (lenis) lenis.stop();
   const pre = gsap.timeline({
