@@ -386,7 +386,11 @@ html.js.reduced .statement-text .w { opacity: 1; }
 
 /* ---------- Systems horizontal pan ---------- */
 .systems { position: relative; margin-top: clamp(2rem, 4vw, 3.5rem); }
-.hpan { position: relative; background: var(--navy); overflow: hidden; }
+.hpan {
+  position: relative; background: var(--navy); overflow: hidden;
+  /* same diagonal entry edge as the certs block and footer */
+  clip-path: polygon(0 var(--wedge), 100% 0, 100% 100%, 0 100%);
+}
 .hpan-track {
   display: flex; align-items: stretch; height: 100dvh;
   padding: clamp(4.5rem, 10vh, 7rem) var(--pad);
@@ -686,9 +690,8 @@ html.js.reduced .statement-text .w { opacity: 1; }
 .ct-l2 { translate: 7% 0; }
 .contact-inner > p { color: var(--muted); margin: 1.8rem auto 0; line-height: 1.75; max-width: 52ch; }
 .contact-cta-wrap { margin-top: 2.8rem; }
-.btn-pill { border-radius: 999px; gap: 0.7rem; }
-.pill-arrow { display: inline-block; transition: transform 0.3s var(--ease); }
-.btn-pill:hover .pill-arrow { transform: translateX(5px); }
+.btn-arrow { display: inline-block; margin-left: 0.7rem; transition: transform 0.3s var(--ease); }
+.btn:hover .btn-arrow { transform: translateX(5px); }
 .contact .btn-solid { transition: background-color 0.3s var(--ease), box-shadow 0.35s var(--ease); }
 .contact .btn-solid:hover, .contact .btn-solid:focus-visible { box-shadow: 0 16px 48px rgba(0, 87, 150, 0.38); }
 /* ---------- Footer (navy end-wall, "final course" finale) ---------- */
@@ -708,7 +711,7 @@ html.js.reduced .statement-text .w { opacity: 1; }
 }
 .footer-id { max-width: 34ch; }
 .footer-logo { display: inline-flex; }
-.footer-logo .logo-mark { width: 128px; color: var(--white); }
+.footer-logo .logo-mark { width: 172px; color: var(--white); }
 .footer-tag { margin-top: 1.7rem; font-weight: 300; font-size: 0.98rem; line-height: 1.75; color: rgba(255, 255, 255, 0.74); }
 .footer-certs { margin-top: 1.5rem; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em; color: var(--lblue); opacity: 0.85; }
 .footer-col { display: flex; flex-direction: column; align-items: flex-start; gap: 0.9rem; }
