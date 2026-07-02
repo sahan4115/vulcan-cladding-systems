@@ -454,34 +454,49 @@ html.js.reduced .statement-text .w { opacity: 1; }
   color: var(--muted); opacity: 0.7; pointer-events: none;
 }
 
-/* ---------- Certs (navy wedge block, interactive rows) ---------- */
+/* ---------- Certs (navy wedge block, split copy + compact grid) ---------- */
 .certs {
   background: var(--navy); color: var(--white);
   clip-path: polygon(0 var(--wedge), 100% 0, 100% 100%, 0 100%);
   margin-top: calc(var(--wedge) * -0.5);
-  padding: calc(clamp(5rem, 11vw, 9rem) + var(--wedge)) var(--pad) clamp(5rem, 11vw, 9rem);
+  padding: calc(clamp(3.5rem, 7vw, 6rem) + var(--wedge)) var(--pad) clamp(3.5rem, 7vw, 6rem);
 }
-.certs-inner { max-width: 1560px; margin: 0 auto; }
+.certs-inner {
+  max-width: 1560px; margin: 0 auto;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: clamp(2.5rem, 6vw, 6rem); align-items: center;
+}
 .certs h2 { color: var(--white); }
-.certs-lede { color: var(--lblue); margin-top: 1.6rem; max-width: 56ch; line-height: 1.75; }
-.certs-rows { list-style: none; margin-top: clamp(2.8rem, 6vw, 4.5rem); border-bottom: 1px solid var(--hairline-light); }
+.certs-lede { color: var(--lblue); margin-top: 1.6rem; max-width: 46ch; line-height: 1.75; }
+/* 2x2 grid of cert cells, hairline-gapped */
+.certs-rows {
+  list-style: none;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+  background: var(--hairline-light); border: 1px solid var(--hairline-light);
+}
 .cert-row {
-  display: flex; align-items: baseline; justify-content: space-between; gap: 2rem;
-  padding: clamp(1.4rem, 3vw, 2.2rem) 0.5rem;
-  border-top: 1px solid var(--hairline-light);
-  cursor: default; position: relative; overflow: hidden;
-  transition: padding-left 0.45s var(--ease), background-color 0.45s var(--ease);
+  background: var(--navy); cursor: default;
+  padding: clamp(1.4rem, 2.4vw, 2.1rem) clamp(1.2rem, 2vw, 1.8rem);
+  transition: background-color 0.45s var(--ease);
+}
+/* the brand plank sits above each certification */
+.cert-row::before {
+  content: ''; display: block; width: 26px; height: 6px; margin-bottom: 0.95rem;
+  background: var(--lblue); transform: skewX(-18deg);
+  transition: background-color 0.45s var(--ease);
 }
 .cert-name {
-  font-size: clamp(1.8rem, 4.6vw, 3.8rem); font-weight: 300; letter-spacing: -0.02em;
-  line-height: 1.15; transition: color 0.45s var(--ease);
+  display: block; font-size: clamp(1.2rem, 1.6vw, 1.55rem); font-weight: 600;
+  letter-spacing: -0.01em; line-height: 1.2; transition: color 0.45s var(--ease);
 }
 .cert-sub {
-  font-size: 0.92rem; color: var(--lblue); text-align: right; white-space: nowrap;
-  opacity: 0.75; transition: opacity 0.45s var(--ease);
+  display: block; margin-top: 0.3rem;
+  font-size: 0.85rem; color: var(--lblue); opacity: 0.75;
+  transition: opacity 0.45s var(--ease);
 }
-.cert-row:hover, .cert-row:focus-visible { padding-left: 1.6rem; background: rgba(167, 172, 216, 0.07); }
+.cert-row:hover, .cert-row:focus-visible { background: #0a3a5c; }
 .cert-row:hover .cert-name, .cert-row:focus-visible .cert-name { color: var(--lblue); }
+.cert-row:hover::before, .cert-row:focus-visible::before { background: var(--white); }
 .cert-row:hover .cert-sub, .cert-row:focus-visible .cert-sub { opacity: 1; }
 
 /* ---------- Steps (why Vulcan — rotating dial, pinned) ---------- */
@@ -793,8 +808,8 @@ html.js.reduced [data-clip] { clip-path: none; }
   .exp-caption { opacity: 1; transform: none; }
   .exp-col::after { opacity: 1; }
 
-  .cert-sub { display: none; }
   .certs { clip-path: polygon(0 1.8rem, 100% 0, 100% 100%, 0 100%); }
+  .certs-inner { grid-template-columns: 1fr; gap: 2.2rem; }
 
   .dial-stage { height: calc(100svh - 290px); min-height: 340px; }
   .dcard p { font-size: 0.85rem; max-width: 260px; }
@@ -816,6 +831,8 @@ html.js.reduced [data-clip] { clip-path: none; }
 }
 
 @media (max-width: 480px) {
+  .certs-rows { grid-template-columns: 1fr; }
+
   /* keep both hero CTAs on one row on small phones */
   .hero-ctas { gap: 1rem; }
   .hero-ctas .btn { padding: 0.85rem 1.3rem; font-size: 0.92rem; }
