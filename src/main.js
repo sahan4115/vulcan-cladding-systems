@@ -167,6 +167,24 @@ burger.addEventListener('click', () => {
   if (lenis) open ? lenis.stop() : lenis.start();
 });
 
+/* ---------- Products dropdown (hover via CSS; click for touch) ---------- */
+const drop = document.querySelector('.nav-drop');
+if (drop) {
+  const dropBtn = drop.querySelector('.nav-drop-btn');
+  const setDrop = (open) => {
+    drop.classList.toggle('open', open);
+    dropBtn.setAttribute('aria-expanded', String(open));
+  };
+  dropBtn.addEventListener('click', () => setDrop(!drop.classList.contains('open')));
+  drop.querySelectorAll('.nav-drop-menu a').forEach((a) => a.addEventListener('click', () => setDrop(false)));
+  document.addEventListener('click', (e) => {
+    if (!drop.contains(e.target)) setDrop(false);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setDrop(false);
+  });
+}
+
 /* ---------- Hero mouse parallax (desktop, motion allowed) ---------- */
 if (!reduce && fine) {
   const qx = gsap.quickTo(heroVideo, 'x', { duration: 0.9, ease: 'power3.out' });

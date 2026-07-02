@@ -157,6 +157,49 @@ html.js.reduced .preloader, html.js .preloader.done { display: none; }
 }
 .nav-links a:hover { opacity: 0.75; }
 .nav-soon { opacity: 0.55; cursor: default; }
+
+/* Products dropdown */
+.nav-drop { position: relative; }
+.nav-drop-btn {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  font-size: 0.92rem; font-weight: 600; color: var(--ink);
+  background: none; border: 0; cursor: pointer; font-family: var(--font);
+  padding: 0.4rem 0;
+}
+.drop-chev { width: 10px; height: 6px; transition: transform 0.3s var(--ease); }
+.nav-drop.open .drop-chev, .nav-drop:hover .drop-chev { transform: rotate(180deg); }
+.nav-drop-menu {
+  position: absolute; left: -1.2rem; top: 100%; min-width: 236px;
+  background: var(--white); border: 1px solid var(--hairline); border-top: 2px solid var(--blue);
+  box-shadow: 0 18px 44px rgba(4, 38, 61, 0.14);
+  padding: 0.5rem 0;
+  opacity: 0; visibility: hidden; transform: translateY(10px);
+  transition: opacity 0.28s var(--ease), transform 0.28s var(--ease), visibility 0.28s;
+}
+.nav-drop:hover .nav-drop-menu, .nav-drop:focus-within .nav-drop-menu, .nav-drop.open .nav-drop-menu {
+  opacity: 1; visibility: visible; transform: translateY(0);
+}
+.nav-drop-menu a {
+  position: relative; display: block;
+  padding: 0.7rem 1.2rem 0.7rem 1.2rem;
+  font-size: 0.95rem; font-weight: 600; color: var(--ink); text-decoration: none;
+  transition: padding-left 0.3s var(--ease), color 0.3s var(--ease), background-color 0.3s var(--ease);
+}
+.nav-drop-menu a sup { font-size: 0.6em; font-weight: 400; }
+.nav-drop-menu a span {
+  display: block; margin-top: 0.15rem;
+  font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); transition: color 0.3s var(--ease);
+}
+/* the skewed plank slides in on hover — same mark as the footer links */
+.nav-drop-menu a::before {
+  content: ''; position: absolute; left: 0.55rem; top: 50%; margin-top: -4px;
+  width: 7px; height: 9px; background: var(--blue);
+  transform: skewX(-18deg) scaleY(0); transition: transform 0.3s var(--ease);
+}
+.nav-drop-menu a:hover { padding-left: 1.6rem; background: var(--paper); color: var(--blue); }
+.nav-drop-menu a:hover::before { transform: skewX(-18deg) scaleY(1); }
+.nav-drop-menu a:hover span { color: var(--blue); }
 .nav-cta { padding: 0.7rem 1.3rem; font-size: 0.88rem; }
 .nav.scrolled { background: var(--white); box-shadow: 0 1px 0 var(--hairline); }
 .nav.scrolled .nav-links a, .nav.scrolled .nav-soon { color: var(--ink); }

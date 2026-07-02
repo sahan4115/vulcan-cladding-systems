@@ -78,12 +78,24 @@
         <svg class="logo-mark" viewBox="0 0 184 61" role="img" aria-label="Vulcan Cladding Systems"><use href="#vulcan-logo"/></svg>
       </a>
       <nav class="nav-links" aria-label="Primary">
-        <a href="#systems">Products</a>
-        <a href="#story">About</a>
-        <a href="#projects">Case Studies</a>
-        <a href="#finishes">Finishes</a>
+        <div class="nav-drop">
+          <button type="button" class="nav-drop-btn" aria-expanded="false" aria-haspopup="true">
+            Products
+            <svg class="drop-chev" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+          </button>
+          <div class="nav-drop-menu">
+            <!-- Inner product pages pending: anchors go to the systems showcase for now -->
+            <a href="#systems">VulcaLap<sup>&reg;</sup><span>Plank system</span></a>
+            <a href="#systems">VulcaBar<sup>&reg;</sup><span>Bar system</span></a>
+            <a href="#systems">400 Series<span>New generation</span></a>
+          </div>
+        </div>
+        <a href="#story">About Us</a>
         <!-- Inner page pending: Downloads -->
         <button type="button" class="nav-soon" title="Coming with the inner pages">Downloads</button>
+        <a href="#finishes">Finishes</a>
+        <a href="#finishes">Colours</a>
+        <a href="#contact">Contact</a>
       </nav>
       <!-- Placeholder CTA: wire to contact page + Pipedrive capture at dev stage -->
       <button type="button" class="btn btn-solid nav-cta">Start a conversation</button>
@@ -96,10 +108,11 @@
   <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
     <nav aria-label="Mobile">
       <a href="#systems">Products</a>
-      <a href="#story">About</a>
-      <a href="#projects">Case Studies</a>
-      <a href="#finishes">Finishes</a>
+      <a href="#story">About Us</a>
       <button type="button" class="nav-soon" title="Coming with the inner pages">Downloads</button>
+      <a href="#finishes">Finishes</a>
+      <a href="#finishes">Colours</a>
+      <a href="#contact">Contact</a>
       <button type="button" class="btn btn-solid">Start a conversation</button>
     </nav>
   </div>
@@ -389,7 +402,7 @@
     </section>
 
     <!-- ============ CONTACT CTA (constellation finale) ============ -->
-    <section class="contact">
+    <section class="contact" id="contact">
       <div class="contact-stage">
         <div class="contact-bg" aria-hidden="true"></div>
         <div class="contact-cards" aria-hidden="true">
