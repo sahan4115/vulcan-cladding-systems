@@ -391,16 +391,5 @@ if (plankStage) {
   io.observe(plankStage);
 }
 
-/* ---------- Footer wordmark rises as the page ends ---------- */
-if (!reduce) {
-  gsap.from('.fw-name', {
-    yPercent: 42,
-    opacity: 0,
-    ease: 'power3.out',
-    duration: 1.1,
-    scrollTrigger: { trigger: '.footer-wordmark', start: 'top 92%', once: true },
-  });
-}
-
 /* ---------- Footer year ---------- */
 document.getElementById('year').textContent = new Date().getFullYear();
