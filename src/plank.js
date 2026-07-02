@@ -63,7 +63,7 @@ const PROFILES = {
       return s;
     },
   },
-  /* 400 Series: the wider, bolder plank — same interlock family, fewer lines */
+  /* VulcaFrame (stand-in): wide modular panel — same interlock family, fewer lines */
   s400: {
     scale: 0.64,
     depth: 34,
