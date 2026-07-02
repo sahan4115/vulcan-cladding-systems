@@ -5,7 +5,7 @@ import { defineConfig } from 'vite';
 export default defineConfig(({ command }) => ({
   base: command === 'build' ? process.env.BASE_PATH || '/vulcan-cladding-systems/' : '/',
   server: {
-    port: 5199,
-    strictPort: true,
+    port: Number(process.env.PORT) || 5199,
+    strictPort: false,
   },
 }));

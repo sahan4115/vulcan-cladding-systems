@@ -33,11 +33,13 @@ const scrollToPos = (target) => {
 
 /* ---------- Preloader: bars fix into place, wall lifts, hero enters ---------- */
 const preloader = document.querySelector('.preloader');
+const heroVideo = document.querySelector('.hero-media-el');
+if (reduce && heroVideo) heroVideo.pause();
 const heroIntro = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
 heroIntro
   .from('.hero-title .line-inner', { yPercent: 112, duration: 1.0, stagger: 0.1 }, 0)
   .from('.hero-side', { y: 26, opacity: 0, duration: 0.8 }, 0.45)
-  .fromTo('.hero-media img', { scale: 1.12 }, { scale: 1.02, duration: 2.2, ease: 'power2.out' }, 0);
+  .fromTo('.hero-media-el', { scale: 1.12 }, { scale: 1.02, duration: 2.2, ease: 'power2.out' }, 0);
 
 const finishPre = () => {
   preloader.classList.add('done');
@@ -58,7 +60,14 @@ if (reduce) {
   pre
     .to('.pre-bar', { scaleX: 1, duration: 0.5, stagger: 0.12, ease: 'power3.inOut' })
     .to('.pre-logo', { opacity: 1, duration: 0.4 }, '-=0.3')
-    .to('.preloader', { yPercent: -100, duration: 0.85, ease: 'power4.inOut', delay: 0.35 });
+    .to('.pre-core', { opacity: 0, duration: 0.35, delay: 0.4 })
+    /* the wall strips away plank by plank */
+    .to('.pre-slats span', {
+      xPercent: (i) => (i % 2 ? 102 : -102),
+      duration: 0.75,
+      stagger: 0.07,
+      ease: 'power4.inOut',
+    }, '-=0.1');
   /* failsafe: never trap the page behind the preloader */
   setTimeout(() => {
     if (!preloader.classList.contains('done')) {
@@ -118,14 +127,23 @@ burger.addEventListener('click', () => {
 
 /* ---------- Hero mouse parallax (desktop, motion allowed) ---------- */
 if (!reduce && fine) {
-  const heroImg = document.querySelector('.hero-media img');
-  const qx = gsap.quickTo(heroImg, 'x', { duration: 0.9, ease: 'power3.out' });
-  const qy = gsap.quickTo(heroImg, 'y', { duration: 0.9, ease: 'power3.out' });
+  const qx = gsap.quickTo(heroVideo, 'x', { duration: 0.9, ease: 'power3.out' });
+  const qy = gsap.quickTo(heroVideo, 'y', { duration: 0.9, ease: 'power3.out' });
   document.querySelector('.hero').addEventListener('pointermove', (e) => {
     const nx = e.clientX / window.innerWidth - 0.5;
     const ny = e.clientY / window.innerHeight - 0.5;
     qx(nx * -18);
     qy(ny * -12);
+  });
+}
+
+/* ---------- Hero exits with depth as the story starts ---------- */
+if (!reduce) {
+  gsap.to('.hero-content', {
+    yPercent: -16,
+    opacity: 0.15,
+    ease: 'none',
+    scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom 30%', scrub: true },
   });
 }
 
@@ -281,6 +299,17 @@ if (plankStage) {
     { rootMargin: '400px' }
   );
   io.observe(plankStage);
+}
+
+/* ---------- Footer wordmark rises as the page ends ---------- */
+if (!reduce) {
+  gsap.from('.fw-name', {
+    yPercent: 42,
+    opacity: 0,
+    ease: 'power3.out',
+    duration: 1.1,
+    scrollTrigger: { trigger: '.footer-wordmark', start: 'top 92%', once: true },
+  });
 }
 
 /* ---------- Footer year ---------- */

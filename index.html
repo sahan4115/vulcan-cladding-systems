@@ -13,8 +13,11 @@
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <!-- Preloader: cladding bars fix into place, then the wall lifts -->
+  <!-- Preloader: cladding bars fix into place, then the wall strips away in slats -->
   <div class="preloader" aria-hidden="true">
+    <div class="pre-slats">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
     <div class="pre-core">
       <div class="pre-bars">
         <span class="pre-bar"></span>
@@ -63,9 +66,11 @@
     <!-- ============ HERO ============ -->
     <section class="hero">
       <div class="hero-media" aria-hidden="true">
-        <!-- MEDIA SLOT: swap this <img> for client drone footage
-             (<video autoplay muted loop playsinline poster="/assets/img/hero.jpg">). -->
-        <img src="/assets/img/hero.jpg" alt="" fetchpriority="high" />
+        <!-- MEDIA SLOT: generated drone film placeholder; swap the <source>
+             for the client's real drone footage when it is shot. -->
+        <video class="hero-media-el" autoplay muted loop playsinline poster="/assets/img/hero.jpg">
+          <source src="/assets/video/hero.mp4" type="video/mp4" />
+        </video>
         <div class="hero-scrim"></div>
       </div>
       <div class="hero-content">
@@ -254,12 +259,20 @@
         <p data-reveal>Tell us about your scheme and we will point you to the right system, finish and evidence pack.</p>
         <!-- Placeholder CTA: contact page + name/number capture to Pipedrive at dev stage -->
         <div data-reveal>
-          <button type="button" class="btn btn-solid btn-lg" data-magnetic>Start a conversation</button>
+          <button type="button" class="btn btn-solid btn-xl" data-magnetic>Start a conversation</button>
         </div>
-        <p class="contact-direct" data-reveal>
-          <a href="tel:+442086810617">020 8681 0617</a>
-          <a href="mailto:sales@vulcansystems.co.uk">sales@vulcansystems.co.uk</a>
-        </p>
+      </div>
+      <div class="contact-rows" data-reveal>
+        <a class="contact-row" href="tel:+442086810617">
+          <span class="cr-label">Call the works</span>
+          <span class="cr-value">020 8681 0617</span>
+          <span class="cr-arrow" aria-hidden="true">&rarr;</span>
+        </a>
+        <a class="contact-row" href="mailto:sales@vulcansystems.co.uk">
+          <span class="cr-label">Email the team</span>
+          <span class="cr-value">sales@vulcansystems.co.uk</span>
+          <span class="cr-arrow" aria-hidden="true">&rarr;</span>
+        </a>
       </div>
     </section>
 
@@ -284,6 +297,10 @@
         <a href="tel:+442086810617">020 8681 0617</a>
         <a href="mailto:sales@vulcansystems.co.uk">sales@vulcansystems.co.uk</a>
       </div>
+    </div>
+    <div class="footer-wordmark" aria-hidden="true">
+      <p class="fw-name">VULCAN</p>
+      <p class="fw-sub"><span>Cladding Systems</span></p>
     </div>
     <div class="footer-legal">
       <p>VulcaLap and VulcaBar are registered trademarks of Vulcan Cladding Systems.</p>
