@@ -5,6 +5,7 @@ import {
   Shape,
   Path,
   ExtrudeGeometry,
+  BoxGeometry,
   Mesh,
   MeshPhysicalMaterial,
   Group,
@@ -12,6 +13,7 @@ import {
   ACESFilmicToneMapping,
 } from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { gsap } from 'gsap';
 
 /*
@@ -63,39 +65,51 @@ const PROFILES = {
       return s;
     },
   },
-  /* VulcaFrame (stand-in): wide modular panel — same interlock family, fewer lines */
+  /* VulcaFrame (key kept as `s400`): the modular screen — NOT a single extruded
+     profile like the plank/bar, but a prefabricated, offsite-built framed panel:
+     a portrait frame (top + bottom rails) spanned by evenly-spaced VERTICAL battens
+     with OPEN gaps between them (a see-through brise-soleil screen). Assembled from
+     merged boxes rather than a 2D extrusion. Match ref: vulcan-systems VulcaFrame. */
   s400: {
-    scale: 0.64,
-    depth: 34,
-    shape() {
-      const s = new Shape();
-      s.moveTo(0, 0);
-      s.lineTo(22, 0);
-      s.lineTo(22, 0.5);
-      s.lineTo(22.9, 0.5);
-      s.lineTo(22.9, 1.1);
-      s.lineTo(22, 1.1);
-      s.lineTo(22, 1.6);
-      s.lineTo(0, 1.6);
-      s.lineTo(0, 1.1);
-      s.lineTo(0.8, 1.1);
-      s.lineTo(0.8, 0.5);
-      s.lineTo(0, 0.5);
-      s.closePath();
-      return s;
+    scale: 0.5,
+    build() {
+      const Wx = 15;      // panel width  (portrait: tall + narrow, ~1:2.5)
+      const Wy = 37;      // panel height
+      const D = 2.2;      // frame + batten depth (front to back)
+      const railH = 1.7;  // top / bottom rail thickness
+      const battenW = 1.5;
+      const nB = 6;       // vertical battens across the width
+      const parts = [];
+
+      /* top + bottom rails span the full width; battens hang between them */
+      parts.push(new BoxGeometry(Wx, railH, D).translate(0, Wy / 2 - railH / 2, 0));
+      parts.push(new BoxGeometry(Wx, railH, D).translate(0, -(Wy / 2 - railH / 2), 0));
+
+      /* vertical battens, first + last flush to the edges, equal open gaps between —
+         the "spaces in the middle" the screen is defined by */
+      const battenSpan = Wy - 2 * railH;
+      const step = (Wx - battenW) / (nB - 1);
+      for (let i = 0; i < nB; i++) {
+        const x = -Wx / 2 + battenW / 2 + i * step;
+        parts.push(new BoxGeometry(battenW, battenSpan, D).translate(x, 0, 0));
+      }
+
+      return mergeGeometries(parts, false);
     },
   },
 };
 
 const buildGeo = (key) => {
   const p = PROFILES[key];
-  const geo = new ExtrudeGeometry(p.shape(), {
-    depth: p.depth,
-    bevelEnabled: true,
-    bevelThickness: 0.05,
-    bevelSize: 0.05,
-    bevelSegments: 2,
-  });
+  const geo = p.build
+    ? p.build()
+    : new ExtrudeGeometry(p.shape(), {
+        depth: p.depth,
+        bevelEnabled: true,
+        bevelThickness: 0.05,
+        bevelSize: 0.05,
+        bevelSegments: 2,
+      });
   geo.center();
   return geo;
 };
@@ -197,6 +211,19 @@ export function initPlank(canvas, { reduce, profile = 'vulcalap' } = {}) {
   const endDrag = () => (dragging = false);
   canvas.addEventListener('pointerup', endDrag);
   canvas.addEventListener('pointercancel', endDrag);
+
+  /* QA hook (harmless, mirrors window.__wall): hold the model at a chosen angle and
+     render one still, so headless/preview captures don't depend on where the idle
+     turntable happens to be. Only ever invoked manually. */
+  window.__plank = {
+    setProfile,
+    still(ry = 0.3, rx = 0.26) {
+      targetY = ry;
+      targetX = rx;
+      group.rotation.set(rx, ry, 0);
+      renderer.render(scene, camera);
+    },
+  };
 
   if (reduce) {
     renderer.render(scene, camera);

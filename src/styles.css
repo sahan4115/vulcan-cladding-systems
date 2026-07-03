@@ -264,14 +264,12 @@ html.js:not(.reduced) .hero-title.filled strong { color: var(--hero-fg); }
 }
 .hero-ctas { display: flex; align-items: center; gap: clamp(1rem, 2vw, 1.8rem); flex-wrap: wrap; }
 
-/* Google reviews proof row */
+/* Credentials cue: specifier-facing authority row (shield-check + certifications) */
 .hero-proof {
-  display: flex; align-items: center; gap: 0.65rem;
+  display: flex; align-items: center; gap: 0.6rem;
   font-size: 0.9rem; color: rgba(255, 255, 255, 0.85);
 }
-.hero-proof .g-mark { width: 17px; height: 17px; flex: none; }
-.hero-proof .stars { display: inline-flex; gap: 2.5px; }
-.hero-proof .stars svg { width: 12px; height: 12px; fill: #eaa53c; }
+.hero-proof .proof-ico { width: 20px; height: 20px; flex: none; } /* stroke=currentColor → inherits row colour */
 .hero-proof .proof-note strong { font-weight: 700; color: var(--hero-fg); }
 
 /* rotating stamp + scroll cue: desktop split state only */
@@ -288,10 +286,25 @@ html.js:not(.reduced) .hero-title.filled strong { color: var(--hero-fg); }
 /* ---------- Split hero (desktop, motion allowed): text on paper, media wedge right ---------- */
 @media (min-width: 861px) {
   html.js:not(.reduced) .hero { background: var(--paper); --hero-fg: var(--ink); display: block; }
-  /* straight media panel (kept as clip so the expand-to-full-bleed tween still runs);
-     geometry must match CLIP_A in main.js */
+  /* Media panel with a slanted (wedge) LEFT edge on the banner — top-left sits right of
+     bottom-left. Right edge stays vertical and tracks the nav container (100% - --gutter) so
+     it lines up with the CTA at ANY desktop width. Everything is driven by --clip-p
+     (0 = slanted split state, 1 = full-bleed rectangle), so the scroll-scrub expansion — which
+     flattens the slant AND grows to full screen — is a single var tween in main.js. */
   html.js:not(.reduced) .hero-media {
-    clip-path: polygon(49% 10%, 96% 10%, 96% 92%, 49% 92%);
+    --clip-p: 0;
+    --clip-ltx: calc(52% * (1 - var(--clip-p)));   /* left edge, top vertex    */
+    --clip-lbx: calc(46% * (1 - var(--clip-p)));   /* left edge, bottom vertex */
+    /* parens around the whole product are required: --gutter is itself a calc(), and
+       without them the trailing "+ pad" escapes the multiply and flips sign */
+    --clip-rx: calc(100% - (var(--gutter) * (1 - var(--clip-p))));
+    --clip-ty: calc(10% * (1 - var(--clip-p)));
+    --clip-by: calc(92% + 8% * var(--clip-p));
+    clip-path: polygon(
+      var(--clip-ltx) var(--clip-ty),
+      var(--clip-rx)  var(--clip-ty),
+      var(--clip-rx)  var(--clip-by),
+      var(--clip-lbx) var(--clip-by));
     will-change: clip-path;
   }
   html.js:not(.reduced) .hero-scrim { opacity: 0.25; }
@@ -305,6 +318,7 @@ html.js:not(.reduced) .hero-title.filled strong { color: var(--hero-fg); }
   html.js:not(.reduced) .hero-side { justify-self: start; max-width: 52ch; }
   html.js:not(.reduced) .hero-sub { color: var(--muted); border-left-color: var(--hairline); }
   html.js:not(.reduced) .hero-proof { color: var(--muted); }
+  html.js:not(.reduced) .hero-proof .proof-ico { color: var(--blue); } /* brand accent on the paper half */
 
   /* rotating stamp badge, straddling the media panel's left edge */
   html.js:not(.reduced) .hero-stamp {
@@ -573,70 +587,123 @@ html.js.reduced .statement-text .w { opacity: 1; }
 .step-cell p { font-size: 0.92rem; color: var(--muted); line-height: 1.7; }
 
 /* ---------- Case studies (expanding gallery) ---------- */
-.projects { padding: clamp(5.5rem, 12vw, 10rem) var(--pad); }
-.projects-head { max-width: 1560px; margin: 0 auto 3.2rem; }
-.projects-head p { color: var(--muted); margin-top: 1.5rem; }
-.expander {
-  max-width: 1560px; margin: 0 auto; display: flex;
-  gap: clamp(0.8rem, 1.4vw, 1.2rem); height: clamp(420px, 68vh, 640px);
+.projects { position: relative; }
+/* ---- Case-study track ----
+   Default (fallback): a native, swipeable horizontal row — works with no JS,
+   on touch, and under reduced motion. JS adds .is-pinned on desktop+motion to
+   switch to the fixed-height pinned layout the scrub translates. */
+.projects-pin { padding: clamp(4.5rem, 10vw, 8rem) 0; }
+.projects-head {
+  max-width: 1560px; margin: 0 auto clamp(2.4rem, 4.5vw, 3.6rem);
+  padding: 0 var(--pad);
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  gap: clamp(1.6rem, 3vw, 2.4rem);
 }
-.exp-col {
-  position: relative; flex: 1; overflow: hidden; border: 0; padding: 0; cursor: pointer;
-  background: var(--navy); border-radius: 0;
-  transition: flex 0.85s var(--ease);
+.projects-head p { color: var(--muted); margin: 1.2rem auto 0; max-width: 52ch; }
+.projects-head .btn { flex: none; }
+.projects-viewport {
+  overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none; -ms-overflow-style: none;
 }
-.exp-col.is-open { flex: 2.7; }
-.exp-col img {
+.projects-viewport::-webkit-scrollbar { display: none; }
+.projects-track {
+  display: flex; gap: clamp(0.9rem, 1.6vw, 1.4rem);
+  padding: 0 var(--pad); width: max-content;
+}
+.pcard {
+  position: relative; flex: 0 0 clamp(258px, 80vw, 440px);
+  height: clamp(420px, 66vh, 600px); overflow: hidden;
+  background: var(--navy); border: 0; padding: 0;
+  scroll-snap-align: start;
+  transition: flex-basis 0.85s var(--ease);
+}
+.pcard img {
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-  transition: transform 0.85s var(--ease), opacity 0.85s var(--ease);
+  transition: transform 0.8s var(--ease);
 }
-.exp-col:hover img { transform: scale(1.04); }
-.exp-col::after {
+.pcard:hover img { transform: scale(1.04); }
+.pcard::after {
   content: ''; position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(4, 38, 61, 0.78), transparent 46%);
-  opacity: 0; transition: opacity 0.6s var(--ease);
+  background: linear-gradient(to top, rgba(4, 38, 61, 0.82), transparent 48%);
 }
-.exp-col.is-open::after { opacity: 1; }
-.exp-caption {
+.pcard-caption {
   position: absolute; left: 1.6rem; right: 1.6rem; bottom: 1.4rem; z-index: 2;
   display: grid; gap: 0.3rem; text-align: left; color: var(--white); line-height: 1.4;
-  font-family: var(--font); opacity: 0; transform: translateY(14px);
-  transition: opacity 0.5s var(--ease) 0.25s, transform 0.5s var(--ease) 0.25s;
+  font-family: var(--font);
 }
-.exp-col.is-open .exp-caption { opacity: 1; transform: none; }
-.exp-caption strong { font-size: 1.15rem; font-weight: 700; }
-.exp-caption em { font-style: normal; font-size: 0.9rem; color: var(--lblue); }
-.projects-cta { max-width: 1560px; margin: 3rem auto 0; }
+.pcard-caption strong { font-size: 1.15rem; font-weight: 700; }
+.pcard-caption em { font-style: normal; font-size: 0.9rem; color: var(--lblue); }
+
+/* ---- Pinned mode (JS-gated: desktop + motion) ----
+   The pin wrapper fills one viewport; header sits above a full-height track that
+   the ScrollTrigger scrubs horizontally. Only applied once JS wires the pin, so
+   the fallback above never gets clipped without a way to scroll. */
+.projects.is-pinned .projects-pin {
+  height: 100vh; padding: clamp(3.5rem, 7vh, 5.5rem) 0 clamp(2rem, 4vh, 3.5rem);
+  display: flex; flex-direction: column; justify-content: center;
+  gap: clamp(1.4rem, 3.5vh, 2.8rem); overflow: hidden;
+}
+.projects.is-pinned .projects-head { margin-bottom: 0; }
+.projects.is-pinned .projects-viewport {
+  overflow: hidden; flex: 1 1 auto; min-height: 0;
+  display: flex; align-items: stretch;
+}
+.projects.is-pinned .projects-track { align-items: stretch; will-change: transform; }
+.pcard-caption strong + em { margin-top: 0.1rem; }
+.projects.is-pinned .pcard {
+  flex: 0 0 clamp(320px, 32vw, 440px); height: auto;
+}
+/* hover-enlarge (the old expander feel): the card under the cursor grows,
+   the track makes room. Fine pointers only — no hover states on touch. */
+@media (hover: hover) and (pointer: fine) {
+  .projects.is-pinned .pcard:hover { flex-basis: clamp(430px, 43vw, 590px); }
+}
 
 /* ---------- Finishes (immersive swatcher) ---------- */
 .finishes { position: relative; }
 .finish-stage {
   position: relative; overflow: hidden; min-height: clamp(560px, 92vh, 860px);
-  display: flex; align-items: flex-end;
+  display: flex; align-items: center; /* text vertically centred to the product */
 }
-.finish-stage > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: filter 0.5s var(--ease); }
-.finish-tint {
-  position: absolute; inset: 0; mix-blend-mode: multiply;
-  background: transparent; transition: background-color 0.5s var(--ease);
+/* Media layers live in one wrapper so both stay registered AND the whole thing can drop
+   below the text on mobile. Right-anchored (100% 50%): when cover crops horizontally it
+   eats the empty left backdrop, never the product. */
+.finish-media { position: absolute; inset: 0; }
+.finish-media img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: 100% 50%;
+}
+#finish-img { z-index: 0; } /* scene stays fixed */
+.finish-wood { z-index: 1; transition: filter 0.5s var(--ease); } /* only the planks recolour */
+/* colour tint clipped to the plank shape (same asset as the mask) — used for arbitrary RAL.
+   Mask position must match the imgs' object-position to stay registered. */
+.finish-wood-tint {
+  position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none;
+  -webkit-mask: url(/assets/img/finish-wood.png) 100% 50% / cover no-repeat;
+  mask: url(/assets/img/finish-wood.png) 100% 50% / cover no-repeat;
+  background: transparent; mix-blend-mode: multiply;
+  transition: background-color 0.5s var(--ease);
+}
+/* navy grade anchored to the BOTTOM of the stage only (was a mid-image scrim on the overlay) */
+.finish-stage::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
+  height: clamp(110px, 20%, 190px); pointer-events: none;
+  background: linear-gradient(to top, rgba(4, 38, 61, 0.6), transparent);
 }
 .finish-wipe {
-  position: absolute; inset: -2% -20%; background: var(--navy); z-index: 3;
+  position: absolute; inset: -2% -20%; background: var(--navy); z-index: 4;
   transform: translateX(-125%) skewX(-12deg); pointer-events: none;
 }
 .finish-overlay {
-  position: relative; z-index: 2; color: var(--white);
-  padding: clamp(6rem, 12vh, 9rem) var(--pad) clamp(2.8rem, 6vh, 4.5rem);
+  position: relative; z-index: 3; color: var(--white);
+  padding: clamp(2.5rem, 6vh, 4rem) var(--pad); /* symmetric now the block is centred */
   max-width: 1560px; margin: 0 auto; width: 100%;
-  text-shadow: 0 1px 24px rgba(4, 38, 61, 0.35);
-}
-.finish-overlay::before {
-  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background: linear-gradient(to top, rgba(4, 38, 61, 0.72), transparent 62%);
-  margin: 0 calc(var(--pad) * -4);
 }
 .finish-overlay h2 { color: var(--white); }
-.finish-overlay p { margin-top: 1.4rem; color: rgba(255, 255, 255, 0.9); line-height: 1.7; }
-.finish-controls { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 2.1rem; }
+.finish-overlay p { margin-top: 1.4rem; color: rgba(255, 255, 255, 0.9); line-height: 1.7; max-width: 42ch; }
+/* capped width wraps the chips 2×2 — copy column stays inside the dark left zone */
+.finish-controls { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 2.1rem; max-width: 24rem; }
 .finish-chip {
   display: inline-flex; align-items: center; gap: 0.6rem;
   font-family: var(--font); font-size: 0.9rem; font-weight: 600; color: var(--white);
@@ -648,41 +715,33 @@ html.js.reduced .statement-text .w { opacity: 1; }
 .finish-chip:hover { border-color: var(--white); }
 .finish-chip.is-active { border-color: var(--white); background: rgba(255, 255, 255, 0.16); }
 
-/* ---------- Contact (floating gallery finale) ---------- */
-.contact { padding: 0 0 clamp(4.5rem, 9vw, 8rem); }
+/* ---------- Contact ("the facade answers" finale) ----------
+   Navy end-wall of canvas-drawn cladding courses; the cursor is raking light
+   moving across the facade (main.js). Flows seamlessly into the navy footer. */
+.contact { background: var(--navy); }
 .contact-stage {
-  position: relative; min-height: clamp(540px, 78vh, 720px);
+  position: relative; min-height: clamp(560px, 92vh, 880px);
   display: grid; place-items: center; text-align: center;
-  padding: clamp(4rem, 8vh, 6rem) var(--pad);
+  padding: clamp(5rem, 10vh, 7rem) var(--pad);
+  overflow: clip;
 }
-/* the field: cards drift upward continuously in three depth layers.
-   It extends below the stage, under the footer wedge, so cards emerge
-   from behind the navy diagonal instead of popping into white space
-   (the footer paints above — later positioned sibling). */
-.float-field { position: absolute; inset: 0 0 -220px 0; pointer-events: none; overflow: hidden; }
-.fcard { position: absolute; top: 0; left: var(--x); margin: 0; will-change: transform; }
-.fcard img {
-  width: 100%; height: 100%; object-fit: cover; display: block;
-  box-shadow: 0 14px 40px rgba(4, 38, 61, 0.16);
-}
-.fl-1 { width: clamp(38px, 3.4vw, 56px); opacity: 0.45; filter: blur(2.5px) saturate(0.85); }
-.fl-2 { width: clamp(54px, 5vw, 78px); opacity: 0.75; filter: blur(0.8px); }
-.fl-3 { width: clamp(74px, 7vw, 106px); }
-.fa-sq { aspect-ratio: 1 / 1; }
-.fa-p { aspect-ratio: 4 / 5; }
-.fa-l { aspect-ratio: 5 / 4; }
+.contact-wall { position: absolute; inset: 0; width: 100%; height: 100%; }
 .contact-inner { position: relative; z-index: 2; max-width: 1560px; margin: 0 auto; display: grid; justify-items: center; }
-.contact-title { font-size: clamp(2.8rem, 7vw, 6.4rem); line-height: 1.02; letter-spacing: -0.05em; }
-/* staggered lines, per the reference */
+.contact-title { color: var(--white); font-size: clamp(2.8rem, 7vw, 6rem); line-height: 1.02; letter-spacing: -0.05em; }
 .ct-line { display: block; }
-.ct-l1 { translate: -6% 0; }
-.ct-l2 { translate: 7% 0; }
-.contact-inner > p { color: var(--muted); margin: 1.8rem auto 0; line-height: 1.75; max-width: 52ch; }
-.contact-cta-wrap { margin-top: 2.8rem; }
+.contact-inner > p { color: rgba(255, 255, 255, 0.78); margin: 1.9rem auto 0; line-height: 1.75; max-width: 46ch; }
+.contact-cta-wrap { margin-top: 3rem; }
 .btn-arrow { display: inline-block; margin-left: 0.7rem; transition: transform 0.3s var(--ease); }
 .btn:hover .btn-arrow { transform: translateX(5px); }
-.contact .btn-solid { transition: background-color 0.3s var(--ease), box-shadow 0.35s var(--ease); }
-.contact .btn-solid:hover, .contact .btn-solid:focus-visible { box-shadow: 0 16px 48px rgba(0, 87, 150, 0.38); }
+/* white monolith CTA on the navy wall; flips to brand blue on hover */
+.contact .btn-solid {
+  background: var(--white); color: var(--ink);
+  transition: background-color 0.3s var(--ease), color 0.3s var(--ease), box-shadow 0.35s var(--ease);
+}
+.contact .btn-solid:hover, .contact .btn-solid:focus-visible {
+  background: var(--blue); color: var(--white);
+  box-shadow: 0 18px 56px rgba(0, 87, 150, 0.45);
+}
 /* ---------- Footer (navy end-wall, "final course" finale) ---------- */
 .footer {
   position: relative;
@@ -788,11 +847,9 @@ html.js.reduced [data-clip] { clip-path: none; }
   .hpan-panel { width: auto; min-height: 72vh; }
   .hpan-progress { display: none; }
 
-  .expander { flex-direction: column; height: auto; }
-  .exp-col { min-height: 250px; }
-  .exp-col.is-open { min-height: 380px; }
-  .exp-caption { opacity: 1; transform: none; }
-  .exp-col::after { opacity: 1; }
+  /* case studies: native swipe row (no pin on mobile) */
+  .projects-pin { padding: clamp(3.5rem, 12vw, 5.5rem) 0; }
+  .pcard { height: clamp(380px, 62vh, 520px); }
 
   .certs-inner { grid-template-columns: 1fr; gap: 2.2rem; }
 
@@ -801,14 +858,16 @@ html.js.reduced [data-clip] { clip-path: none; }
   .dial-counter { font-size: 1.3rem; }
   .steps-grid { grid-template-columns: 1fr; }
 
-  .finish-stage { min-height: 78vh; }
+  /* Stacked: text first, image below — the product never sits under the copy.
+     align-items:stretch overrides the desktop `center` (cross axis is horizontal here,
+     and `center` collapses the content-less media wrapper to 0 width) */
+  .finish-stage { display: flex; flex-direction: column; align-items: stretch; min-height: 0; background: #05070c; }
+  .finish-overlay { order: 1; padding-top: clamp(3rem, 8vw, 4rem); padding-bottom: 1rem; }
+  .finish-media { order: 2; position: relative; inset: auto; aspect-ratio: 1376 / 768; }
+  .finish-stage::after { display: none; }
 
-  /* Contact: keep the float field, drop the blurred far layer for clarity */
-  .contact { padding-bottom: 5rem; }
-  .contact-stage { min-height: 82svh; padding: 5rem var(--pad) 3rem; }
-  .fl-1 { display: none; }
-  .fl-2 { width: 62px; opacity: 0.5; }
-  .fl-3 { width: 92px; }
+  /* Contact: shorter stage; no cursor on touch, so the wall's ambient sweep carries it */
+  .contact-stage { min-height: 76svh; padding: 5rem var(--pad) 4.5rem; }
 
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 2.4rem; }
   .footer-id { grid-column: 1 / -1; max-width: none; }

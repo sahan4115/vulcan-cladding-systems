@@ -167,21 +167,27 @@ burger.addEventListener('click', () => {
   if (lenis) open ? lenis.stop() : lenis.start();
 });
 
-/* ---------- Products dropdown (hover via CSS; click for touch) ---------- */
-const drop = document.querySelector('.nav-drop');
-if (drop) {
+/* ---------- Nav dropdowns (Products, Colours — hover via CSS; click for touch) ---------- */
+const drops = [...document.querySelectorAll('.nav-drop')];
+const setDrop = (drop, open) => {
+  drop.classList.toggle('open', open);
+  drop.querySelector('.nav-drop-btn').setAttribute('aria-expanded', String(open));
+};
+drops.forEach((drop) => {
   const dropBtn = drop.querySelector('.nav-drop-btn');
-  const setDrop = (open) => {
-    drop.classList.toggle('open', open);
-    dropBtn.setAttribute('aria-expanded', String(open));
-  };
-  dropBtn.addEventListener('click', () => setDrop(!drop.classList.contains('open')));
-  drop.querySelectorAll('.nav-drop-menu a').forEach((a) => a.addEventListener('click', () => setDrop(false)));
+  dropBtn.addEventListener('click', () => {
+    const open = !drop.classList.contains('open');
+    // opening one closes the others
+    drops.forEach((d) => setDrop(d, d === drop ? open : false));
+  });
+  drop.querySelectorAll('.nav-drop-menu a').forEach((a) => a.addEventListener('click', () => setDrop(drop, false)));
+});
+if (drops.length) {
   document.addEventListener('click', (e) => {
-    if (!drop.contains(e.target)) setDrop(false);
+    drops.forEach((drop) => { if (!drop.contains(e.target)) setDrop(drop, false); });
   });
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') setDrop(false);
+    if (e.key === 'Escape') drops.forEach((drop) => setDrop(drop, false));
   });
 }
 
@@ -200,9 +206,8 @@ if (!reduce && fine) {
 /* ---------- Hero: media wedge expands to full bleed, second beat reveals (desktop) ---------- */
 mm.add('(min-width: 861px) and (prefers-reduced-motion: no-preference)', () => {
   document.body.classList.add('hero-a');
-  const CLIP_A = 'polygon(49% 10%, 96% 10%, 96% 92%, 49% 92%)';
-  const CLIP_B = 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)';
-  gsap.set('.hero-media', { clipPath: CLIP_A });
+  /* clip geometry lives in CSS (driven by --clip-p); 0 = split state, 1 = full bleed */
+  gsap.set('.hero-media', { '--clip-p': 0 });
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: '.hero',
@@ -218,7 +223,7 @@ mm.add('(min-width: 861px) and (prefers-reduced-motion: no-preference)', () => {
       onEnterBack: () => navSolid(false),
     },
   });
-  tl.to('.hero-media', { clipPath: CLIP_B, duration: 0.5, ease: 'power2.inOut' }, 0)
+  tl.to('.hero-media', { '--clip-p': 1, duration: 0.5, ease: 'power2.inOut' }, 0)
     .to('.hero-content', { x: -90, opacity: 0, duration: 0.35, ease: 'power1.in' }, 0.02)
     /* fromTo: explicit start so a mid-page reload can't lock these at the intro's opacity 0 */
     .fromTo(['.hero-stamp', '.hero-scroll'], { opacity: 1 }, { opacity: 0, duration: 0.25, ease: 'power1.in' }, 0.02)
@@ -436,79 +441,195 @@ if (!reduce && stepsSec && dialStage) {
   });
 }
 
-/* ---------- Contact: floating gallery field — cards drift upward forever ---------- */
-const floatField = document.querySelector('.float-field');
-if (floatField) {
-  const fcards = gsap.utils.toArray('.fcard');
-  const SPEED = { 1: 14, 2: 26, 3: 42 }; /* px per second, by depth layer */
-  let fieldH = 0;
-  const items = fcards.map((el, i) => ({
-    el,
-    /* small deterministic variance so same-layer cards don't move in lockstep */
-    speed: SPEED[el.dataset.layer] * (1 + ((i % 3) - 1) * 0.14),
-    y: 0,
-    h: 120,
-  }));
-  const fieldLayout = () => {
-    fieldH = floatField.offsetHeight;
-    items.forEach((it, i) => {
-      it.h = it.el.offsetHeight || 120;
-      /* golden-ratio scatter spreads cards evenly but non-uniformly down the field */
-      it.y = ((i * 0.618034) % 1) * (fieldH + 240) - 120;
-      it.el.style.transform = `translate3d(0, ${it.y}px, 0)`;
+/* ---------- Contact: "the facade answers" — plank wall lit by the cursor ----------
+   The canvas draws horizontal cladding courses; one virtual light rakes across them
+   (the cursor on fine pointers, a slow ambient drift otherwise), catching each course's
+   top lip. Hovering the CTA pulls the light onto the button so the wall focuses the eye. */
+const wallCanvas = document.querySelector('.contact-wall');
+if (wallCanvas) {
+  const wctx = wallCanvas.getContext('2d');
+  const wallStage = wallCanvas.closest('.contact-stage');
+  const wallCta = wallStage.querySelector('.btn');
+  const COURSE = 46; /* target cladding course height, CSS px */
+  let W = 0;
+  let H = 0;
+  let planks = [];
+
+  /* x/y are 0..1 of the stage; focus (0/1) tightens the pool onto the CTA on hover */
+  const light = { x: 0.5, y: 1.2, tx: 0.5, ty: 0.55, pointer: false, focus: 0, focusT: 0 };
+
+  const mixc = (a, b, t) => a + (b - a) * t;
+  /* intensity ramp: navy base → brand blue → a breath of lblue at the peak */
+  const plankColor = (I) => {
+    let r, g, b;
+    if (I < 0.72) {
+      const t = I / 0.72;
+      r = mixc(4, 0, t); g = mixc(38, 87, t); b = mixc(61, 150, t);
+    } else {
+      const t = (I - 0.72) / 0.28;
+      r = mixc(0, 84, t); g = mixc(87, 118, t); b = mixc(150, 186, t);
+    }
+    return `rgb(${r | 0},${g | 0},${b | 0})`;
+  };
+
+  const drawWall = (settle) => {
+    const lx = light.x * W;
+    const ly = light.y * H;
+    const sigX = W * (0.21 - light.focusT * 0.07);
+    const sigY = H * (0.24 - light.focusT * 0.07);
+    planks.forEach((p) => {
+      const cy = p.y + p.h / 2;
+      const fy = Math.exp(-(((cy - ly) / sigY) ** 2) / 2);
+      p.lit = settle ? fy : p.lit + (fy - p.lit) * 0.16; /* trails a beat — feels physical */
+      const grad = wctx.createLinearGradient(0, 0, W, 0);
+      const lip = wctx.createLinearGradient(0, 0, W, 0);
+      for (let s = 0; s <= 8; s++) {
+        const fx = Math.exp(-((((s / 8) * W - lx) / sigX) ** 2) / 2);
+        const I = Math.min(0.88, p.lit * fx * (0.95 + light.focusT * 0.25));
+        grad.addColorStop(s / 8, plankColor(I));
+        lip.addColorStop(s / 8, `rgba(167,172,216,${(I * 0.6).toFixed(3)})`);
+      }
+      wctx.fillStyle = grad;
+      wctx.fillRect(0, p.y, W, p.h + 1);
+      /* shiplap detail: top lip catches the light, under-shadow reads as the seam */
+      wctx.fillStyle = lip;
+      wctx.fillRect(0, p.y, W, 1.25);
+      wctx.fillStyle = 'rgba(1, 16, 27, 0.5)';
+      wctx.fillRect(0, p.y + p.h - 1, W, 1);
+      /* one staggered vertical joint per course (running bond), barely-there */
+      wctx.fillStyle = `rgba(1, 16, 27, ${(0.1 + p.lit * 0.18).toFixed(3)})`;
+      wctx.fillRect(p.joint * W, p.y, 1, p.h);
     });
   };
-  fieldLayout();
-  window.addEventListener('resize', fieldLayout);
+
+  const wallLayout = () => {
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    W = wallStage.clientWidth;
+    H = wallStage.clientHeight;
+    wallCanvas.width = Math.round(W * dpr);
+    wallCanvas.height = Math.round(H * dpr);
+    wctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const n = Math.max(10, Math.round(H / COURSE));
+    planks = Array.from({ length: n }, (_, i) => ({
+      y: (i * H) / n,
+      h: H / n,
+      lit: 0,
+      /* golden-ratio scatter keeps the joints non-repeating */
+      joint: (i * 0.618034 + 0.23) % 1,
+    }));
+    /* reduced motion: one static render, pool settled behind the CTA */
+    if (reduce) { light.x = 0.5; light.y = 0.58; drawWall(true); }
+  };
+  wallLayout();
+  window.addEventListener('resize', wallLayout);
+
+  /* QA hook: hidden preview panels never fire rAF, so screenshots need a manual frame.
+     Renders the wall settled, with the light at (x, y) in 0..1 stage coords. */
+  window.__wall = { render: (x = 0.5, y = 0.55) => { light.x = x; light.y = y; drawWall(true); } };
 
   if (!reduce) {
-    /* run only while the section is on screen */
-    let fieldVisible = false;
-    const fio = new IntersectionObserver((es) => {
-      fieldVisible = es.some((e) => e.isIntersecting);
-    });
-    fio.observe(floatField);
-    gsap.ticker.add((t, dtMs) => {
-      if (!fieldVisible) return;
-      const dt = Math.min(dtMs, 100) / 1000;
-      items.forEach((it) => {
-        it.y -= it.speed * dt;
-        if (it.y < -it.h - 60) it.y = fieldH + 20; /* wrap: exit top, re-enter beneath the footer wedge */
-        it.el.style.transform = `translate3d(0, ${it.y}px, 0)`;
+    if (fine) {
+      wallStage.addEventListener('pointermove', (e) => {
+        const r = wallStage.getBoundingClientRect();
+        light.pointer = true;
+        light.tx = (e.clientX - r.left) / r.width;
+        light.ty = (e.clientY - r.top) / r.height;
       });
+      wallStage.addEventListener('pointerleave', () => { light.pointer = false; });
+      if (wallCta) {
+        wallCta.addEventListener('pointerenter', () => { light.focus = 1; });
+        wallCta.addEventListener('pointerleave', () => { light.focus = 0; });
+      }
+    }
+    /* run only while on screen; one intro sweep across the facade on first arrival */
+    let wallVisible = false;
+    let sweep = -1;
+    const wio = new IntersectionObserver((es) => {
+      const vis = es.some((e) => e.isIntersecting);
+      if (vis && !wallVisible && sweep < 0) sweep = 0;
+      wallVisible = vis;
+    }, { threshold: 0.2 });
+    wio.observe(wallStage);
+    gsap.ticker.add((t, dtMs) => {
+      if (!wallVisible) return;
+      const dt = Math.min(dtMs, 100) / 1000;
+      if (sweep >= 0 && sweep < 1) {
+        sweep = Math.min(1, sweep + dt / 1.8);
+        light.tx = -0.25 + sweep * 1.5;
+        light.ty = 0.5;
+      } else if (!light.pointer) {
+        /* ambient drift: slow lissajous so the wall never sits still */
+        light.tx = 0.5 + 0.42 * Math.sin(t * 0.21);
+        light.ty = 0.52 + 0.3 * Math.sin(t * 0.14 + 2);
+      }
+      if (light.focus && wallCta) {
+        const r = wallCta.getBoundingClientRect();
+        const s = wallStage.getBoundingClientRect();
+        light.tx = (r.left + r.width / 2 - s.left) / s.width;
+        light.ty = (r.top + r.height / 2 - s.top) / s.height;
+      }
+      light.focusT += (light.focus - light.focusT) * 0.1;
+      light.x += (light.tx - light.x) * 0.085;
+      light.y += (light.ty - light.y) * 0.085;
+      drawWall(false);
     });
   }
 }
 
-/* ---------- Case studies: expanding gallery ---------- */
-const cols = gsap.utils.toArray('.exp-col');
-const openCol = (target) => {
-  cols.forEach((c) => {
-    const on = c === target;
-    c.classList.toggle('is-open', on);
-    c.setAttribute('aria-expanded', String(on));
+/* ---------- Case studies: pinned horizontal scroll ----------
+   Desktop + motion: pin the section for one viewport and scrub the track right→left
+   as the page scrolls, revealing all cards. Touch / reduced-motion keep the CSS
+   native swipe row (no pin), so the cards are always reachable. */
+const projSec = document.querySelector('.projects');
+if (projSec) {
+  const pinEl = projSec.querySelector('.projects-pin');
+  const viewport = projSec.querySelector('.projects-viewport');
+  const track = projSec.querySelector('.projects-track');
+  // travel = how far the track overruns the viewport; measured, not from 100vw (scrollbar-safe)
+  const travel = () => Math.max(0, track.scrollWidth - viewport.clientWidth);
+
+  mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', () => {
+    projSec.classList.add('is-pinned'); // switch to the fixed-height pinned layout before measuring
+    const tween = gsap.to(track, {
+      x: () => -travel(),
+      ease: 'none',
+      scrollTrigger: {
+        trigger: pinEl,
+        start: 'top top',
+        end: () => '+=' + travel(),
+        pin: pinEl,
+        scrub: 0.5,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+      },
+    });
+    return () => {
+      projSec.classList.remove('is-pinned');
+      tween.scrollTrigger && tween.scrollTrigger.kill();
+      tween.kill();
+      gsap.set(track, { clearProps: 'transform' });
+    };
   });
-};
-cols.forEach((c) => {
-  c.addEventListener('click', () => openCol(c));
-  if (fine) c.addEventListener('mouseenter', () => openCol(c));
-});
+}
 
 /* ---------- Finishes: diagonal wipe swatcher ---------- */
-const finishImg = document.getElementById('finish-img');
-const tint = document.querySelector('.finish-tint');
+const wood = document.querySelector('.finish-wood');
+const woodTint = document.querySelector('.finish-wood-tint');
 const wipe = document.querySelector('.finish-wipe');
+/* Only the wood planks recolour (the .finish-wood layer); the rest of the cutaway stays put.
+   cedar/oak/anthracite via a filter on the planks; RAL via a colour multiplied onto the
+   grayscale planks through the wood-shaped mask. */
 const FINISHES = {
-  cedar: { filter: 'none', tint: 'transparent' },
-  oak: { filter: 'saturate(0.9)', tint: 'rgba(37, 22, 8, 0.52)' },
-  anthracite: { filter: 'grayscale(1) brightness(0.82)', tint: 'rgba(24, 28, 32, 0.55)' },
-  ral: { filter: 'grayscale(1) brightness(0.9)', tint: 'rgba(0, 87, 150, 0.72)' },
+  cedar:      { filter: 'none',                                           tint: 'transparent' },
+  oak:        { filter: 'brightness(0.72) saturate(1.15) contrast(1.05)', tint: 'transparent' },
+  anthracite: { filter: 'grayscale(1) brightness(0.6) contrast(1.05)',    tint: 'transparent' },
+  ral:        { filter: 'grayscale(1) brightness(1.12) contrast(0.95)',   tint: 'rgba(0, 87, 150, 0.85)' },
 };
 let wiping = false;
 const applyFinish = (key) => {
   const f = FINISHES[key];
-  finishImg.style.filter = f.filter;
-  tint.style.backgroundColor = f.tint;
+  wood.style.filter = f.filter;
+  woodTint.style.backgroundColor = f.tint;
 };
 document.querySelectorAll('.finish-chip').forEach((chip) => {
   chip.addEventListener('click', () => {
