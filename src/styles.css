@@ -378,11 +378,7 @@ html.js.reduced .statement-text .w { opacity: 1; }
 
 /* ---------- Systems horizontal pan ---------- */
 .systems { position: relative; margin-top: clamp(2rem, 4vw, 3.5rem); }
-.hpan {
-  position: relative; background: var(--navy); overflow: hidden;
-  /* same diagonal entry edge as the certs block and footer */
-  clip-path: polygon(0 var(--wedge), 100% 0, 100% 100%, 0 100%);
-}
+.hpan { position: relative; background: var(--navy); overflow: hidden; }
 .hpan-track {
   display: flex; align-items: stretch; height: 100dvh;
   padding: clamp(4.5rem, 10vh, 7rem) var(--pad);
