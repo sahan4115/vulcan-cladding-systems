@@ -21,6 +21,9 @@
   --hairline-light: rgba(167, 172, 216, 0.28);
   --font: 'Open Sans', Arial, sans-serif;
   --pad: clamp(1.25rem, 4vw, 4.5rem);
+  /* left edge of the centred 1560px container — aligns full-bleed text with the nav on any
+     screen (100%, not 100vw: vw includes the scrollbar and lands 8px off) */
+  --gutter: calc(max((100% - 1560px) / 2, 0px) + var(--pad));
   --wedge: clamp(2.5rem, 5vw, 4.5rem);
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -294,7 +297,7 @@ html.js:not(.reduced) .hero-title.filled strong { color: var(--hero-fg); }
   html.js:not(.reduced) .hero-scrim { opacity: 0.25; }
   html.js:not(.reduced) .hero-content {
     min-height: 100dvh; align-content: center; justify-items: start;
-    max-width: none; margin: 0; padding: 114px var(--pad) 0; /* utility rail + nav row */
+    max-width: none; margin: 0; padding: 114px var(--pad) 0 var(--gutter); /* utility rail + nav row; left edge tracks the nav container */
     width: min(50%, 720px); gap: clamp(2.2rem, 4vh, 3rem);
   }
   html.js:not(.reduced) .hero-title { font-size: clamp(2.6rem, 5.2vw, 5.4rem); }
@@ -318,7 +321,7 @@ html.js:not(.reduced) .hero-title.filled strong { color: var(--hero-fg); }
   /* scroll cue, bottom of the paper half */
   html.js:not(.reduced) .hero-scroll {
     display: flex; position: absolute; z-index: 2;
-    left: var(--pad); bottom: 2.4rem; align-items: center; gap: 0.9rem;
+    left: var(--gutter); bottom: 2.4rem; align-items: center; gap: 0.9rem;
     font-size: 0.72rem; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase;
     color: var(--muted);
   }
@@ -331,7 +334,7 @@ html.js:not(.reduced) .hero-title.filled strong { color: var(--hero-fg); }
   html.js:not(.reduced) .hero-reveal {
     display: grid; position: absolute; inset: 0; z-index: 2;
     align-content: end; justify-items: start;
-    padding: 0 var(--pad) clamp(3.5rem, 10vh, 7rem);
+    padding: 0 var(--pad) clamp(3.5rem, 10vh, 7rem) var(--gutter);
     opacity: 0; pointer-events: none;
   }
   /* nav over the paper half while the hero is in its first state */
