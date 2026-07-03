@@ -200,7 +200,7 @@ if (!reduce && fine) {
 /* ---------- Hero: media wedge expands to full bleed, second beat reveals (desktop) ---------- */
 mm.add('(min-width: 861px) and (prefers-reduced-motion: no-preference)', () => {
   document.body.classList.add('hero-a');
-  const CLIP_A = 'polygon(52% 10%, 96% 10%, 96% 92%, 46% 92%)';
+  const CLIP_A = 'polygon(49% 10%, 96% 10%, 96% 92%, 49% 92%)';
   const CLIP_B = 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)';
   gsap.set('.hero-media', { clipPath: CLIP_A });
   const tl = gsap.timeline({

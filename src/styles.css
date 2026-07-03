@@ -285,8 +285,10 @@ html.js:not(.reduced) .hero-title.filled strong { color: var(--hero-fg); }
 /* ---------- Split hero (desktop, motion allowed): text on paper, media wedge right ---------- */
 @media (min-width: 861px) {
   html.js:not(.reduced) .hero { background: var(--paper); --hero-fg: var(--ink); display: block; }
+  /* straight media panel (kept as clip so the expand-to-full-bleed tween still runs);
+     geometry must match CLIP_A in main.js */
   html.js:not(.reduced) .hero-media {
-    clip-path: polygon(52% 10%, 96% 10%, 96% 92%, 46% 92%);
+    clip-path: polygon(49% 10%, 96% 10%, 96% 92%, 49% 92%);
     will-change: clip-path;
   }
   html.js:not(.reduced) .hero-scrim { opacity: 0.25; }
@@ -301,10 +303,10 @@ html.js:not(.reduced) .hero-title.filled strong { color: var(--hero-fg); }
   html.js:not(.reduced) .hero-sub { color: var(--muted); border-left-color: var(--hairline); }
   html.js:not(.reduced) .hero-proof { color: var(--muted); }
 
-  /* rotating stamp badge, straddling the wedge's left edge */
+  /* rotating stamp badge, straddling the media panel's left edge */
   html.js:not(.reduced) .hero-stamp {
     display: block; position: absolute; z-index: 3;
-    left: 43.5%; top: 54%; width: clamp(106px, 9.5vw, 148px); aspect-ratio: 1;
+    left: 44.5%; top: 54%; width: clamp(106px, 9.5vw, 148px); aspect-ratio: 1;
   }
   .hero-stamp svg { width: 100%; height: 100%; display: block; }
   .stamp-disc { fill: var(--paper); }
@@ -445,12 +447,10 @@ html.js.reduced .statement-text .w { opacity: 1; }
   color: var(--muted); opacity: 0.7; pointer-events: none;
 }
 
-/* ---------- Certs (navy wedge block, split copy + compact grid) ---------- */
+/* ---------- Certs (navy block, split copy + compact grid) ---------- */
 .certs {
   background: var(--navy); color: var(--white);
-  clip-path: polygon(0 var(--wedge), 100% 0, 100% 100%, 0 100%);
-  margin-top: calc(var(--wedge) * -0.5);
-  padding: calc(clamp(3.5rem, 7vw, 6rem) + var(--wedge)) var(--pad) clamp(3.5rem, 7vw, 6rem);
+  padding: clamp(3.5rem, 7vw, 6rem) var(--pad);
 }
 .certs-inner {
   max-width: 1560px; margin: 0 auto;
@@ -609,7 +609,6 @@ html.js.reduced .statement-text .w { opacity: 1; }
 .finishes { position: relative; }
 .finish-stage {
   position: relative; overflow: hidden; min-height: clamp(560px, 92vh, 860px);
-  clip-path: polygon(0 0, 100% var(--wedge), 100% 100%, 0 100%);
   display: flex; align-items: flex-end;
 }
 .finish-stage > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: filter 0.5s var(--ease); }
@@ -685,9 +684,7 @@ html.js.reduced .statement-text .w { opacity: 1; }
 .footer {
   position: relative;
   background: var(--navy); color: var(--white);
-  clip-path: polygon(0 0, 100% var(--wedge), 100% 100%, 0 100%);
-  margin-top: calc(var(--wedge) * -1);
-  padding-top: calc(clamp(5rem, 10vw, 8rem) + var(--wedge));
+  padding-top: clamp(5rem, 10vw, 8rem);
   overflow: hidden;
 }
 .footer-inner { max-width: 1560px; margin: 0 auto; padding: 0 var(--pad); }
@@ -794,7 +791,6 @@ html.js.reduced [data-clip] { clip-path: none; }
   .exp-caption { opacity: 1; transform: none; }
   .exp-col::after { opacity: 1; }
 
-  .certs { clip-path: polygon(0 1.8rem, 100% 0, 100% 100%, 0 100%); }
   .certs-inner { grid-template-columns: 1fr; gap: 2.2rem; }
 
   .dial-stage { height: calc(100svh - 290px); min-height: 340px; }
