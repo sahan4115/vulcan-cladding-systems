@@ -364,7 +364,7 @@ if (!reduce && stepsSec && dialStage) {
     const mob = innerWidth < 700;
     R = mob ? Math.max(560, innerWidth * 1.45) : Math.min(1100, Math.max(820, innerWidth * 0.78));
     Rtick = R - (mob ? 115 : 140);
-    stepDeg = mob ? 30 : 21;
+    stepDeg = mob ? 22 : 21; /* 4 cards: keep rotation (stepDeg * 3) within the ±66° tick arc */
     cardSpacing = mob ? dialStage.offsetWidth * 0.86 : Math.min(540, dialStage.offsetWidth * 0.42);
     cardY = Math.round(dialStage.offsetHeight * 0.05);
     dialEl.style.top = `${dialStage.offsetHeight * 0.44 + R}px`;

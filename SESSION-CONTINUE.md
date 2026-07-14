@@ -165,6 +165,49 @@ gh run rerun <run-id> --failed   # the transient Pages error clears on rerun (ma
 
 ---
 
+## Copy & SEO pass — 2026-07-14 (per Vendo change schedule: `Vulcan_Cladding_Copy_SEO_Change_Schedule.md`)
+
+Applied the copywriter/SEO change schedule (Alfie Wakelin, Vendo) across `index.html` + a little
+CSS/JS. Three forks were decided by the user before building:
+- **No section eyebrows** (C4 declined). SEO keyword coverage instead comes from C5 H3 descriptor
+  sublines (`.hpan-h3sub`) + JSON-LD. Do NOT reintroduce eyebrows.
+- **A2 classification string IS published** (E2 approved by user, *pending Ray's sign-off*): the fire
+  section now says "classified A2-s1,d0 to BS EN 13501-1 as tested". Reversible to a string-free
+  fallback if Ray declines.
+- **VulcaFrame ® → ™ site-wide** (E3): it is not in the footer's registered-marks line, so ® was a
+  legal exposure. All `VulcaFrame<sup>&trade;</sup>` now.
+
+**Done:** A1 hero sub-line · A3 "standard you specified" · A4 plank "No core, no laminate" + hidden-
+fixings `.plank-note` · **A5 fire section** (H2 "The fire evidence is already written.", A2-s1,d0
+lede, cert grid split to 2 chips — ISO moved out) · A6 `.finish-creds` (Qualicoat · 25-yr warranty)
+· A7 contact CTA "A system for every elevation" + button "Request samples and specs" (nav keeps
+"Start a conversation") · A8 Croydon removed from body copy (only the footer postal address + clock
+remain, both permitted NAP) · **Section B** steps→advantage: H2 "Where Vulcan pulls ahead.", cards
+02/03 rewritten, **new card 04 "Traceable to the batch"**, ISO chips relocated to `.steps-creds`.
+The dial is data-driven so 4 cards "just work" — only change was mobile `stepDeg` 30→22 so rotation
+(stepDeg×3) stays inside the ±66° tick arc; counter HTML `/03`→`/04`; static fallback grid → 2×2.
+· C2 head (canonical, og:type, twitter card, aligned og:description) · C3 title + meta · C5 H3
+descriptors · C6 JSON-LD (`Organization` areaServed GB + 3×`Product` + `BreadcrumbList`).
+
+**A2 (marquee):** already satisfied — the old "certainty of aluminium" marquee was replaced last
+session; current USP ticker doesn't contain it. **"certainty" count:** left the hero couplet + its
+scroll-reveal echo + finishes + footer brand sign-off (deliberate brand echoes, not dilutive tics);
+only the systems-intro repeat was removed (A3).
+
+**Deferred / needs input (NOT done):**
+- **C1** three product pages (`/vulcalap` etc.) — phase two; the single-page SEO ceiling stands until then.
+- **C2 noindex-on-staging** — no staging/prod split exists (GitHub Pages IS the only deploy). Canonical→prod
+  domain added as partial mitigation; a real robots strategy is still needed before go-live.
+- **C7 image filenames** `float/f03,f07,f09.jpg` → `case-*.jpg` — asset rename + ref updates in `index.html`
+  and the `CASES` array; quick but not done.
+- **D1 "VulcaBar 400 Series"** — the schedule treats it as a new product, but "400 Series" was RENAMED to
+  VulcaFrame in this build. Contradiction — needs client clarification before adding anything.
+- **D2 NBS copy-to-clipboard** — needs the actual NBS clause text. **D3 Downloads section** — needs the files
+  (both nav items still "coming soon"). **D4 footer clock** — not a bug; `tickClock()` runs on load, `--:--`
+  is only the no-JS placeholder.
+- **Claims to confirm with client:** Qualicoat approval, 25-year finish warranty (A6), batch-level
+  traceability (card 04, E4). Canonical/JSON-LD assume `vulcansystems.co.uk` is the production domain.
+
 ## Open follow-ups (most relevant first)
 - [ ] **Social URLs** for the utility rail (LinkedIn / Instagram / YouTube are `#`).
 - [x] ~~Confirm hero Google rating~~ — the consumer Google-reviews strip was **replaced with a
