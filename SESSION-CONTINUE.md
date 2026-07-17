@@ -209,6 +209,21 @@ only the systems-intro repeat was removed (A3).
   systems intro "Every"→"Each"; hero proof strip trimmed to the doc's exact `A2-s1,d0 classified · CWCT
   tested`. Remaining "every"s are all inside the doc's own mandated replacement copy.
 
+**Section D built (2026-07-17, client pushed for them; interim mechanics until real content arrives):**
+- **D1(b)** — "Also in 400 Series" `.series-tag` on the VulcaBar panel. ⚠️ STILL needs the client to
+  confirm this VulcaBar variant is distinct from the old "400 Series" that became VulcaFrame — HTML
+  comment marks it; remove the tag if not.
+- **D2** — "Copy NBS clause" `.btn-nbs` on all three system panels (in a new `.hpan-ctas` row).
+  Copies a **DRAFT clause** (each copied text is headed "DRAFT - confirm with Vulcan before issue")
+  from the `NBS_CLAUSES` map in `main.js` — **swap that map for Vulcan's real NBS copy when supplied**.
+  Success state "Copied" (2.2s), clipboard-API + textarea fallback, and fires a
+  `dataLayer` `nbs_clause_copy` conversion event ready for GTM/Clarity at dev stage.
+- **D3** — real `#downloads` section (between projects and contact): split header + six `.dl-row`
+  document rows (test certs / datasheets / CAD & Revit / install guides / EPDs / warranty), each a
+  **mailto request link** with a prefilled subject — swap each mailto for a direct file link as
+  documents arrive. Nav, mobile menu and footer "Downloads" now link to it; all `.nav-soon`/`.f-soon`
+  "coming soon" buttons are GONE.
+
 **Deferred / needs input (NOT done):**
 - **C1** three product pages (`/vulcalap` etc.) — phase two; the single-page SEO ceiling stands until then.
 - **D1 "VulcaBar 400 Series"** — the schedule treats it as a new product, but "400 Series" was RENAMED to

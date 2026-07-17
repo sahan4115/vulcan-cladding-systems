@@ -614,6 +614,48 @@ p.eyebrow {
 /* A6: finishes credential line beneath the swatch controls */
 .finish-creds { margin-top: 1.6rem; color: rgba(255, 255, 255, 0.78); font-size: 0.85rem; letter-spacing: 0.02em; }
 
+/* D1(b): 400 Series sub-variant tag on the VulcaBar panel */
+.series-tag {
+  display: inline-flex; align-items: center; gap: 0.55rem; width: fit-content;
+  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--lblue); border: 1px solid var(--hairline-light); padding: 0.4rem 0.75rem;
+}
+.series-tag i { width: 9px; height: 9px; background: var(--lblue); transform: skewX(-12deg); }
+/* D2: system CTAs row + NBS copy button (underlined text action, beneath the summary) */
+.hpan-ctas { display: flex; align-items: center; gap: 1.7rem; flex-wrap: wrap; margin-top: 0.9rem; }
+.hpan-ctas .btn { margin-top: 0; }
+.btn-nbs {
+  background: none; border: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.55);
+  color: var(--white); font-family: var(--font); font-size: 0.92rem; font-weight: 600;
+  letter-spacing: 0.015em; padding: 0.3rem 0.1rem; cursor: pointer;
+  transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+.btn-nbs:hover, .btn-nbs:focus-visible { color: var(--lblue); border-color: var(--lblue); }
+.btn-nbs.is-copied { color: var(--lblue); border-color: transparent; cursor: default; }
+
+/* ---------- Downloads (D3 — request-based document list) ---------- */
+.downloads { background: var(--paper); padding: clamp(4.5rem, 9vw, 7.5rem) var(--pad); scroll-margin-top: 130px; }
+.downloads-inner {
+  max-width: 1560px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1.45fr; gap: clamp(2.5rem, 5vw, 5rem);
+  align-items: start;
+}
+.dl-lede { color: var(--muted); margin-top: 1.5rem; line-height: 1.75; max-width: 38ch; }
+.dl-list { list-style: none; }
+.dl-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+  padding: 1.35rem 0; border-top: 1px solid var(--hairline);
+}
+.dl-row:last-child { border-bottom: 1px solid var(--hairline); }
+.dl-name { display: block; font-weight: 600; font-size: 1.02rem; }
+.dl-sub { display: block; margin-top: 0.25rem; font-size: 0.88rem; color: var(--muted); }
+.dl-req {
+  flex: none; font-size: 0.92rem; font-weight: 600; color: var(--blue);
+  text-decoration: none; letter-spacing: 0.015em;
+  transition: color 0.3s var(--ease);
+}
+.dl-req:hover, .dl-req:focus-visible { color: var(--blue-deep); }
+
 /* ---------- Case studies (expanding gallery) ---------- */
 .projects { position: relative; }
 /* ---- Case-study track ----
@@ -893,6 +935,9 @@ html.js.reduced [data-clip] { clip-path: none; }
   .finish-overlay { order: 1; padding-top: clamp(3rem, 8vw, 4rem); padding-bottom: 1rem; }
   .finish-media { order: 2; position: relative; inset: auto; aspect-ratio: 1376 / 768; }
   .finish-stage::after { display: none; }
+
+  /* Downloads: copy stacks above the list */
+  .downloads-inner { grid-template-columns: 1fr; }
 
   /* Contact: shorter stage; no cursor on touch, so the wall's ambient sweep carries it */
   .contact-stage { min-height: 76svh; padding: 5rem var(--pad) 4.5rem; }

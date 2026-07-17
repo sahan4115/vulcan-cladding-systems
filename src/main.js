@@ -709,6 +709,61 @@ if (!reduce) {
 }
 document.querySelector('.footer-up').addEventListener('click', () => scrollToPos(0));
 
+/* ---------- D2: NBS clause copy-to-clipboard ----------
+   DRAFT clauses — each copied text is headed with a confirm-before-issue note.
+   Swap this map for Vulcan's real NBS spec copy when it is supplied. */
+const NBS_CLAUSES = {
+  vulcalap: `NBS SOURCE CLAUSE (DRAFT - confirm the project clause with Vulcan before issue)
+System: VulcaLap(R) aluminium plank rainscreen cladding
+Manufacturer: Vulcan Cladding Systems - sales@vulcansystems.co.uk - 020 8681 0617
+Reaction to fire: Classified A2-s1,d0 to BS EN 13501-1 (system classification, as tested)
+Profile: Single-extrusion aluminium plank - no core, no laminate
+Finish: Wood-grain or RAL polyester powder coat, Qualicoat approved
+Fixings: Hidden fixings throughout, with aluminium trims in a matching finish`,
+  vulcabar: `NBS SOURCE CLAUSE (DRAFT - confirm the project clause with Vulcan before issue)
+System: VulcaBar(R) aluminium bar cladding / facade screen
+Manufacturer: Vulcan Cladding Systems - sales@vulcansystems.co.uk - 020 8681 0617
+Reaction to fire: Classified A2-s1,d0 to BS EN 13501-1 (system classification, as tested)
+Profile: Single-extrusion aluminium bar sections - no core, no laminate
+Finish: Wood-grain or RAL polyester powder coat, Qualicoat approved
+Fixings: Hidden fixings throughout, with aluminium trims in a matching finish`,
+  vulcaframe: `NBS SOURCE CLAUSE (DRAFT - confirm the project clause with Vulcan before issue)
+System: VulcaFrame(TM) modular aluminium rainscreen cassettes
+Manufacturer: Vulcan Cladding Systems - sales@vulcansystems.co.uk - 020 8681 0617
+Reaction to fire: Classified A2-s1,d0 to BS EN 13501-1 (system classification, as tested)
+Construction: Prefabricated offsite in 600 / 900 / 1200mm cassettes - no core, no laminate
+Substrates: Suitable over brick, steel, concrete or existing cladding
+Fixings: Hidden fixings throughout, with aluminium trims in a matching finish`,
+};
+document.querySelectorAll('[data-nbs]').forEach((btn) => {
+  const idle = btn.textContent;
+  btn.addEventListener('click', async () => {
+    const text = NBS_CLAUSES[btn.dataset.nbs];
+    if (!text || btn.classList.contains('is-copied')) return;
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (_) {
+      /* clipboard API can be blocked (permissions/insecure context) — textarea fallback */
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+    }
+    btn.textContent = 'Copied';
+    btn.classList.add('is-copied');
+    /* high-intent conversion event — picked up when analytics (GTM/Clarity) lands */
+    (window.dataLayer = window.dataLayer || []).push({ event: 'nbs_clause_copy', system: btn.dataset.nbs });
+    setTimeout(() => {
+      btn.textContent = idle;
+      btn.classList.remove('is-copied');
+    }, 2200);
+  });
+});
+
 /* ---------- Footer clock (the works' local time) + year ---------- */
 const timeEl = document.getElementById('footer-time');
 const timeFmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit' });

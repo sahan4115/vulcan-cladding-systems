@@ -230,8 +230,7 @@
             <a href="#finishes">RAL Colours<span>Any RAL shade</span></a>
           </div>
         </div>
-        <!-- Inner page pending: Downloads -->
-        <button type="button" class="nav-soon" title="Coming with the inner pages">Downloads</button>
+        <a href="#downloads">Downloads</a>
         <a href="#contact">Contact</a>
       </nav>
       <!-- Placeholder CTA: wire to contact page + Pipedrive capture at dev stage -->
@@ -248,7 +247,7 @@
       <a href="#systems">Products</a>
       <a href="#projects">Case Studies</a>
       <a href="#finishes">Colours</a>
-      <button type="button" class="nav-soon" title="Coming with the inner pages">Downloads</button>
+      <a href="#downloads">Downloads</a>
       <a href="#contact">Contact</a>
       <button type="button" class="btn btn-solid">Start a conversation</button>
     </nav>
@@ -346,16 +345,26 @@
             <div class="hpan-info">
               <h3>VulcaLap<sup>&reg;</sup><span class="hpan-h3sub">Aluminium plank cladding</span></h3>
               <p class="hpan-desc">Classic weatherboard lines, extruded in aluminium. Reads as timber, performs as metal.</p>
-              <!-- Inner page pending: VulcaLap product page + NBS spec button -->
-              <button type="button" class="btn btn-ghost-light" title="Product page coming next">View system <span class="btn-arrow" aria-hidden="true">&rarr;</span></button>
+              <!-- Inner page pending: VulcaLap product page -->
+              <div class="hpan-ctas">
+                <button type="button" class="btn btn-ghost-light" title="Product page coming next">View system <span class="btn-arrow" aria-hidden="true">&rarr;</span></button>
+                <!-- D2: copies a DRAFT clause (marked as such in the copied text) — swap NBS map in main.js for Vulcan's real clauses -->
+                <button type="button" class="btn-nbs" data-nbs="vulcalap">Copy NBS clause</button>
+              </div>
             </div>
           </article>
           <article class="hpan-panel">
             <img src="/assets/img/vulcabar.jpg" alt="VulcaBar balustrade screening on a balcony facade" loading="lazy" />
             <div class="hpan-info">
               <h3>VulcaBar<sup>&reg;</sup><span class="hpan-h3sub">Aluminium bar cladding</span></h3>
+              <!-- D1(b): 400 Series sub-variant tag. CONFIRM with client: is this VulcaBar variant
+                   distinct from the old "400 Series" that was renamed VulcaFrame? Remove if not. -->
+              <span class="series-tag"><i aria-hidden="true"></i>Also in 400 Series</span>
               <p class="hpan-desc">Crisp bar profiles that bring rhythm and privacy to balconies, screens and walkways.</p>
-              <button type="button" class="btn btn-ghost-light" title="Product page coming next">View system <span class="btn-arrow" aria-hidden="true">&rarr;</span></button>
+              <div class="hpan-ctas">
+                <button type="button" class="btn btn-ghost-light" title="Product page coming next">View system <span class="btn-arrow" aria-hidden="true">&rarr;</span></button>
+                <button type="button" class="btn-nbs" data-nbs="vulcabar">Copy NBS clause</button>
+              </div>
             </div>
           </article>
           <article class="hpan-panel">
@@ -363,7 +372,10 @@
             <div class="hpan-info">
               <h3>VulcaFrame<sup>&trade;</sup><span class="hpan-h3sub">Modular rainscreen cassettes</span></h3>
               <p class="hpan-desc">Modular rainscreen cassettes, built offsite and fitted fast &mdash; over brick, steel or concrete.</p>
-              <button type="button" class="btn btn-ghost-light" title="Product page coming next">View system <span class="btn-arrow" aria-hidden="true">&rarr;</span></button>
+              <div class="hpan-ctas">
+                <button type="button" class="btn btn-ghost-light" title="Product page coming next">View system <span class="btn-arrow" aria-hidden="true">&rarr;</span></button>
+                <button type="button" class="btn-nbs" data-nbs="vulcaframe">Copy NBS clause</button>
+              </div>
             </div>
           </article>
         </div>
@@ -559,6 +571,44 @@
       </div>
     </section>
 
+    <!-- ============ DOWNLOADS (D3 — request-based until the real files are supplied;
+         swap each mailto for a direct file link as documents arrive) ============ -->
+    <section class="downloads" id="downloads">
+      <div class="downloads-inner">
+        <header class="downloads-head" data-reveal>
+          <p class="eyebrow">Technical documentation</p>
+          <h2>The paperwork, <strong>on request.</strong></h2>
+          <p class="dl-lede">Direct downloads are being prepared. Until then, tell us which documents you need and we will send them over.</p>
+        </header>
+        <ul class="dl-list">
+          <li class="dl-row" data-reveal>
+            <div class="dl-info"><span class="dl-name">A2-s1,d0 test certificates</span><span class="dl-sub">System classification reports to BS EN 13501-1</span></div>
+            <a class="dl-req" href="mailto:sales@vulcansystems.co.uk?subject=Document%20request%3A%20A2-s1%2Cd0%20test%20certificates">Request <span class="btn-arrow" aria-hidden="true">&rarr;</span></a>
+          </li>
+          <li class="dl-row" data-reveal>
+            <div class="dl-info"><span class="dl-name">Datasheets</span><span class="dl-sub">Technical datasheets for each system</span></div>
+            <a class="dl-req" href="mailto:sales@vulcansystems.co.uk?subject=Document%20request%3A%20Datasheets">Request <span class="btn-arrow" aria-hidden="true">&rarr;</span></a>
+          </li>
+          <li class="dl-row" data-reveal>
+            <div class="dl-info"><span class="dl-name">CAD &amp; Revit details</span><span class="dl-sub">Typical details and BIM objects</span></div>
+            <a class="dl-req" href="mailto:sales@vulcansystems.co.uk?subject=Document%20request%3A%20CAD%20%2F%20Revit%20details">Request <span class="btn-arrow" aria-hidden="true">&rarr;</span></a>
+          </li>
+          <li class="dl-row" data-reveal>
+            <div class="dl-info"><span class="dl-name">Installation guides</span><span class="dl-sub">Fixing, setting out and interface guidance</span></div>
+            <a class="dl-req" href="mailto:sales@vulcansystems.co.uk?subject=Document%20request%3A%20Installation%20guides">Request <span class="btn-arrow" aria-hidden="true">&rarr;</span></a>
+          </li>
+          <li class="dl-row" data-reveal>
+            <div class="dl-info"><span class="dl-name">EPDs</span><span class="dl-sub">Environmental product declarations</span></div>
+            <a class="dl-req" href="mailto:sales@vulcansystems.co.uk?subject=Document%20request%3A%20EPDs">Request <span class="btn-arrow" aria-hidden="true">&rarr;</span></a>
+          </li>
+          <li class="dl-row" data-reveal>
+            <div class="dl-info"><span class="dl-name">Warranty documentation</span><span class="dl-sub">25-year finish warranty terms</span></div>
+            <a class="dl-req" href="mailto:sales@vulcansystems.co.uk?subject=Document%20request%3A%20Warranty%20documentation">Request <span class="btn-arrow" aria-hidden="true">&rarr;</span></a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
     <!-- ============ CONTACT CTA ("the facade answers" finale) ============ -->
     <section class="contact" id="contact">
       <div class="contact-stage">
@@ -598,8 +648,7 @@
           <a href="#systems">Products</a>
           <a href="#projects">Case Studies</a>
           <a href="#finishes">Colours</a>
-          <!-- Inner page pending: Downloads -->
-          <button type="button" class="f-soon" title="Coming with the inner pages">Downloads</button>
+          <a href="#downloads">Downloads</a>
           <a href="#contact">Contact</a>
         </nav>
         <nav class="footer-col" aria-label="Systems">
