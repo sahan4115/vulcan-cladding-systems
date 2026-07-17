@@ -598,7 +598,9 @@ p.eyebrow {
 .hpan-intro .eyebrow { margin-bottom: -0.8rem; } /* the intro grid's gap already spaces it */
 .steps-head .eyebrow { width: 100%; margin-bottom: -0.5rem; } /* own row above the flex h2 row */
 .finish-overlay .eyebrow { margin-bottom: 0.9rem; }
-.projects-intro p.eyebrow { color: var(--blue); margin: 0 0 1.15rem; } /* .projects-intro p sits later in the file */
+/* .projects-head p (later in the file) wins ties — re-assert colour, full width and
+   centred box so the label centres with the rest of the header */
+.projects-intro p.eyebrow { color: var(--blue); margin: 0 auto 1.15rem; max-width: none; }
 /* A4: hidden-fixings supporting line under the plank intro */
 .plank-note { margin-top: 0.7rem; color: var(--muted); font-size: 0.95rem; }
 /* C5: SEO descriptor subline inside each product H3 (crawlable, deliberately not an eyebrow) */
