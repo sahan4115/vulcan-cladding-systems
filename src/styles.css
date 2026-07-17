@@ -587,6 +587,18 @@ html.js.reduced .statement-text .w { opacity: 1; }
 .step-cell p { font-size: 0.92rem; color: var(--muted); line-height: 1.7; }
 
 /* ---------- Copy & SEO change schedule (Vendo) additions ---------- */
+/* C4: SEO eyebrow — keyword micro-label above each section H2, at client request
+   (reverses the earlier no-kicker rule; remove by deleting .eyebrow elements + this block).
+   Follows the site's existing uppercase micro-label voice (0.12em tracking). */
+p.eyebrow {
+  font-size: 0.74rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--blue); margin: 0 0 1.15rem; max-width: none;
+}
+.hpan-intro .eyebrow, .certs-copy .eyebrow, .finish-overlay .eyebrow { color: var(--lblue); }
+.hpan-intro .eyebrow { margin-bottom: -0.8rem; } /* the intro grid's gap already spaces it */
+.steps-head .eyebrow { width: 100%; margin-bottom: -0.5rem; } /* own row above the flex h2 row */
+.finish-overlay .eyebrow { margin-bottom: 0.9rem; }
+.projects-intro p.eyebrow { color: var(--blue); margin: 0 0 1.15rem; } /* .projects-intro p sits later in the file */
 /* A4: hidden-fixings supporting line under the plank intro */
 .plank-note { margin-top: 0.7rem; color: var(--muted); font-size: 0.95rem; }
 /* C5: SEO descriptor subline inside each product H3 (crawlable, deliberately not an eyebrow) */

@@ -194,12 +194,23 @@ session; current USP ticker doesn't contain it. **"certainty" count:** left the 
 scroll-reveal echo + finishes + footer brand sign-off (deliberate brand echoes, not dilutive tics);
 only the systems-intro repeat was removed (A3).
 
+**Conformance pass 2 (2026-07-17, client re-sent the same schedule asking for full adjustment):**
+- **C4 eyebrows ADDED after all** — the user reversed their earlier "keep them off" call when the client
+  re-sent the doc. Six `p.eyebrow` micro-labels (doc strings verbatim) above the section H2s; styled in the
+  site's 0.12em uppercase micro-label voice, blue on light sections / lblue on dark. Specificity notes: the
+  base rule is `p.eyebrow` (beats `.plank-copy p`), plus a `.projects-intro p.eyebrow` override because the
+  projects styles sit LATER in the file and win ties. The no-kicker rule is now void for these SEO eyebrows.
+- **C7 done** — case images renamed via `git mv`: `tower-vert`→`case-merle-court`, `float/f07`→
+  `case-riverside-quarter`, `float/f03`→`case-harbour-view`, `float/f09`→`case-elmwood-court` (refs only in
+  `index.html` now; the other session's case-study rework removed the main.js CASES array).
+- **C2 noindex ADDED** — `<meta name="robots" content="noindex">` with a loud STAGING-ONLY comment; MUST be
+  removed in the production-domain build (canonical already points at vulcansystems.co.uk).
+- **A9 finished** — footer tag's brand couplet dropped (visible "certainty" now exactly 2: hero + finishes);
+  systems intro "Every"→"Each"; hero proof strip trimmed to the doc's exact `A2-s1,d0 classified · CWCT
+  tested`. Remaining "every"s are all inside the doc's own mandated replacement copy.
+
 **Deferred / needs input (NOT done):**
 - **C1** three product pages (`/vulcalap` etc.) — phase two; the single-page SEO ceiling stands until then.
-- **C2 noindex-on-staging** — no staging/prod split exists (GitHub Pages IS the only deploy). Canonical→prod
-  domain added as partial mitigation; a real robots strategy is still needed before go-live.
-- **C7 image filenames** `float/f03,f07,f09.jpg` → `case-*.jpg` — asset rename + ref updates in `index.html`
-  and the `CASES` array; quick but not done.
 - **D1 "VulcaBar 400 Series"** — the schedule treats it as a new product, but "400 Series" was RENAMED to
   VulcaFrame in this build. Contradiction — needs client clarification before adding anything.
 - **D2 NBS copy-to-clipboard** — needs the actual NBS clause text. **D3 Downloads section** — needs the files
