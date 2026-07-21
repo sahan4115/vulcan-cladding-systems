@@ -210,9 +210,9 @@ only the systems-intro repeat was removed (A3).
   tested`. Remaining "every"s are all inside the doc's own mandated replacement copy.
 
 **Section D built (2026-07-17, client pushed for them; interim mechanics until real content arrives):**
-- **D1(b)** — "Also in 400 Series" `.series-tag` on the VulcaBar panel. ⚠️ STILL needs the client to
-  confirm this VulcaBar variant is distinct from the old "400 Series" that became VulcaFrame — HTML
-  comment marks it; remove the tag if not.
+- **D1(b)** — "Also in 400 Series" `.series-tag` on the **VulcaLap** panel. RESOLVED 2026-07-21:
+  client confirmed 400 Series is a **VulcaLap** sub-variant (the change-schedule's "VulcaBar 400
+  Series" heading was wrong); tag was moved off VulcaBar accordingly.
 - **D2** — "Copy NBS clause" `.btn-nbs` on all three system panels (in a new `.hpan-ctas` row).
   Copies a **DRAFT clause** (each copied text is headed "DRAFT - confirm with Vulcan before issue")
   from the `NBS_CLAUSES` map in `main.js` — **swap that map for Vulcan's real NBS copy when supplied**.
