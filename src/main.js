@@ -69,7 +69,6 @@ heroIntro
   .add(() => heroTitle.classList.add('filled'), 0.95)
   .from('.hero-side > *', { y: 26, opacity: 0, duration: 0.8, stagger: 0.12 }, 0.55)
   .from('.hero-stamp', { scale: 0.6, opacity: 0, duration: 0.9, ease: 'back.out(1.5)' }, 0.85)
-  .from('.hero-scroll', { opacity: 0, duration: 0.6 }, 1.05)
   .fromTo('.hero-media-el', { scale: 1.12 }, { scale: 1.02, duration: 2.2, ease: 'power2.out' }, 0);
 
 const finishPre = () => {
@@ -79,7 +78,7 @@ const finishPre = () => {
 
 if (reduce) {
   finishPre();
-  gsap.set(['.hero-title .line-inner', '.hero-side > *', '.hero-stamp', '.hero-scroll'], { clearProps: 'all' });
+  gsap.set(['.hero-title .line-inner', '.hero-side > *', '.hero-stamp'], { clearProps: 'all' });
   heroTitle.classList.add('filled');
 } else {
   if (lenis) lenis.stop();
@@ -226,7 +225,7 @@ mm.add('(min-width: 861px) and (prefers-reduced-motion: no-preference)', () => {
   tl.to('.hero-media', { '--clip-p': 1, duration: 0.5, ease: 'power2.inOut' }, 0)
     .to('.hero-content', { x: -90, opacity: 0, duration: 0.35, ease: 'power1.in' }, 0.02)
     /* fromTo: explicit start so a mid-page reload can't lock these at the intro's opacity 0 */
-    .fromTo(['.hero-stamp', '.hero-scroll'], { opacity: 1 }, { opacity: 0, duration: 0.25, ease: 'power1.in' }, 0.02)
+    .fromTo('.hero-stamp', { opacity: 1 }, { opacity: 0, duration: 0.25, ease: 'power1.in' }, 0.02)
     .to('.hero-scrim', { opacity: 1, duration: 0.35, ease: 'none' }, 0.2)
     .to('.hero-reveal', { opacity: 1, duration: 0.2, ease: 'none' }, 0.52)
     .from('.hero-reveal .line-inner', { yPercent: 112, duration: 0.3, stagger: 0.09, ease: 'power2.out' }, 0.55);
@@ -234,7 +233,7 @@ mm.add('(min-width: 861px) and (prefers-reduced-motion: no-preference)', () => {
     document.body.classList.remove('hero-a');
     if (tl.scrollTrigger) tl.scrollTrigger.kill();
     tl.kill();
-    gsap.set(['.hero-media', '.hero-content', '.hero-stamp', '.hero-scroll', '.hero-scrim', '.hero-reveal', '.hero-reveal .line-inner'], { clearProps: 'all' });
+    gsap.set(['.hero-media', '.hero-content', '.hero-stamp', '.hero-scrim', '.hero-reveal', '.hero-reveal .line-inner'], { clearProps: 'all' });
   };
 });
 

@@ -272,8 +272,8 @@ html.js:not(.reduced) .hero-title.filled strong { color: var(--hero-fg); }
 .hero-proof .proof-ico { width: 20px; height: 20px; flex: none; } /* stroke=currentColor → inherits row colour */
 .hero-proof .proof-note strong { font-weight: 700; color: var(--hero-fg); }
 
-/* rotating stamp + scroll cue: desktop split state only */
-.hero-stamp, .hero-scroll { display: none; }
+/* rotating stamp: desktop split state only (scroll cue removed — it overlapped the credential strip) */
+.hero-stamp { display: none; }
 
 /* ---------- Hero second beat (revealed by the wedge expansion) ---------- */
 .hero-reveal { display: none; }
@@ -332,19 +332,6 @@ html.js:not(.reduced) .hero-title.filled strong { color: var(--hero-fg); }
   .stamp-mark { fill: var(--blue); }
   @keyframes stamp-spin { to { transform: rotate(360deg); } }
 
-  /* scroll cue, bottom of the paper half */
-  html.js:not(.reduced) .hero-scroll {
-    display: flex; position: absolute; z-index: 2;
-    left: var(--gutter); bottom: 2.4rem; align-items: center; gap: 0.9rem;
-    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--muted);
-  }
-  .hero-scroll i { display: block; width: 56px; height: 1px; background: var(--hairline); position: relative; overflow: hidden; }
-  .hero-scroll i::after {
-    content: ''; position: absolute; inset: 0; background: var(--blue);
-    transform: translateX(-101%); animation: scroll-slide 2.4s var(--ease) infinite;
-  }
-  @keyframes scroll-slide { 45% { transform: translateX(0); } 100% { transform: translateX(102%); } }
   html.js:not(.reduced) .hero-reveal {
     display: grid; position: absolute; inset: 0; z-index: 2;
     align-content: end; justify-items: start;
