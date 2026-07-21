@@ -618,7 +618,10 @@ p.eyebrow {
 .series-tag {
   display: inline-flex; align-items: center; gap: 0.55rem; width: fit-content;
   font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--lblue); border: 1px solid var(--hairline-light); padding: 0.4rem 0.75rem;
+  color: var(--white); padding: 0.45rem 0.8rem;
+  /* solid navy backing so the chip reads over any photo, light timber included */
+  background: rgba(4, 38, 61, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.38);
 }
 .series-tag i { width: 9px; height: 9px; background: var(--lblue); transform: skewX(-12deg); }
 /* D2: system CTAs row + NBS copy button (underlined text action, beneath the summary) */
