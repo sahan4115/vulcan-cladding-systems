@@ -347,7 +347,12 @@ const WB = [
   { img: 'app-commercial', name: 'Commercial &amp; education',
     line: 'Exterior and infill cladding for schemes where the envelope has to work as hard as it looks.' },
 ];
-const wbSrc = (k) => `/assets/img/apps/${k}.webp`;
+/* ⚠️ Asset URLs built in JS MUST carry import.meta.env.BASE_URL. Vite rewrites
+   absolute /assets paths in HTML and CSS at build time, but it cannot rewrite a
+   string literal — so a hardcoded '/assets/...' works in dev (base '/') and 404s
+   on the GitHub Pages project subpath. This shipped broken once: it took out all
+   of 04 Applications and the whole 05 coat wall + panel on the live site. */
+const wbSrc = (k) => `${import.meta.env.BASE_URL}assets/img/apps/${k}.webp`;
 
 const wbPin = document.getElementById('wbPin');
 if (wbPin) {
@@ -493,8 +498,9 @@ const COATS = {
 /* `raw` has no wall surface: the building is simply unclad, so the navy stage
    shows through and the bare-metal panel reads bright against it. The first
    pour clads the wall and coats the panel in the same sweep. */
-const tileUrl = (k) => (k === 'raw' ? 'none' : `url(/assets/img/finishes/tile-${k}.webp)`);
-const panelUrl = (k) => `/assets/img/finishes/panel-${k}.webp`;
+const tileUrl = (k) =>
+  (k === 'raw' ? 'none' : `url(${import.meta.env.BASE_URL}assets/img/finishes/tile-${k}.webp)`);
+const panelUrl = (k) => `${import.meta.env.BASE_URL}assets/img/finishes/panel-${k}.webp`;
 /* the wall is dark-veiled on the left, so type stays white until the coat is
    genuinely pale — ivory is the only one that needs ink */
 const inkFor = (k) => (COATS[k].lum > 170 ? '#0e2434' : '#ffffff');
