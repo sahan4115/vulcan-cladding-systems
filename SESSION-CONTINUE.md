@@ -431,6 +431,66 @@ are marked indicative. VulcaBar / VulcaFrame pages not started.
 
 ---
 
+## 🔴 BUILD-TIME TRAP — read before building VulcaBar / VulcaFrame
+
+**Any asset URL built in JS MUST use `import.meta.env.BASE_URL`.**
+Vite rewrites absolute `/assets/...` paths in HTML and CSS at build time, but it
+CANNOT rewrite a string literal inside JS. So a hardcoded `/assets/img/x.webp`
+works perfectly in dev (base `/`) and 404s on the GitHub Pages project subpath
+`/vulcan-cladding-systems/`.
+
+This SHIPPED BROKEN on 2026-08-18 (commit 2771e52, fixed in 80b4c81): `wbSrc`,
+`tileUrl` and `panelUrl` in vulcalap.js took out every image in 04 Applications
+and the entire 05 coat wall + panel on the live site, while everything looked
+perfect locally. The homepage was never affected because its paths are in HTML/CSS.
+
+```js
+// WRONG — 404s in production
+const u = (k) => `/assets/img/finishes/tile-${k}.webp`;
+// RIGHT
+const u = (k) => `${import.meta.env.BASE_URL}assets/img/finishes/tile-${k}.webp`;
+```
+
+**Verifying this needs the production build served under the SUBPATH.** Serving
+`dist` at localhost root proves nothing — the bug is invisible there by construction:
+```bash
+npm run build && mkdir -p /tmp/s && cp -r dist /tmp/s/vulcan-cladding-systems
+cd /tmp/s && python -m http.server 8123
+# then load http://localhost:8123/vulcan-cladding-systems/vulcalap.html and
+# check performance.getEntriesByType('resource') for responseStatus >= 400
+```
+
+## Coat wall textures REBUILT (2026-08-18) — tile-*.webp are new
+The old tiles were 300px crops from the ISOMETRIC render, so their plank seams and
+wood grain ran DIAGONALLY (fighting the horizontal course-line layer) and were
+upscaled 2.8x on retina — the "pixelated" complaint. Now:
+- two client renders (fin-cedar, fin-bronze) upscaled 6.3x via Higgsfield (4 credits),
+- de-rotated by the measured **28.4 deg** plank angle so grain runs horizontal,
+- cropped to exactly ONE course pitch (**505px**, measured off the specular course
+  lines) with that line CENTRED so both tile edges land in flat face,
+- offset-blended both axes -> seams measure at or below the interior gradient,
+- recoloured to all 14 coats from each coat's OWN sampled colour (validated against
+  the existing `COATS[].lum` values: cedar 143.3 vs 144, ivory 183.7 vs 183).
+Assets 434 KB -> 170 KB, and the tile is now DOWNSCALED 0.5x at DPR 2.
+⚠️ Because the tile is one course, `background-size` had to be retuned
+(420px -> `clamp(110px, 9vw, 175px)`); course now reads ~118px not ~381px.
+Scripts are in the session scratchpad; the recipe above is the durable record.
+⚠️ A faint diagonal ghost remains in the wood base (render lighting). Subtle, behind
+the veil, but visible if you look.
+
+## Client video supplied, NOT yet used: `T-G-Buildup.mp4`
+User's Downloads, 2026-08-18. Vulcan's REAL CAD install animation — 1280x720, 25fps,
+54s, no audio, 6.7 MB (re-encodes to 3.1 MB h264 / 1.6 MB VP9 at 720p).
+Arc: membrane roll -> substructure -> planks bottom-up round a corner -> close-up on
+the concealed fixing -> clad. Real geometry, not an AI reinterpretation.
+**Recommendation given: put it in 02 "The joint does the work"** (same subject as that
+section's SVG joint drawing), NOT the hero — it is 16:9 in a dark OSB environment vs
+the hero's portrait paper stage, its camera moves constantly (scrubbing a moving camera
+needs ~300+ frames = 8-12 MB, worse than the current 4.2 MB), and it opens on a membrane
+roll. **PLAY it, do not scrub it.** Gotchas: frame 0 is ~0.9s of PURE WHITE (RGB 255,
+std 0.0) and must be trimmed; it does NOT loop (starts membrane, ends clad) so play once
+on scroll-into-view. Awaiting the user's decision.
+
 ## ⚠️ First thing to check: the last deploy
 
 Everything is **committed and pushed** (head `a356fad`, working tree clean), but GitHub Pages
