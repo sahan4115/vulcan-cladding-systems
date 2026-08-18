@@ -133,13 +133,18 @@ html.js.reduced .preloader, html.js .preloader.done { display: none; }
   display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none;
   color: var(--lblue); font-size: 0.82rem; font-weight: 600; white-space: nowrap;
   transition: color 0.25s var(--ease);
+  /* fill the 38px rail so the tap target is the rail, not the 17px text line.
+     The rail's height is fixed, so this cannot move layout. */
+  padding: 10px 0;
 }
 .util-link:hover { color: var(--white); }
 .util-ico { width: 15px; height: 15px; flex: none; opacity: 0.9; }
-.util-social { display: flex; align-items: center; gap: 0.35rem; flex: none; }
+.util-social { display: flex; align-items: center; gap: 0.1rem; flex: none; } /* tighter gap offsets the wider boxes */
 .util-soc {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 30px; height: 30px; color: var(--lblue);
+  /* 38px box = the full rail height; the 15px glyph stays centred so the icons
+     LOOK identical, only the hit area grows (was 30px, a WCAG 2.5.8 miss) */
+  width: 38px; height: 38px; color: var(--lblue);
   transition: color 0.25s var(--ease), background-color 0.25s var(--ease);
 }
 .util-soc svg { width: 15px; height: 15px; }
@@ -157,6 +162,9 @@ html.js.reduced .preloader, html.js .preloader.done { display: none; }
   font-size: 0.92rem; font-weight: 600; text-decoration: none; color: var(--ink);
   background: none; border: 0; cursor: pointer; font-family: var(--font);
   transition: opacity 0.2s;
+  /* ~53px tap target inside the fixed-height bar (fits the 64px mobile bar too);
+     also bridges the pointer gap to the Products dropdown */
+  padding: 18px 0;
 }
 .nav-links a:hover { opacity: 0.75; }
 .nav-soon { opacity: 0.55; cursor: default; }

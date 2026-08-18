@@ -1,0 +1,904 @@
+/* ==========================================================================
+   VulcaLap product page — deeper cut of the homepage language.
+   Loads AFTER styles.css: nav, footer, buttons, marquee, reveal utilities and
+   the contact finale all come from there. Everything here is page-scoped
+   (.phero / .po- / .pd- / .rec- / .wb- / .coat- / .sb- / .pnav prefixes).
+   No eyebrows on this surface. Sharp corners throughout.
+   ========================================================================== */
+
+/* ---------- Product rail (sub-nav): appears once the system has opened ---------- */
+.pnav {
+  position: fixed; left: 0; right: 0; top: 114px; z-index: 99;
+  background: var(--white); box-shadow: 0 1px 0 var(--hairline);
+  transform: translateY(-100%); opacity: 0; pointer-events: none;
+  transition: transform 0.45s var(--ease), opacity 0.35s var(--ease), top 0.45s var(--ease);
+}
+body.nav-up .pnav { top: 0; }
+.pnav.on { transform: translateY(0); opacity: 1; pointer-events: auto; }
+.pnav-inner {
+  max-width: 1560px; margin: 0 auto; height: 52px; padding: 0 var(--pad);
+  display: flex; align-items: center; gap: 2rem;
+}
+.pnav-name { font-size: 0.95rem; font-weight: 700; letter-spacing: -0.01em; color: var(--ink); white-space: nowrap; }
+.pnav-name sup { font-size: 0.55em; font-weight: 400; }
+.pnav-name i { font-style: normal; font-weight: 400; color: var(--muted); }
+.pnav-links { display: flex; gap: 1.6rem; margin-left: auto; }
+.pnav-links a {
+  position: relative; font-size: 0.84rem; font-weight: 600; text-decoration: none;
+  color: var(--muted); padding: 0.3rem 0; transition: color 0.25s var(--ease);
+}
+/* the skewed plank underlines the section you are in */
+.pnav-links a::after {
+  content: ''; position: absolute; left: 0; right: 6px; bottom: -2px; height: 4px;
+  background: var(--blue); transform: skewX(-24deg) scaleX(0); transform-origin: left center;
+  transition: transform 0.35s var(--ease);
+}
+.pnav-links a:hover { color: var(--ink); }
+.pnav-links a.is-active { color: var(--blue); }
+.pnav-links a.is-active::after { transform: skewX(-24deg) scaleX(1); }
+.pnav-cta { padding: 0.5rem 1.05rem; font-size: 0.82rem; }
+@media (max-width: 1024px) { .pnav { display: none; } }
+
+/* ---------- Hero: the system experience ---------- */
+.phero { position: relative; background: var(--paper); }
+.phero-pin { position: relative; height: 100dvh; overflow: hidden; }
+.phero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+html.reduced .phero-pin { height: auto; min-height: 100dvh; }
+
+.phero-copy {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  display: grid; align-content: center; justify-items: start; gap: 1.9rem;
+  padding: 130px var(--pad) 0 var(--gutter);
+  max-width: none; width: min(56%, 760px);
+}
+.phero-copy > * { pointer-events: auto; }
+.phero-title {
+  font-size: clamp(3.2rem, 8.2vw, 8.2rem); line-height: 0.98; letter-spacing: -0.05em;
+  color: var(--ink);
+}
+.phero-title sup { font-size: 0.28em; font-weight: 400; letter-spacing: 0; }
+.phero-strap {
+  font-size: clamp(1.05rem, 1.5vw, 1.3rem); font-weight: 300; line-height: 1.65;
+  color: var(--muted); max-width: 44ch;
+  padding-left: 1.35rem; border-left: 1px solid var(--hairline);
+}
+.phero-facts {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 0.55rem 1.1rem;
+  font-size: 0.85rem; font-weight: 600; color: var(--muted); letter-spacing: 0.02em;
+}
+.phero-facts i { width: 8px; height: 10px; background: var(--blue); transform: skewX(-18deg); }
+.phero-ctas { display: flex; align-items: center; gap: clamp(1rem, 2vw, 1.8rem); flex-wrap: wrap; }
+.phero-ctas .link-cta { color: var(--ink); }
+
+/* scroll cue + stage readout: the engineered edge of the frame */
+.phero-hint {
+  position: absolute; left: var(--gutter); bottom: clamp(1.6rem, 4vh, 2.8rem); z-index: 2;
+  font-size: 0.78rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted); display: flex; align-items: center; gap: 0.7rem; pointer-events: none;
+}
+.phero-hint::before { content: ''; width: 30px; height: 1px; background: var(--muted); }
+.phero-rail {
+  position: absolute; right: clamp(1.2rem, 2.5vw, 2.4rem); bottom: clamp(1.6rem, 4vh, 2.8rem);
+  z-index: 2; display: grid; justify-items: center; gap: 0.8rem; pointer-events: none;
+}
+.phero-rail-track { width: 2px; height: clamp(90px, 16vh, 150px); background: var(--hairline); position: relative; overflow: hidden; }
+.phero-rail-fill { position: absolute; inset: 0; background: var(--blue); transform: scaleY(0); transform-origin: top center; }
+.phero-stageword {
+  font-size: 0.68rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--muted); writing-mode: vertical-rl;
+}
+
+/* projected component callouts */
+.phero-labels { position: absolute; inset: 0; z-index: 3; pointer-events: none; overflow: hidden; }
+.plabel { position: absolute; left: 0; top: 0; opacity: 0; will-change: transform, opacity; }
+.plabel-in { position: relative; padding-left: 1.6rem; transform: translateY(-50%); }
+.plabel-in::before {
+  content: ''; position: absolute; left: 0; top: 50%; width: 8px; height: 8px; margin-top: -4px;
+  background: var(--blue); transform: skewX(-18deg);
+}
+.plabel-in::after {
+  content: ''; position: absolute; left: 10px; right: calc(100% - 1.45rem); top: 50%;
+  height: 1px; background: var(--ink); opacity: 0.4;
+}
+.plabel strong { display: block; font-size: 0.92rem; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; white-space: nowrap; }
+.plabel span { display: block; font-size: 0.78rem; color: var(--muted); white-space: nowrap; }
+/* halo so the text stays legible when it crosses the timber */
+.plabel strong, .plabel span { text-shadow: 0 0 8px rgba(244, 247, 250, 0.85), 0 0 2px rgba(244, 247, 250, 0.9); }
+/* labels that sit left of their anchor read right-aligned */
+.plabel.flip .plabel-in { padding-left: 0; padding-right: 1.6rem; text-align: right; transform: translate(-100%, -50%); }
+.plabel.flip .plabel-in::before { left: auto; right: 0; }
+.plabel.flip .plabel-in::after { left: calc(100% - 1.45rem); right: 10px; }
+
+/* Out in the margin the canvas-drawn leader line already reaches the box, so the
+   label drops its own long stub and keeps only the terminal mark. On narrow stages
+   `at-edge` is off and the original stub-and-dot returns. */
+.plabel.at-edge .plabel-in { padding-left: 0.95rem; }
+.plabel.at-edge .plabel-in::after { display: none; }
+.plabel.at-edge.flip .plabel-in { padding-left: 0; padding-right: 0.95rem; }
+
+/* the closing line of the experience */
+.phero-beat {
+  position: absolute; left: var(--gutter); bottom: clamp(3.2rem, 9vh, 6rem); z-index: 2;
+  opacity: 0; pointer-events: none;
+  font-size: clamp(1.8rem, 3.4vw, 3rem); font-weight: 300; line-height: 1.15;
+  letter-spacing: -0.04em; color: var(--ink); max-width: 30ch;
+}
+.phero-beat strong { font-weight: 700; }
+
+/* static legend replaces the callouts when motion is off */
+.phero-legend { display: none; }
+html.reduced .phero-legend {
+  display: flex; flex-wrap: wrap; gap: 0.5rem 1.8rem;
+  padding: 1rem var(--gutter) 2rem; font-size: 0.85rem; color: var(--muted);
+}
+html.reduced .phero-hint, html.reduced .phero-rail, html.reduced .phero-beat, html.reduced .phero-labels { display: none; }
+html.reduced .phero-copy { position: relative; padding-top: 150px; padding-bottom: 2rem; width: auto; max-width: 900px; }
+html.reduced .phero-canvas { position: relative; height: 62vh; }
+html.reduced .phero-pin { display: flex; flex-direction: column; }
+
+@media (max-width: 860px) {
+  .phero-copy { width: auto; right: 0; align-content: end; padding: 0 var(--pad) 7rem; gap: 1.3rem; }
+  .phero-title { font-size: clamp(3.4rem, 15vw, 5.2rem); }
+  .phero-strap { font-size: 1rem; max-width: 34ch; }
+  .phero-hint { left: var(--pad); bottom: 1.4rem; }
+  .phero-rail { display: none; }
+  .plabel strong { font-size: 0.8rem; }
+  .plabel span { display: none; }
+  .phero-beat { left: var(--pad); }
+}
+
+/* ---------- 01 Overview ---------- */
+/* 01 is a NAVY COMMITMENT BAND — the first colour block on the page, straight off the
+   hero's paper, and it alternates into the white 02 that follows. Full-bleed by the
+   section; the text itself stays capped at 1200 by .po-intro-inner, so the band is wide
+   but the measure is not. White on --navy is 15.5:1.
+   The word-reveal still runs: .w animates opacity 0.14 -> 1, which on navy reads as the
+   same "unread" wash the light version gives, just inverted. Nothing in JS changes. */
+.po-intro {
+  padding: clamp(6rem, 12vw, 10rem) var(--pad) clamp(6rem, 12vw, 10rem);
+  background: var(--navy);
+}
+.po-intro .statement-text { color: var(--white); }
+.po-intro-inner { max-width: 1200px; margin: 0 auto; }
+.po-split {
+  max-width: 1560px; margin: 0 auto;
+  padding: clamp(2rem, 5vw, 4.5rem) var(--pad) clamp(5rem, 10vw, 8.5rem);
+  display: grid; grid-template-columns: 1.15fr 1fr; gap: clamp(2.5rem, 6vw, 6.5rem);
+  align-items: center;
+}
+.po-media { position: relative; overflow: hidden; }
+.po-media img { width: 100%; height: clamp(420px, 62vh, 640px); object-fit: cover; }
+.po-copy h2 { margin-bottom: 1.6rem; }
+.po-copy > p { color: var(--muted); }
+.po-index { list-style: none; margin-top: 2.4rem; }
+.po-index li {
+  display: grid; grid-template-columns: 3.2rem 1fr; gap: 1.2rem; align-items: baseline;
+  padding: 1.15rem 0; border-top: 1px solid var(--hairline);
+}
+.po-index li:last-child { border-bottom: 1px solid var(--hairline); }
+.po-index i {
+  font-style: normal; font-weight: 300; font-size: 1.15rem; letter-spacing: -0.02em;
+  color: var(--blue); font-variant-numeric: tabular-nums;
+}
+.po-index strong { display: block; font-weight: 600; font-size: 1rem; }
+.po-index span { display: block; font-size: 0.9rem; color: var(--muted); margin-top: 0.2rem; }
+
+/* ---------- 03 Engineered detail ---------- */
+.pd { background: var(--white); padding: clamp(5rem, 10vw, 8.5rem) var(--pad); }
+.pd-inner {
+  max-width: 1560px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1.3fr; gap: clamp(2.5rem, 6vw, 6rem);
+  align-items: center;
+}
+.pd-copy > p { color: var(--muted); margin-top: 1.6rem; }
+.pd-points { list-style: none; margin-top: 2.2rem; display: grid; gap: 1.1rem; }
+.pd-points li { display: flex; gap: 0.85rem; font-size: 0.95rem; color: var(--ink); line-height: 1.6; }
+.pd-points i { flex: none; width: 9px; height: 11px; margin-top: 0.42em; background: var(--blue); transform: skewX(-18deg); }
+.pd-points b { font-weight: 700; }
+
+/* the section drawing: engineering documentation, drawn by scroll */
+.pd-draw { position: relative; }
+.pd-draw svg { width: 100%; height: auto; display: block; }
+.pd-draw .dwg-line { stroke: var(--ink); stroke-width: 1.6; fill: none; }
+.pd-draw .dwg-line.lite { stroke-width: 1; opacity: 0.55; }
+.pd-draw .dwg-fill { fill: rgba(0, 87, 150, 0.07); }
+.pd-draw .dwg-accent { stroke: var(--blue); stroke-width: 1.6; fill: none; }
+.pd-draw .dwg-rail { fill: rgba(0, 87, 150, 0.16); }
+.pd-draw .dwg-brk { stroke: var(--muted); stroke-width: 1; fill: none; opacity: 0.5; }
+.pd-draw .dwg-dim { stroke: var(--muted); stroke-width: 1; fill: none; }
+.pd-draw .dwg-dim-t {
+  font-family: var(--font); font-size: 13px; font-weight: 600; letter-spacing: 0.08em;
+  fill: var(--muted); text-transform: uppercase;
+}
+.pd-draw .dwg-note { font-family: var(--font); font-size: 13.5px; font-weight: 700; fill: var(--ink); }
+.pd-draw .dwg-sub { font-family: var(--font); font-size: 12px; font-weight: 400; fill: var(--muted); }
+.pd-footnote { margin-top: 1.1rem; font-size: 0.78rem; color: var(--muted); opacity: 0.8; }
+
+/* ---------- 03 PERFORMANCE (the record plate) --------------------------
+   A machined aluminium plate on the navy. The claims are engraved into it —
+   dark cut face, light lower lip — and scroll runs a cutting pass that files
+   each line in. Selecting a line picks the document that evidences the claim,
+   which is what the section is actually for.
+   Contrast: cut face #232b33 on the plate's darkest tone #a9b0b7 is ~6.5:1;
+   secondary #333c45 is ~4.7:1. Keep them at least this dark.
+   --------------------------------------------------------------------- */
+.rec { background: var(--navy); padding: clamp(4.5rem, 8.5vw, 7.5rem) var(--pad); }
+.rec-inner {
+  max-width: 1560px; margin: 0 auto;
+  display: grid; grid-template-columns: minmax(0, 0.64fr) minmax(0, 1.36fr);
+  gap: clamp(2.5rem, 4.5vw, 4.5rem); align-items: center;
+}
+
+.rec-h { color: var(--white); max-width: 12ch; }
+.rec-lede { color: var(--lblue); margin-top: 1.5rem; max-width: 40ch; line-height: 1.7; }
+
+.rec-pack { margin-top: clamp(2rem, 4vw, 3rem); display: grid; gap: 0.9rem; justify-items: start; }
+.rec-count { margin: 0; color: var(--white); font-size: 0.95rem; }
+.rec-count b { font-size: 1.9rem; font-weight: 300; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.rec-count span { color: rgba(255, 255, 255, 0.72); }
+.rec-meter { width: min(280px, 100%); height: 2px; background: rgba(167, 172, 216, 0.3); }
+.rec-meter i { display: block; height: 100%; width: 100%; background: var(--lblue); transform: scaleX(0); transform-origin: left center; transition: transform 0.5s var(--ease); }
+.rec-cta { margin-top: 0.5rem; transition: opacity 0.3s var(--ease), background-color 0.3s var(--ease); }
+.rec-cta[disabled] { opacity: 0.4; cursor: not-allowed; }
+.rec-hint { margin: 0; font-size: 0.82rem; color: rgba(255, 255, 255, 0.6); max-width: 34ch; }
+
+/* ---- the plate ---- */
+.rec-plate {
+  position: relative; margin: 0; padding: clamp(1.4rem, 2.4vw, 2.2rem) clamp(1.2rem, 2.4vw, 2.4rem) clamp(1rem, 2vw, 1.8rem);
+  /* brushed aluminium: fine horizontal grain over a raking sheen */
+  background:
+    linear-gradient(107deg, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0) 26%, rgba(0, 0, 0, 0.07) 52%, rgba(255, 255, 255, 0.22) 74%, rgba(0, 0, 0, 0.05) 100%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.055) 0 1px, rgba(0, 0, 0, 0.045) 1px 2px, transparent 2px 4px),
+    linear-gradient(168deg, #cbd1d7 0%, #b4bbc2 46%, #a9b0b7 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.75), inset 0 -1px 0 rgba(0, 0, 0, 0.28),
+    inset 1px 0 0 rgba(255, 255, 255, 0.3), inset -1px 0 0 rgba(0, 0, 0, 0.18),
+    0 28px 60px rgba(1, 16, 27, 0.55), 0 2px 0 rgba(1, 16, 27, 0.5);
+  transform-style: preserve-3d; will-change: transform;
+}
+/* countersunk fixings, one at each corner — it is a plate, not a panel */
+.rec-fix {
+  position: absolute; width: 11px; height: 11px; border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, #6f767d, #2f363d 62%, #8b9299 100%);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+.rec-fix-tl { left: 12px; top: 12px; }
+.rec-fix-tr { right: 12px; top: 12px; }
+.rec-fix-bl { left: 12px; bottom: 12px; }
+.rec-fix-br { right: 12px; bottom: 12px; }
+
+.rec-plate-head {
+  display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+  padding: 0 1.6rem 0.9rem; margin-bottom: 0.4rem;
+  border-bottom: 1px solid rgba(1, 16, 27, 0.22);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
+  font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+  color: #333c45; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+.rec-plate-head sup { font-size: 0.7em; }
+
+.rec-lines { list-style: none; }
+.rec-line { position: relative; --cut: 0%; border-bottom: 1px solid rgba(1, 16, 27, 0.16); box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4); }
+.rec-line:last-child { border-bottom: 0; box-shadow: none; }
+
+.rec-hit {
+  display: block; width: 100%; background: none; border: 0; cursor: pointer;
+  font-family: var(--font); text-align: left; padding: 0; border-radius: 0;
+  transition: background-color 0.3s var(--ease);
+}
+.rec-hit:hover { background: rgba(255, 255, 255, 0.22); }
+.rec-hit:focus-visible { outline: 2px solid var(--blue); outline-offset: -3px; }
+
+/* the engraved content; the cut sweeps in from the left as the tool passes */
+.rec-cut {
+  display: grid; align-items: baseline;
+  grid-template-columns: minmax(120px, 0.5fr) minmax(0, 1fr) minmax(0, 0.9fr) minmax(0, 1fr);
+  gap: 0.4rem clamp(0.8rem, 1.8vw, 1.8rem);
+  padding: clamp(1.1rem, 2vw, 1.75rem) 1.6rem;
+  clip-path: inset(0 var(--cut) 0 0);
+}
+.rec-fig {
+  font-size: clamp(1.8rem, 2.9vw, 3.05rem); font-weight: 300; line-height: 1;
+  letter-spacing: -0.035em; color: #232b33; white-space: nowrap;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.62), 0 -1px 1px rgba(0, 0, 0, 0.3);
+}
+.rec-fig i { font-style: normal; font-size: 0.38em; font-weight: 600; letter-spacing: 0.02em; }
+.rec-claim {
+  font-size: clamp(1rem, 1.25vw, 1.18rem); font-weight: 700; letter-spacing: -0.01em; color: #232b33;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55), 0 -1px 1px rgba(0, 0, 0, 0.22);
+}
+.rec-std {
+  font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em; color: #333c45;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+.rec-doc {
+  display: flex; align-items: center; gap: 0.55rem; justify-self: end;
+  font-size: 0.84rem; font-weight: 600; color: #333c45;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  transition: color 0.3s var(--ease);
+}
+/* the tick is struck into the metal when the document is chosen */
+.rec-tick {
+  flex: none; width: 17px; height: 17px; position: relative;
+  border: 1px solid rgba(1, 16, 27, 0.4); background: rgba(1, 16, 27, 0.07);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.22), 0 1px 0 rgba(255, 255, 255, 0.45);
+  transition: background-color 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+.rec-tick::after {
+  content: ''; position: absolute; left: 4px; top: 4px; width: 8px; height: 4px;
+  border-left: 2px solid var(--white); border-bottom: 2px solid var(--white);
+  transform: rotate(-45deg) scale(0.4); opacity: 0;
+  transition: transform 0.35s var(--ease), opacity 0.25s var(--ease);
+}
+.rec-hit[aria-pressed="true"] .rec-tick { background: var(--blue); border-color: var(--blue-deep); }
+.rec-hit[aria-pressed="true"] .rec-tick::after { transform: rotate(-45deg) scale(1); opacity: 1; }
+.rec-hit[aria-pressed="true"] .rec-doc { color: #16324a; }
+
+/* the cutter: a hot point travelling at the edge of the cut */
+.rec-tool {
+  position: absolute; top: 6%; bottom: 6%; left: calc(100% - var(--cut));
+  width: 2px; opacity: 0; pointer-events: none;
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.95) 22%, rgba(255, 255, 255, 0.95) 78%, transparent);
+  box-shadow: 0 0 16px 2px rgba(255, 255, 255, 0.8), 0 0 40px 6px rgba(0, 87, 150, 0.5);
+}
+.rec-line.cutting .rec-tool { opacity: 1; }
+
+@media (max-width: 1024px) {
+  .rec-inner { grid-template-columns: 1fr; }
+  .rec-h { max-width: none; }
+}
+@media (max-width: 720px) {
+  .rec-cut {
+    grid-template-columns: auto 1fr; gap: 0.25rem 1rem;
+    padding: 1rem 1.1rem;
+  }
+  .rec-fig { grid-row: span 2; align-self: center; }
+  .rec-std { grid-column: 2; }
+  .rec-doc { grid-column: 1 / -1; justify-self: start; margin-top: 0.5rem; }
+  .rec-plate-head { padding: 0 1.1rem 0.8rem; font-size: 0.62rem; }
+  .rec-plate-head span:last-child { display: none; }
+}
+
+/* reduced motion / no JS: the plate is already fully engraved (--cut defaults
+   to 0), so nothing is gated behind the cutting pass */
+html.reduced .rec-tool { display: none; }
+
+/* ---------- 04 WHERE IT BELONGS ---------------------------------------
+   One photograph per application, full bleed. The transition re-clads the
+   frame course by course: each band is a slice of the same covered image, so
+   the bands compose one undistorted photograph, and they sweep in from
+   alternating sides like planks going up. The bottom index is the progress bar.
+   --------------------------------------------------------------------- */
+.wb { position: relative; background: var(--navy); }
+.wb-pin { position: relative; height: 100dvh; overflow: hidden; --bands: 14; }
+
+.wb-stage { position: absolute; inset: 0; }
+.wb-layer { position: absolute; inset: 0; }
+/* a band is a window onto the full-stage image; the image inside is sized to
+   the whole layer and pushed up by this band's index, so `cover` still governs
+   the composition and nothing is stretched */
+.wb-band { position: absolute; left: 0; right: 0; height: calc(100% / var(--bands)); top: calc(var(--j) * 100% / var(--bands)); overflow: hidden; }
+.wb-band img { position: absolute; left: 0; width: 100%; height: calc(100% * var(--bands)); top: calc(var(--j) * -100%); object-fit: cover; display: block; }
+/* the leading edge of a course as it lands */
+.wb-band::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 2px; opacity: 0;
+  background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 22px rgba(255, 255, 255, 0.55);
+}
+.wb-band.from-l::after { right: 0; }
+.wb-band.from-r::after { left: 0; }
+.wb-band.laying::after { opacity: 1; }
+
+.wb-veil {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(98deg, rgba(4, 38, 61, 0.86) 0%, rgba(4, 38, 61, 0.42) 28%, rgba(4, 38, 61, 0) 54%),
+    linear-gradient(to top, rgba(4, 38, 61, 0.92) 0%, rgba(4, 38, 61, 0.3) 20%, transparent 42%);
+}
+
+.wb-eyeless {
+  position: absolute; left: var(--gutter); top: clamp(9.5rem, 21vh, 11.5rem); margin: 0;
+  font-size: clamp(1.1rem, 1.5vw, 1.45rem); font-weight: 300; letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 0.72);
+}
+.wb-eyeless strong { font-weight: 700; color: var(--white); }
+
+/* the application is the hero here, not the section title */
+.wb-read {
+  position: absolute; left: var(--gutter); right: var(--pad);
+  bottom: clamp(9.5rem, 20vh, 13rem);
+  /* NOT ch — it would resolve against the body font-size, not the display size */
+  max-width: min(52vw, 860px); color: var(--white);
+}
+.wb-name {
+  margin: 0; font-size: clamp(2.5rem, 5.6vw, 5.6rem); font-weight: 300;
+  line-height: 0.95; letter-spacing: -0.05em; text-wrap: balance; hyphens: none;
+}
+.wb-line {
+  margin: 1.5rem 0 0; max-width: 42ch;
+  font-size: clamp(0.95rem, 1.15vw, 1.1rem); font-weight: 300; line-height: 1.62;
+  color: rgba(255, 255, 255, 0.82);
+  padding-left: 1.3rem; border-left: 1px solid rgba(167, 172, 216, 0.45);
+}
+
+/* index = progress bar: four equal spans, the live one fills */
+.wb-index {
+  position: absolute; left: var(--gutter); right: var(--gutter);
+  bottom: clamp(2.2rem, 5vh, 3.4rem);
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(0.8rem, 2vw, 2rem);
+}
+.wb-tab {
+  position: relative; display: grid; gap: 0.55rem; justify-items: start; text-align: left;
+  background: none; border: 0; padding: 0; cursor: pointer; font-family: var(--font);
+  color: rgba(255, 255, 255, 0.55); transition: color 0.3s var(--ease);
+}
+.wb-tab-bar { display: block; width: 100%; height: 2px; background: rgba(255, 255, 255, 0.26); }
+.wb-tab-bar i { display: block; height: 100%; width: 100%; background: var(--white); transform: scaleX(0); transform-origin: left center; }
+.wb-tab-no { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; font-variant-numeric: tabular-nums; }
+.wb-tab-name { font-size: clamp(0.8rem, 1vw, 0.95rem); font-weight: 600; letter-spacing: -0.01em; line-height: 1.3; }
+.wb-tab:hover, .wb-tab:focus-visible { color: var(--white); }
+.wb-tab.is-on { color: var(--white); }
+
+/* no JS / reduced motion: four plain full-bleed applications, stated */
+html:not(.js) .wb-pin, html.reduced .wb-pin { height: auto; }
+html:not(.js) .wb-stage, html.reduced .wb-stage,
+html:not(.js) .wb-veil, html.reduced .wb-veil,
+html:not(.js) .wb-index, html.reduced .wb-index { display: none; }
+html:not(.js) .wb-eyeless, html.reduced .wb-eyeless,
+html:not(.js) .wb-read, html.reduced .wb-read { position: relative; left: auto; right: auto; top: auto; bottom: auto; padding: 0 var(--pad); max-width: none; }
+html.reduced .wb-pin { padding: clamp(4rem, 9vw, 7rem) 0; }
+html.reduced .wb-fallback { display: grid; }
+.wb-fallback { display: none; }
+
+@media (max-width: 900px) {
+  /* --bands must NOT be overridden here: the band elements are built once from
+     this value in JS, and a mismatch after a resize breaks the composition */
+  .wb-pin { height: 100svh; }
+  .wb-eyeless { left: var(--pad); top: clamp(6rem, 14vh, 8rem); }
+  .wb-read { left: var(--pad); right: var(--pad); bottom: clamp(8.5rem, 22vh, 12rem); max-width: none; }
+  .wb-name { font-size: clamp(2.4rem, 11vw, 3.6rem); }
+  .wb-line { font-size: 0.92rem; max-width: none; }
+  .wb-index { left: var(--pad); right: var(--pad); bottom: clamp(1.4rem, 4vh, 2.2rem); gap: 0.5rem; }
+  .wb-tab-name { display: none; }
+  .wb-veil {
+    background:
+      linear-gradient(to bottom, rgba(4, 38, 61, 0.82) 0%, rgba(4, 38, 61, 0.28) 34%, transparent 52%),
+      linear-gradient(to top, rgba(4, 38, 61, 0.92) 0%, rgba(4, 38, 61, 0.45) 26%, transparent 50%);
+  }
+}
+
+/* ---------- 05 THE COAT ------------------------------------------------
+   A pinned, full-viewport composition. The stage IS the surface: a wall of the
+   real coated material, the product panel in front of it, and one hard pour
+   edge that crosses wall + panel + headline together. Per-coat values arrive
+   as custom properties from JS (--coat-a/--coat-b = the two coats in play,
+   --pour = 0..1, --ink-a/--ink-b = legible type colour for each coat).
+   ---------------------------------------------------------------------- */
+.coat { position: relative; background: var(--paper); }
+.coat-pin {
+  position: relative; height: 100dvh; overflow: hidden;
+  --pour: 0;                 /* 0 = base coat only, 1 = new coat fully poured */
+  --edge: 0%;                /* the pour edge, as a % down the stage */
+  --ink-a: var(--white);
+  --ink-b: var(--white);
+}
+
+/* ---- the wall: real plank face, repeated at cladding scale ---- */
+.coat-wall { position: absolute; inset: 0; z-index: 0; background: var(--navy); }
+.coat-wall-l {
+  position: absolute; inset: 0;
+  background-image: var(--coat-a);
+  /* The tile is now ONE course pitch (see the finishes asset note), so this sets the
+     course height directly: width x 0.908. ~110-175px gives a course of ~100-159px,
+     which reads as laid cladding and roughly matches the panel in front. The old
+     420px was tuned for a tile that held several courses. */
+  background-size: clamp(110px, 9vw, 175px) auto;
+  background-repeat: repeat;
+  will-change: clip-path;
+}
+/* the wall fills the stage, so a stage-relative % is already correct here.
+   The coat floods DOWNWARD from the top, the way a wall is actually coated. */
+.coat-wall-pour { background-image: var(--coat-b); clip-path: inset(0 0 calc(100% - var(--edge)) 0); }
+/* course lines: the wall reads as laid cladding, not wallpaper */
+.coat-courses {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    repeating-linear-gradient(to bottom,
+      rgba(255, 255, 255, 0.07) 0, rgba(255, 255, 255, 0.07) 1px,
+      transparent 1px, transparent 3px,
+      rgba(1, 16, 27, 0.16) calc(clamp(52px, 5.2vw, 96px) - 2px),
+      rgba(1, 16, 27, 0.3) clamp(52px, 5.2vw, 96px));
+}
+/* vignette + a raking gradient so the wall has light on it, never flat */
+.coat-veil {
+  position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  background:
+    linear-gradient(104deg, rgba(4, 38, 61, 0.82) 0%, rgba(4, 38, 61, 0.42) 34%, rgba(4, 38, 61, 0) 62%),
+    radial-gradient(120% 90% at 78% 18%, rgba(255, 255, 255, 0.16), transparent 55%),
+    linear-gradient(to top, rgba(4, 38, 61, 0.6), transparent 34%);
+}
+
+/* ---- every coat at once ---- */
+.coat-spectrum {
+  position: absolute; inset: 0; z-index: 2; display: flex; opacity: 0; pointer-events: none;
+}
+.coat-band {
+  flex: 1; background-image: var(--sw); background-size: cover; background-position: center;
+  transform: scaleY(0); transform-origin: bottom center; will-change: transform;
+}
+
+/* ---- the resolve ---- */
+.coat-arch { position: absolute; inset: 0; z-index: 2; opacity: 0; clip-path: inset(100% 0 0 0); }
+.coat-arch img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ---- the product ---- */
+.coat-panel {
+  position: absolute; z-index: 4; margin: 0;
+  right: clamp(-3rem, -1vw, 0rem); bottom: clamp(-4rem, -3vh, -1rem);
+  width: clamp(300px, 44vw, 660px); aspect-ratio: 500 / 650;
+  filter: drop-shadow(-34px 44px 64px rgba(1, 16, 27, 0.55)) drop-shadow(0 2px 3px rgba(1, 16, 27, 0.35));
+  will-change: transform;
+}
+.coat-panel-l { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+/* panel + copy sit anywhere in the stage, so their cut line is set in px by
+   JS (clip-path % would resolve against the element, not the stage, and the
+   edges would drift apart). */
+.coat-panel-pour { clip-path: inset(0 0 100% 0); }
+
+/* ---- the pour edge ---- */
+.coat-edge {
+  position: absolute; left: 0; right: 0; top: var(--edge); z-index: 6;
+  height: 2px; pointer-events: none; opacity: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.92) 18%, rgba(255, 255, 255, 0.92) 82%, transparent);
+  box-shadow: 0 6px 26px rgba(255, 255, 255, 0.32), 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* ---- headline + readout (two stacked copies; the edge crosses the type) ---- */
+.coat-copy {
+  position: absolute; z-index: 5; left: var(--gutter); right: var(--pad);
+  top: 50%; transform: translateY(-50%);
+  max-width: min(52vw, 760px); color: var(--ink-a);
+  display: grid; gap: clamp(1.1rem, 2vh, 1.8rem); pointer-events: none;
+}
+.coat-copy-pour { color: var(--ink-b); clip-path: inset(0 0 100% 0); }
+.coat-h {
+  font-size: clamp(3rem, 7.6vw, 8rem); line-height: 0.94; letter-spacing: -0.05em;
+  color: inherit; max-width: 11ch;
+}
+.coat-sub {
+  font-size: clamp(0.95rem, 1.15vw, 1.15rem); font-weight: 300; line-height: 1.62;
+  color: inherit; opacity: 0.82; max-width: 40ch;
+  padding-left: 1.35rem; border-left: 1px solid currentColor;
+}
+.coat-read { display: grid; gap: 0.2rem; color: inherit; }
+.coat-read strong { font-size: clamp(1.05rem, 1.5vw, 1.35rem); font-weight: 700; letter-spacing: -0.015em; }
+.coat-read span { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.72; }
+
+.coat-close {
+  position: absolute; z-index: 5; left: var(--gutter); bottom: clamp(7rem, 16vh, 11rem);
+  margin: 0; opacity: 0; pointer-events: none;
+  font-size: clamp(2rem, 4.4vw, 4.2rem); font-weight: 300; line-height: 1.06;
+  letter-spacing: -0.045em; color: var(--white); max-width: 16ch;
+  text-shadow: 0 2px 40px rgba(1, 16, 27, 0.5);
+}
+.coat-close strong { font-weight: 700; }
+
+/* ---- the range, as a spectrum rail ---- */
+.coat-rail {
+  position: absolute; z-index: 7; left: 0; right: 0; bottom: 0;
+  display: flex; align-items: flex-end; gap: clamp(0.9rem, 2vw, 1.8rem);
+  padding: 0 var(--gutter) clamp(1.1rem, 2.4vh, 1.8rem);
+}
+.coat-rail-lede {
+  flex: none; padding-bottom: 0.5rem;
+  font-size: 0.68rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.72);
+}
+.coat-sws { flex: 1; display: flex; align-items: flex-end; gap: 3px; min-width: 0; }
+/* the bar grows on hover, but the BUTTON does not: animating height here
+   re-laid out all 15 siblings on every hover and made the hit target slide out
+   from under the cursor. --h drives a compositor-only scaleY instead, and the
+   hit area stays constant. */
+@property --h { syntax: '<number>'; inherits: false; initial-value: 0.45; }
+.coat-sw {
+  position: relative; flex: 1; height: clamp(46px, 6vh, 72px); --h: 0.45;
+  background: none; border: 0; border-radius: 0; padding: 0; cursor: pointer;
+  transition: --h 0.4s var(--ease);
+}
+.coat-sw::before {
+  content: ''; position: absolute; inset: 0;
+  background-image: var(--sw); background-size: cover; background-position: center;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+  transform: scaleY(var(--h)); transform-origin: bottom center;
+  transition: box-shadow 0.3s var(--ease);
+}
+.coat-sw::after {
+  content: ''; position: absolute; left: 0; right: 0; height: 3px;
+  top: calc((1 - var(--h)) * 100% - 5px);
+  background: var(--white); transform: skewX(-24deg) scaleX(0);
+  transition: transform 0.35s var(--ease);
+}
+.coat-sw:hover, .coat-sw:focus-visible, .coat-sw.is-on { --h: 1; }
+.coat-sw:hover::before, .coat-sw:focus-visible::before { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5); }
+.coat-sw.is-on::after { transform: skewX(-24deg) scaleX(1); }
+.coat-sw-name {
+  position: absolute; left: 50%; bottom: calc(100% + 12px); transform: translateX(-50%);
+  white-space: nowrap; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.02em;
+  color: var(--white); background: rgba(4, 38, 61, 0.9); padding: 0.3rem 0.6rem;
+  opacity: 0; transition: opacity 0.25s var(--ease); pointer-events: none;
+}
+.coat-sw:hover .coat-sw-name, .coat-sw:focus-visible .coat-sw-name { opacity: 1; }
+
+/* ---- no JS / reduced motion: a static, complete version of the same idea ---- */
+html:not(.js) .coat-pin, html.reduced .coat-pin { height: auto; min-height: 100dvh; padding: clamp(5rem, 10vw, 8rem) 0 0; }
+html:not(.js) .coat-copy, html.reduced .coat-copy { position: relative; top: auto; transform: none; padding-bottom: clamp(16rem, 34vh, 26rem); }
+html.reduced .coat-copy { clip-path: none !important; }
+html:not(.js) .coat-copy-pour, html.reduced .coat-copy-pour,
+html:not(.js) .coat-edge, html.reduced .coat-edge,
+html:not(.js) .coat-spectrum, html.reduced .coat-spectrum,
+html:not(.js) .coat-arch, html.reduced .coat-arch,
+html:not(.js) .coat-close, html.reduced .coat-close { display: none; }
+html.reduced .coat-panel { bottom: 4rem; }
+
+@media (max-width: 900px) {
+  .coat-pin { height: 100svh; }
+  .coat-copy { top: clamp(5.5rem, 13vh, 8rem); transform: none; max-width: none; right: var(--pad); left: var(--pad); }
+  .coat-h { font-size: clamp(2.9rem, 13vw, 4.6rem); max-width: 9ch; }
+  .coat-sub { display: none; }               /* the wall and the panel carry it on small screens */
+  .coat-panel { width: min(92vw, 460px); right: -12%; bottom: clamp(3.5rem, 9vh, 6rem); }
+  .coat-close { left: var(--pad); bottom: clamp(8rem, 20vh, 12rem); font-size: clamp(1.9rem, 8.5vw, 2.8rem); }
+  .coat-rail { padding: 0 var(--pad) 1rem; gap: 0.7rem; }
+  .coat-rail-lede { display: none; }
+  .coat-sw { height: clamp(22px, 3vh, 30px); }
+  .coat-veil {
+    background:
+      linear-gradient(to bottom, rgba(4, 38, 61, 0.88) 0%, rgba(4, 38, 61, 0.34) 46%, rgba(4, 38, 61, 0.05) 62%),
+      linear-gradient(to top, rgba(4, 38, 61, 0.72), transparent 30%);
+  }
+}
+
+/* ---------- 06 THE SPEC BENCH -----------------------------------------
+   A tool, not a narrative: the page's one Operate surface. Choices on the
+   left, a clause that rewrites itself on the right, two actions. Evidence
+   lives in 03; this owns the specification.
+   --------------------------------------------------------------------- */
+.sb { background: var(--paper); padding: clamp(5rem, 9vw, 8rem) var(--pad); scroll-margin-top: 130px; }
+.sb-inner {
+  max-width: 1560px; margin: 0 auto;
+  display: grid; grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+  column-gap: clamp(2.5rem, 5vw, 5rem); row-gap: clamp(2.2rem, 4vw, 3.2rem);
+  align-items: start;
+}
+.sb-head { grid-column: 1 / -1; max-width: 62ch; }
+.sb-h { margin: 0; }
+.sb-lede { margin-top: 1.3rem; color: var(--muted); max-width: 56ch; }
+
+/* ---- the choices: a spec form, machined ---- */
+.sb-controls { display: grid; gap: clamp(1.6rem, 3vw, 2.4rem); border: 0; }
+.sb-group { border: 0; padding: 0; margin: 0; }
+.sb-legend {
+  padding: 0 0 0.85rem; font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+}
+.sb-opts { display: grid; gap: 1px; background: var(--hairline); border: 1px solid var(--hairline); }
+.sb-opt { position: relative; display: block; background: var(--white); cursor: pointer; }
+.sb-opt input { position: absolute; opacity: 0; width: 0; height: 0; }
+.sb-opt-face {
+  display: flex; align-items: baseline; gap: 0.7rem; flex-wrap: wrap;
+  padding: 0.95rem 1.1rem 0.95rem 2.4rem;
+  transition: background-color 0.25s var(--ease), color 0.25s var(--ease);
+}
+/* the brand's skewed plank is the selected marker */
+.sb-opt-face::before {
+  content: ''; position: absolute; left: 1.1rem; top: 50%; margin-top: -6px;
+  width: 9px; height: 12px; background: var(--grey);
+  transform: skewX(-18deg) scaleY(0.45); transform-origin: center;
+  transition: transform 0.3s var(--ease), background-color 0.3s var(--ease);
+}
+.sb-opt-name { font-size: 1rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
+.sb-opt-note { font-size: 0.85rem; color: var(--muted); }
+.sb-opt:hover .sb-opt-face { background: var(--paper); }
+.sb-opt input:focus-visible + .sb-opt-face { outline: 2px solid var(--blue); outline-offset: -2px; }
+.sb-opt input:checked + .sb-opt-face { background: var(--white); }
+.sb-opt input:checked + .sb-opt-face::before { background: var(--blue); transform: skewX(-18deg) scaleY(1); }
+.sb-opt input:checked + .sb-opt-face .sb-opt-name { color: var(--blue); }
+
+/* ---- the output: a document that rewrites itself ---- */
+.sb-out { background: var(--white); border: 1px solid var(--hairline); }
+.sb-out-head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+  padding: 1.1rem clamp(1.1rem, 2vw, 1.7rem); border-bottom: 1px solid var(--hairline);
+}
+.sb-out-title { font-size: 0.95rem; font-weight: 700; letter-spacing: -0.01em; color: var(--ink); }
+.sb-draft { font-size: 0.74rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+.sb-clause { margin: 0; padding: clamp(0.6rem, 1.2vw, 1rem) 0; }
+.sb-line {
+  position: relative; display: grid; grid-template-columns: minmax(128px, 0.3fr) 1fr;
+  gap: 0.3rem 1.4rem; padding: 0.5rem clamp(1.1rem, 2vw, 1.7rem);
+}
+.sb-line dt { font-size: 0.82rem; font-weight: 700; color: var(--muted); letter-spacing: 0.01em; }
+.sb-line dd {
+  margin: 0; font-size: 0.93rem; line-height: 1.55; color: var(--ink);
+  font-variant-numeric: tabular-nums; text-wrap: pretty;
+}
+/* a changed line flashes, the way a diff does — that is the whole tell that
+   the document is live */
+.sb-line::before {
+  content: ''; position: absolute; inset: 0; background: rgba(0, 87, 150, 0.13);
+  opacity: 0; pointer-events: none;
+}
+.sb-line.changed::before { animation: sb-flash 1.05s cubic-bezier(0.16, 1, 0.3, 1); }
+@keyframes sb-flash { 0% { opacity: 1; } 100% { opacity: 0; } }
+.sb-line.changed dd { animation: sb-set 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+@keyframes sb-set { from { transform: translateY(-5px); opacity: 0.35; } to { transform: none; opacity: 1; } }
+
+/* derived figures, tabular so the columns hold as values change */
+.sb-data {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+  gap: 1px; background: var(--hairline);
+  border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline);
+}
+.sb-data > div { background: var(--white); padding: 0.95rem clamp(1.1rem, 2vw, 1.7rem); display: grid; gap: 0.25rem; }
+.sb-data-k { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.sb-data-v { font-size: 1.08rem; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+
+.sb-acts {
+  display: flex; align-items: center; gap: clamp(1rem, 2vw, 1.8rem); flex-wrap: wrap;
+  padding: clamp(1.2rem, 2vw, 1.7rem) clamp(1.1rem, 2vw, 1.7rem) 0;
+}
+.sb-copy.is-copied { background: var(--ink); }
+.sb-files { color: var(--ink); }
+.sb-note {
+  margin: 0.9rem 0 0; padding: 0 clamp(1.1rem, 2vw, 1.7rem) clamp(1.2rem, 2vw, 1.7rem);
+  font-size: 0.82rem; color: var(--muted); max-width: 54ch;
+}
+
+/* the surfaces the browser would otherwise style for us */
+.sb ::selection { background: var(--blue); color: var(--white); }
+
+@media (max-width: 900px) {
+  .sb-inner { grid-template-columns: 1fr; }
+  .sb-line { grid-template-columns: 1fr; gap: 0.15rem; padding-block: 0.6rem; }
+  .sb-line dt { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; }
+}
+
+/* ---------- Finale ---------- */
+/* reuses .contact / .contact-stage / .contact-wall from styles.css */
+
+/* ---------- Mobile ---------- */
+@media (max-width: 900px) {
+  .po-split { grid-template-columns: 1fr; }
+  .pd-inner { grid-template-columns: 1fr; }
+  .pd-draw { order: 2; }
+}
+
+/* ---------- SAMPLE REQUEST DIALOG -------------------------------------
+   Native <dialog>: focus trapping, Esc and inert background come for free,
+   and a modal is earned here because the task needs protected focus.
+   Two steps so the lead (samples, name, phone, email) lands before the
+   longer project section.
+   --------------------------------------------------------------------- */
+.rq {
+  width: min(58rem, calc(100vw - 2rem)); max-width: none;
+  max-height: min(90dvh, 56rem);
+  padding: 0; border: 0; border-radius: 0; background: var(--white); color: var(--ink);
+  box-shadow: 0 40px 100px rgba(1, 16, 27, 0.5);
+  /* the dialog itself must NOT scroll — the UA gives it overflow:auto, which
+     fought the inner scroller and left the footer overlapping the fields */
+  overflow: hidden;
+}
+.rq::backdrop { background: rgba(4, 38, 61, 0.72); backdrop-filter: blur(3px); }
+/* the panel is centred by the UA's margin:auto — restate it, and make [hidden]
+   win over the explicit display on .btn / .rq-done / .rq-field, which would
+   otherwise render the success panel and both footer buttons at once */
+.rq { margin: auto; }
+.rq [hidden], .rq-form[hidden], .rq-done[hidden] { display: none !important; }
+.rq[open] { animation: rq-in 0.42s cubic-bezier(0.16, 1, 0.3, 1); }
+.rq[open]::backdrop { animation: rq-fade 0.42s cubic-bezier(0.16, 1, 0.3, 1); }
+@keyframes rq-in { from { opacity: 0; transform: translateY(18px); } }
+@keyframes rq-fade { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .rq[open], .rq[open]::backdrop { animation-duration: 0.01ms; }
+}
+.rq-panel { display: flex; flex-direction: column; max-height: min(90dvh, 56rem); min-height: 0; }
+
+.rq-head {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 1.5rem;
+  padding: clamp(1.4rem, 3vw, 2.1rem) clamp(1.3rem, 3vw, 2.2rem) 1.1rem;
+  border-bottom: 1px solid var(--hairline);
+}
+.rq-title { font-size: clamp(1.5rem, 2.6vw, 2.1rem); letter-spacing: -0.035em; margin: 0; }
+.rq-sub { margin: 0.5rem 0 0; font-size: 0.9rem; color: var(--muted); max-width: 46ch; }
+.rq-close {
+  flex: none; width: 40px; height: 40px; display: grid; place-items: center;
+  background: none; border: 1px solid var(--hairline); color: var(--ink); cursor: pointer;
+  transition: background-color 0.25s var(--ease), color 0.25s var(--ease), border-color 0.25s var(--ease);
+}
+.rq-close svg { width: 15px; height: 15px; }
+.rq-close:hover, .rq-close:focus-visible { background: var(--ink); color: var(--white); border-color: var(--ink); }
+
+.rq-prog {
+  display: flex; gap: 1.6rem; padding: 0.9rem clamp(1.3rem, 3vw, 2.2rem);
+  border-bottom: 1px solid var(--hairline); background: var(--paper);
+  font-size: 0.78rem; font-weight: 600; color: var(--muted);
+}
+.rq-prog-step { display: inline-flex; align-items: center; gap: 0.5rem; }
+.rq-prog-step i { width: 9px; height: 12px; background: var(--grey); transform: skewX(-18deg); transition: background-color 0.3s var(--ease); }
+.rq-prog-step.is-on { color: var(--blue); }
+.rq-prog-step.is-on i { background: var(--blue); }
+
+/* form is the flex column; only .rq-scroll scrolls. min-height:0 is required
+   or the flex item refuses to shrink and nothing scrolls at all. */
+.rq-form { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
+.rq-scroll {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain;
+  padding: clamp(1.3rem, 3vw, 2rem) clamp(1.3rem, 3vw, 2.2rem);
+  scrollbar-width: thin; scrollbar-color: var(--grey) transparent;
+}
+.rq-scroll::-webkit-scrollbar { width: 10px; }
+.rq-scroll::-webkit-scrollbar-thumb { background: var(--grey); }
+.rq-scroll::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+.rq-step { display: none; }
+.rq-step.is-on { display: grid; gap: clamp(1rem, 2vw, 1.4rem); }
+.rq-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: clamp(0.9rem, 2vw, 1.3rem); align-items: start; }
+.rq-field { display: grid; gap: 0.4rem; min-width: 0; align-content: start; }
+.rq-field label { font-size: 0.82rem; font-weight: 700; color: var(--ink); letter-spacing: 0.01em; }
+.rq-field label em, .rq-set legend em {
+  font-style: normal; font-weight: 600; font-size: 0.68rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted); margin-left: 0.4rem;
+}
+.rq-sublabel { font-weight: 600 !important; color: var(--muted) !important; }
+.rq-field input, .rq-field select, .rq-field textarea {
+  font-family: var(--font); font-size: 0.98rem; color: var(--ink); background: var(--white);
+  border: 1px solid var(--hairline); border-radius: 0; padding: 0 0.85rem; width: 100%;
+  height: 2.9rem; line-height: 2.9rem;
+  transition: border-color 0.22s var(--ease), box-shadow 0.22s var(--ease);
+}
+.rq-field textarea { resize: vertical; height: auto; min-height: 5.5rem; line-height: 1.55; padding: 0.7rem 0.85rem; }
+.rq-field input:hover, .rq-field select:hover, .rq-field textarea:hover { border-color: var(--muted); }
+.rq-field input:focus, .rq-field select:focus, .rq-field textarea:focus {
+  outline: 0; border-color: var(--blue); box-shadow: inset 0 -2px 0 var(--blue);
+}
+.rq-field.is-bad input, .rq-field.is-bad select { border-color: #b3261e; box-shadow: inset 0 -2px 0 #b3261e; }
+.rq-msg { margin: 0; font-size: 0.78rem; color: #b3261e; min-height: 0; }
+.rq-msg:empty { display: none; }
+
+.rq-set { border: 1px solid var(--hairline); padding: 1rem 1.1rem 1.1rem; margin: 0; display: grid; gap: 0.8rem; }
+.rq-set legend { padding: 0 0.5rem; font-size: 0.82rem; font-weight: 700; color: var(--ink); }
+.rq-set.is-bad { border-color: #b3261e; }
+.rq-checks { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.rq-check { position: relative; cursor: pointer; }
+.rq-check input { position: absolute; opacity: 0; width: 0; height: 0; }
+.rq-check span {
+  display: inline-block; padding: 0.55rem 0.95rem; border: 1px solid var(--hairline);
+  font-size: 0.9rem; font-weight: 600; color: var(--muted); background: var(--white);
+  transition: border-color 0.2s var(--ease), color 0.2s var(--ease), background-color 0.2s var(--ease);
+}
+.rq-check:hover span { border-color: var(--muted); color: var(--ink); }
+.rq-check input:focus-visible + span { outline: 2px solid var(--blue); outline-offset: 2px; }
+.rq-check input:checked + span { border-color: var(--blue); color: var(--blue); background: rgba(0, 87, 150, 0.07); }
+
+.rq-error-top {
+  margin: 0 0 1.1rem; padding: 0.8rem 1rem; border: 1px solid #b3261e;
+  background: rgba(179, 38, 30, 0.06); color: #8f1d17; font-size: 0.88rem; font-weight: 600;
+}
+
+.rq-foot {
+  flex: none; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+  padding: 1rem clamp(1.3rem, 3vw, 2.2rem);
+  border-top: 1px solid var(--hairline); background: var(--white);
+}
+.rq-foot-note { font-size: 0.8rem; color: var(--muted); margin-right: auto; }
+.rq-back { color: var(--ink); }
+.rq-submit[aria-busy="true"] { opacity: 0.6; pointer-events: none; }
+
+.rq-done { padding: clamp(2rem, 5vw, 3.4rem) clamp(1.3rem, 3vw, 2.2rem); display: grid; gap: 1rem; justify-items: start; }
+.rq-done h3 { font-size: clamp(1.6rem, 3vw, 2.4rem); letter-spacing: -0.035em; }
+.rq-done p { color: var(--muted); max-width: 46ch; }
+.rq-done .btn { margin-top: 0.6rem; }
+
+@media (max-width: 640px) {
+  .rq { width: 100vw; max-width: 100vw; max-height: 100dvh; height: 100dvh; }
+  .rq-prog { gap: 1rem; font-size: 0.72rem; }
+  .rq-set { padding: 0.9rem; }
+}

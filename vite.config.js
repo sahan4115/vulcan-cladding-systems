@@ -1,3 +1,4 @@
+import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 
 // Local dev serves at root (port 5199); production build is served from the
@@ -7,5 +8,13 @@ export default defineConfig(({ command }) => ({
   server: {
     port: Number(process.env.PORT) || 5199,
     strictPort: false,
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html'),
+        vulcalap: resolve(__dirname, 'vulcalap.html'),
+      },
+    },
   },
 }));
