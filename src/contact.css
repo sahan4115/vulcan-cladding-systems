@@ -43,6 +43,10 @@
   font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
   text-transform: uppercase; color: var(--muted);
 }
+.ct-direct address {
+  font-style: normal; font-size: clamp(1rem, 1.5vw, 1.22rem);
+  font-weight: 600; color: var(--ink); line-height: 1.4;
+}
 .ct-direct a {
   font-size: clamp(1rem, 1.5vw, 1.22rem); font-weight: 600;
   color: var(--ink); text-decoration: none;
@@ -52,6 +56,7 @@
 .ct-direct a:hover { color: var(--blue); border-bottom-color: var(--blue); }
 .ct-direct--navy li { border-bottom-color: var(--hairline-light); }
 .ct-direct--navy span { color: var(--lblue); }
+.ct-direct--navy address { color: var(--white); }
 .ct-direct--navy a { color: var(--white); border-bottom-color: var(--hairline-light); }
 .ct-direct--navy a:hover { color: var(--lblue); border-bottom-color: var(--lblue); }
 /* on the navy hero the direct lines sit on navy too */
@@ -77,13 +82,16 @@
   text-transform: none; color: var(--muted);
 }
 
+/* A control needs more presence than a divider: the 0.14 hairline that separates
+   rows reads as unstyled once it is asked to describe a field. Paper ground plus
+   a heavier edge, so an empty input is legible as somewhere to type. */
 .ct-field input,
 .ct-field select,
 .ct-field textarea {
-  font: inherit; color: var(--ink); background: var(--white);
-  border: 1px solid var(--hairline); border-radius: 0;
+  font: inherit; color: var(--ink); background: var(--paper);
+  border: 1px solid rgba(14, 36, 52, 0.52); border-radius: 0;
   padding: 0.85rem 1rem; width: 100%;
-  transition: border-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+  transition: border-color 0.25s var(--ease), background 0.25s var(--ease), box-shadow 0.25s var(--ease);
 }
 .ct-field textarea { resize: vertical; min-height: 8.5rem; line-height: 1.55; }
 .ct-field input::placeholder,
@@ -91,12 +99,12 @@
 
 .ct-field input:hover,
 .ct-field select:hover,
-.ct-field textarea:hover { border-color: rgba(14, 36, 52, 0.3); }
+.ct-field textarea:hover { border-color: rgba(14, 36, 52, 0.68); }
 
 .ct-field input:focus-visible,
 .ct-field select:focus-visible,
 .ct-field textarea:focus-visible {
-  outline: none; border-color: var(--blue);
+  outline: none; border-color: var(--blue); background: var(--white);
   box-shadow: 0 0 0 3px rgba(0, 87, 150, 0.18);
 }
 
@@ -145,11 +153,15 @@
   font-variant-numeric: tabular-nums; letter-spacing: 0.08em;
   padding-top: 0.35rem;
 }
+/* Both the heading and the copy belong in the second column. Without the
+   explicit placement, auto-flow drops the paragraph into the number column
+   and wraps one sentence into a tall narrow ribbon. */
 .ct-steps h3 {
+  grid-column: 2;
   font-size: clamp(1.1rem, 1.8vw, 1.5rem); font-weight: 700;
   letter-spacing: -0.025em; text-wrap: balance;
 }
-.ct-steps p { color: var(--muted); margin-top: 0.5rem; max-width: 62ch; }
+.ct-steps p { grid-column: 2; color: var(--muted); margin-top: 0.5rem; max-width: 62ch; }
 
 /* ---------- Visiting ---------- */
 .ct-visit {

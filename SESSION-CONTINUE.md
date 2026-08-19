@@ -67,10 +67,35 @@ no console errors; `detect.mjs --json contact.html` → **[]** (still DEGRADED �
 entry; findings are an undercount). Built subpath assets all resolve under
 `/vulcan-cladding-systems/`, every referenced file present.
 
+### 🔴 THREE FIXES AFTER THE FIRST DEPLOY — the page shipped visibly broken
+The first deploy passed every programmatic check and still looked wrong, because those
+checks measured computed styles rather than the rendered page. **Take a screenshot.**
+
+1. **`.ct-steps li` grid mis-placement.** Two columns (`3.5rem minmax(0,1fr)`) with THREE
+   children — `::before`, `h3`, `p`. Auto-flow put each `<p>` into the **56px number
+   column**, wrapping one sentence into a ~300px-tall ribbon and inflating the section
+   from 847px to **1707px**. Fixed with explicit `grid-column: 2` on both `h3` and `p`.
+   ⚠️ It stayed invisible in screenshots because those elements were still `opacity: 0`
+   awaiting their `[data-reveal]` trigger — so measure element heights, not just overflow.
+   Any `.ab-sec` list with a counter `::before` needs the same explicit placement.
+2. **THE ADDRESS EXISTED ALL ALONG.** `4 Imperial Way, Croydon CR0 4RR` sits in the
+   `<address>` block of **every page footer**. The earlier claim that Vulcan publishes no
+   address was wrong — it came from grepping for "Road"/"Estate"/"Unit" and never checking
+   the `<address>` tag. A "Coming to see us" section with no location is broken on its
+   face; the address is now the first row of that ledger. **Opening hours genuinely are
+   absent** — those are still owed.
+3. **Form fields were styled at divider weight.** Inputs used the `--hairline` (0.14 alpha)
+   that separates table rows, giving a border-to-field contrast of **1.64:1** on a fill
+   only 1.06:1 from the page — neither cue identified the control, so empty fields read as
+   unstyled. Now a `--paper` fill with an `rgba(14,36,52,0.52)` edge = **3.32:1**, clearing
+   the 3:1 floor for a UI component boundary; hover 0.68, focus lifts to white plus the
+   blue ring.
+
 ### ⚠️ Still owed from the client — do not invent these
-**No postal address and no opening hours** appear anywhere in Vulcan's material, so the page
-has neither. The only premises copy that exists is "access to our warehouse and head office
-is by appointment only", which is used verbatim. A contact page normally carries an address
+**No opening hours** appear anywhere in Vulcan’s material, so the page has none. The
+postal address DOES exist — 4 Imperial Way, Croydon CR0 4RR, in every page footer — and is
+now the first row of the visit ledger. The premises copy “access to our warehouse and head
+office is by appointment only” is used verbatim. A contact page normally carries an address
 — **ask the client for it**, plus hours, and a company registration number for the footer.
 
 ### 🚀 Deployed
