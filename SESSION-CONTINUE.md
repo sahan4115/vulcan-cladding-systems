@@ -9,6 +9,536 @@ Last session: 2026-07-03. Live URL: https://sahan4115.github.io/vulcan-cladding-
 
 ---
 
+## 2026-08-19 (latest) — CONTACT PAGE BUILT (`contact.html`) + FIRST DEPLOY OF THE WHOLE PENDING SET
+
+A real contact page, replacing the `#contact` anchor every nav pointed at.
+
+### Flow
+hero (navy, no photograph — the ask is the only thing on it; H1 "Send us **the drawings.**"
+with email + phone already visible) → **the enquiry form** (white) → **What happens next**
+(paper, their own three-step process) → **Coming to see us** (navy, the appointment-only
+line). The shared `.contact` CTA band is deliberately **omitted** — this page *is* that ask,
+so repeating it at the foot would be asking twice.
+
+### 🔴 THE FORM HAS NO BACKEND — it composes a pre-filled email
+There is no form endpoint on this build. Rather than ship a form that silently drops
+enquiries, submit builds a `mailto:sales@vulcansystems.co.uk` with subject and body
+pre-filled and sets `location.href`. Verified composition:
+
+- subject follows the site's existing convention — `Take-off request — Harbour View, Bristol`
+  (the `What do you need?` select supplies the prefix: Take-off request / Product enquiry /
+  Document request / General enquiry, matching the `?subject=` links used elsewhere).
+- body carries name, company, email, optional phone, optional scheme, then the message.
+- 451 chars encoded on a realistic enquiry — well inside the ~2000 char mailto limit.
+
+**If the client wants a hosted form, wire an endpoint (Formspree/Netlify/Basin) into the
+submit handler in `src/contact.js` and keep the mailto as the no-JS fallback.** The page
+note under the button tells the visitor the email will open, so the behaviour is not a
+surprise — update that copy if a real endpoint lands.
+
+### Validation
+Hand-rolled, not native bubbles, so the messages match the page's voice. Verified: empty
+submit flags **4 fields with 4 visible errors**, sets `aria-invalid` and focuses the first
+bad field; a malformed email is caught on its own; a valid submit clears everything and
+writes a live-region status line. Errors clear on re-entry, never while first typing.
+
+### 🔴 A REAL BUG THIS SURFACED — shared section furniture had to move
+`.ab-sec`, `.ab-sec--white/paper/navy`, `.ab-inner`, `.ab-head` lived in **about.css**.
+`contact.html` imports only `styles.css` + `contact.css`, so it rendered with **no section
+backgrounds and no gutters at all** — caught by a contrast probe reading 1.00 on the navy
+block. Those primitives now live in **`src/styles.css`** (which every page imports) and were
+removed from about.css. **About was re-verified afterwards and is byte-identical in
+behaviour** — same grounds, 115.2px section padding, 1560px inner, 6 register rows.
+Any future inner page can now use the `.ab-sec` stack without importing about.css.
+
+### Wiring
+All **21 Contact links rewired** to `contact.html` (3 each across index, vulcalap, cases,
+about, both case pages, and contact itself). Note index.html used a bare `#contact`
+in-page anchor while the others used `./#contact` — both forms were caught. The homepage
+keeps its `id="contact"` CTA section; only the nav/footer links now leave the page.
+`aria-current="page"` on all 3 contact links. 7th vite rollup input added.
+
+### Verified
+All contrast AA or better (hero lede 14.47:1, hero direct links 15.56:1, field labels
+14.79:1, form note 7.14:1, step body 6.64:1, error text 6.22:1, visit copy 14.47:1);
+no horizontal scroll at desktop **or 375px** with 0 offending elements; form stacks to one
+column on mobile with 56px inputs and a 70px full-width submit; labels all bound to inputs;
+no console errors; `detect.mjs --json contact.html` → **[]** (still DEGRADED — see the About
+entry; findings are an undercount). Built subpath assets all resolve under
+`/vulcan-cladding-systems/`, every referenced file present.
+
+### ⚠️ Still owed from the client — do not invent these
+**No postal address and no opening hours** appear anywhere in Vulcan's material, so the page
+has neither. The only premises copy that exists is "access to our warehouse and head office
+is by appointment only", which is used verbatim. A contact page normally carries an address
+— **ask the client for it**, plus hours, and a company registration number for the footer.
+
+### 🚀 Deployed
+This push was the **first deploy of the entire pending set**, not just the contact page:
+About, cases.html + both case-study pages, the VulcaLap changes and the client install
+video all went live with it. All pages carry `noindex` (C2 staging preview). ⚠️ **That means
+the placeholder scheme records (Merle Court, Knights Hill et al.) are now publicly reachable
+for the first time** — they are still placeholder and must be replaced before the production
+domain.
+
+---
+
+## 2026-08-19 (later) — ✅ ABOUT REDESIGN SHIPPED: destination-led ("Where it goes")
+
+The paused /impeccable run is **finished**. Direction locked by the user on the re-rolled
+hand; page rebuilt, verified, DESIGN.md written. Seed key `ae8b7015`.
+
+### ⚠️ The recorded resume command in the old entry was WRONG — don't copy that pattern
+It was `--scope surface … --register safer`, which the seeder rejects twice: `--register`
+needs `--reroll <n>`, and then **`--register` applies to `--scope direction` only**. Root
+cause: round 0's decision page offered the safer/bolder register buttons on a **surface**
+round. Per serve-question's own contract the registers belong to direction rounds; a
+surface payload ships plain `reroll: true`. The valid resume was:
+
+`node .claude/skills/impeccable/scripts/concept-seed.mjs --scope surface --mode persuade --from ae8b7015 --reroll 1`
+
+"safer" is then carried by *you*, in how the grounded candidates are derived — it is not a
+flag at surface scope.
+
+### The round
+Re-roll round 1 dealt **6, 4, 2 (6 leads)**; round 0's three are eliminated. Cards served
+code-led with wireframes. **The user picked index 4, "Where it goes"** (a dealt alternate,
+not the lead), no steer, build path `code`. No telemetry ping was sent: grounded picks send
+no name, and none of the four ping kinds (assigned/pick/challenger/canon) describe a dealt
+alternate — reporting `assigned` would have falsely said the lead won.
+
+### 🔴 THE MAP WAS CUT, DELIBERATELY — do not add one back
+The chosen card's viewport promised "a drawn UK & Ireland". **It was cut on provenance
+grounds.** The only geography Vulcan actually publishes is "overnight pallet/parcel, UK and
+Ireland". The eight named schemes in `cases.html` (Merle Court, Knights Hill, Ashdown
+Primary, Meridian Works, Leamington Court, Riverside Quarter, Harbour View, Elmwood Court)
+are **PLACEHOLDER records** — see the "Register/detail content … is PLACEHOLDER" note
+further down this file. Pinning them to a national map would present invented projects as a
+factual coverage claim on the company's About page. Geography is therefore **stated, never
+drawn**: the `.dst-reach` line. If the client supplies a real project list with locations, a
+map becomes buildable — not before.
+
+### What the page is now
+Destination-led. Order: hero → **Where it lands** (the spine) → **To site** (delivery) →
+Counted before it is cut (the take-off) → What we make → Ethos → In their words →
+Questions → contact. Delivery sits **immediately beside** the destinations on purpose: the
+chosen thesis was delivery-as-structure, so the argument reads destination → how it gets
+there → why it is right when it arrives. Moving it there used only existing verbatim copy.
+Ethos dropped from first to fifth; the six sectors were promoted from a small footnote list
+to the page's opening statement at **display scale (46px desktop / 25.6px mobile)**.
+
+- `.dst` / `.dst-row` — six rows, two columns (sector | what it does there), hairline
+  between. Rows not cards. Copy is their own market language, verbatim.
+- `.dst-reach` — the honest geography, plus "which of the six it is changes the schedule,
+  never the standard".
+- Grounds re-alternated white → paper → navy → white → paper → white → paper (the reorder
+  had left two adjacent papers and two adjacent whites). **0 adjacent clashes.**
+
+### Removed on craft-floor grounds (do not reintroduce)
+- **All 7 `.ab-no` kickers** ("01 — Ethos" etc.). An eyebrow above a heading is a hard ban
+  in craft-floor.md *and* a PRODUCT.md anti-reference. CSS rules deleted too.
+- **The three `.ab-eth-n` ordinals** (01/02/03 on the ethos principles) — decorative
+  section numbering carrying no information.
+- Numerals now survive **only** where they inform: the take-off's codes, quantities, total.
+
+### ⚠️ A wipe animation was built and then deliberately removed
+`.dst-row::after` originally wiped a rule in on scroll (`.is-in` via ScrollTrigger). It was
+cut for two reasons: it could not be verified in this environment (see below), and the page
+already has its one authored moment. The rules are now plain `border-bottom`, present
+unconditionally — no JS dependency, no override chain, nothing to fall back from. The rows
+ride the existing `[data-reveal]` rise like everything else. Page JS is back to **6.59 kB**.
+
+### 🔴 VERIFICATION TRAP — the preview pane does not composite in this session
+`computer{action:"screenshot"}` times out ("the Browser pane is not displayed"), and because
+of that **rAF is suspended**: Lenis will not scroll, GSAP tweens never advance, every
+`[data-reveal]` element reads `opacity: 0`, and `getComputedStyle(el,'::after')` returns a
+stale value that never recalculates. **None of that is a page defect** — it is the same trap
+the previous session hit, which is why `window.__tk` exists as a QA hook. Verify motion by
+driving state directly, or on a real browser. Static/structural checks are trustworthy.
+
+### Verified
+Section order and grounds; 6 register rows; no horizontal scroll at 1265px **or 375px** (0
+overflowing elements); register stacks to one column on mobile; schedule still drops its 4th
+column and measures 334px inside 335px; **all contrast AA or better** — register name
+15.9:1, descriptions 7.14:1, navy lede 14.47:1, schedule caption 6.64:1; `aria-current` on
+all 3 About links; no console errors. **Take-off invariants re-checked after the restructure:
+8 rows in markup and `sum(data-qty) = 535 = data-total`, still derived in JS, never literal.**
+Production build clean, and the direction contract (with seed key `ae8b7015`) **survives into
+`dist/about.html`**.
+
+### Exit conditions discharged
+Direction contract as first child of `<body>` (150 words, cap 150, verbatim FINISH line) ·
+seed key greppable in the built output · `detect.mjs --json about.html` → **[]** · DESIGN.md
+written at finish from the built world.
+
+⚠️ **detect.mjs ran DEGRADED** — `htmlparser2`, `css-select`, `css-tree` and `domutils` are
+not installed in the skill, so custom properties, selector matching and computed contrast
+were **not** evaluated. `[]` is an undercount, not a clean bill of health. The contrast
+figures above were measured independently in the browser, not by the detector.
+
+### Note on the em-dash advisory
+The detector's first run flagged 16 em-dashes. One was mine and was rewritten; the remaining
+**14 are in verbatim client copy** and were left alone rather than break provenance.
+
+### Still open
+- **DESIGN.md is new** (`context.mjs` had reported `INCUMBENT_WORLD_UNDOCUMENTED`). It
+  documents the world as built across all four page types — check it before the next
+  visual change, and keep it current.
+- The two content constraints from the old entry **still stand**: no company history and no
+  statistics anywhere in their material, so no founding timeline and no animated stats
+  without real client-supplied facts. `where-it-goes` needed neither.
+- Client photography still owed; `ab-pack.webp` remains unused.
+
+---
+
+## 2026-08-19 — ABOUT PAGE BUILT (`about.html`, `src/about.css`, `src/about.js`)
+
+A replacement for vulcansystems.co.uk/about-us/, built from **their own live copy**
+(scraped, not invented) around one argument taken straight from their FAQ:
+
+  **"No. We are supply only."** They never set foot on the building — so everything
+  has to be right before it leaves them. All four of their client testimonials
+  independently praise exactly that: the take-off, the schedule, the packaging, the
+  delivery arriving as promised. H1: "Everything right, before it leaves."
+
+### Flow
+hero (navy, factory image at 0.5 + scrim) → **01 Ethos** (their three principles,
+near-verbatim) → **02 THE TAKE-OFF** (signature) → **03 What we make** → **04 Where it
+goes** (six sectors) → **05 To site** (navy; the distribution promise) → **06 In their
+words** (the four real testimonials) → **07 Questions** (native `<details>`) → contact wall.
+
+### The signature: THE TAKE-OFF (`.tk*`)
+Their estimating team prices a facade off the drawings; the Alifit testimonial describes
+"a spreadsheet for areas and numbers of material including lengths with all quantities of
+ancillary items and spares". So the page shows that document **issuing itself line by
+line** on scroll, with the item count totalling as it goes.
+- ⚠️ **The count is DERIVED from the issued rows** (`sum of data-qty`), never a separate
+  number — so the figure and the visible rows cannot drift. Verified: 0/244/299/498/535
+  against row-by-row expectations, ending exactly on the stated total.
+- ⚠️ **The schedule is complete without JS.** All 8 rows and the 535 total are in the
+  markup; CSS only dims un-issued rows under `html.js:not(.reduced)`. Verified: both
+  reduced-motion and no-JS render every row at opacity 1.
+- The 4th column is hidden below 900px (`.col-sec`) — a 4-column schedule cannot survive
+  375px. Table measures 334px inside a 335px doc, no overflow.
+
+### Copy provenance — IMPORTANT for the client review
+**Verbatim / near-verbatim from their site:** ethos (integrity, supplier relationships,
+sustainability + innovation), products (fire-rated plank and bar, standard and bespoke,
+short lead times), markets and applications, the whole distribution section (overnight
+pallet/parcel UK & Ireland, pre-delivery call re offload machinery, Hiab on request, JIT
+stock kits, batches planned to site progress), "supply only" and "private customers"
+answers, all four testimonials, "certificates available on request", and "access to our
+warehouse and head office is by appointment only".
+**DERIVED (needs client sign-off):**
+- "Do you supply the whole of the UK?" — answered yes/UK & Ireland from their Distribution
+  copy; their own accordion answer was never exposed.
+- "Do you provide support systems and all ancillary items?" — answered yes from the
+  product pages and testimonials.
+- Lead times — deliberately **no number given** ("ask estimating for a date against your
+  programme"); their site only claims "short lead-times".
+- Warranty — deliberately **no term given** (points at the documentation). The homepage's
+  "25-year finish warranty" claim is still unconfirmed, so it is not repeated here.
+- The take-off schedule itself is **indicative** and captioned as such; the numbers are
+  illustrative, the shape is real.
+
+### Imagery
+`public/assets/img/about/` — 5 soul_location webps, ~489 KB: ab-hero (racked extrusions,
+1920), ab-rack (coated planks), ab-profile (cut plank ends, T&G in section), ab-pack
+(dispatch bay, currently unused — held for a future section), ab-load (hiab offload).
+Swap for the client's own factory photography when available.
+
+### Wiring
+About now points at `about.html` in the nav, mobile menu and footer of **all five pages**
+(3 links each; previously `./#story`), `aria-current="page"` on this page, and a 6th vite
+rollup input. `about.js` reuses the cases.js chrome verbatim (same convention) with only
+the take-off block swapped in — 6.59 kB page JS.
+
+Verified: every element AA or better, including hero type over photography measured
+against the lightest composited pixel behind it (h1 9.8:1, lede 9.23:1, facts 7.13:1) and
+the navy section (10.98 / 11.44:1); mobile stacks to one column with no horizontal scroll
+and 85px FAQ taps; subpath build swept **15/15 resources, 0 failures**, schedule issuing
+correctly on the built site.
+
+---
+
+## 2026-08-19 (final) — LISTING IS NOW JUST TABS + CARDS
+
+**Read this before touching cases.html.** The listing went through three cuts and the
+user rejected the first two. The current, approved design is deliberately plain:
+
+  **Tabs on top (one axis: system) + a card grid below. That is the whole page.**
+
+Do not reintroduce the earlier ideas — they were each tried and dropped:
+1. *Pill bench + card grid* — rejected as templated.
+2. *Elevation of full-width "courses"* (title block beside a facade slice, alternating
+   sides, golden-ratio staggered splits, filter that "re-clads" the wall) — rejected:
+   at ~250px tall every facade became a strip of texture, eight near-identical bands
+   scanned like a spreadsheet, and the openable schemes had no prominence.
+3. *Query sentence + two zones* ("Show me [any system] in [any finish]…" over large
+   "open files" panels and a dense register table) — clever, and still rejected. The
+   user asked plainly for tabs and cards.
+
+### What is there now
+- `.tabs` — four buttons: All schemes / VulcaLap&reg; / VulcaBar&reg; / VulcaFrame&trade;.
+  Real `<button aria-pressed>` (no faked tabpanel contract); active state is a blue
+  2px underline. **Each tab's count is derived from the cards in JS**, so it can never
+  drift from the grid (08 / 05 / 02 / 01 today).
+- `.cards-grid` / `.cc` — 3 columns desktop, 2 at 900, 1 at 640. Card = 3:2 facade,
+  ref + status, name, location, a System/Finish/Completed ledger, and — only on the
+  two with a full file — "View the case study". **Records are `<article>`, not links**
+  (brief rule: only substantial projects get a case study), so there is no false
+  affordance. The lit-top-lip hover is on `a.cc` only.
+- Filter syncs to `?system=…`, so a filtered view is shareable and arriving on one
+  lands on the right tab.
+- ⚠️ `.cc[hidden]` and `.rt-row[hidden]` need `display: none !important` — `.cc` is
+  `display:flex`, which beats the UA `[hidden]` rule. Same trap as the sample dialog.
+
+### Hero: two columns, not one
+The hero was a two-column grid with a single child, so the whole right half of the page
+was empty (user flagged it). It is now title-left / lede-right, bottom-aligned on one
+line, and the section is ~374px instead of a tall empty block.
+
+### Still true from the redesign round (detail pages unchanged)
+The project files keep their reflow and **the transformation** — hero → cover sheet →
+01 brief (type only) → 02 constraint (oversized, navy) → 03 the answer = bottom-up
+course wipe → 4 numbered plates → record → survey → specify → next file. The before
+states were derived from their own afters via `nano_banana_2` image-to-image passing the
+prior generation's **job_id** as `medias[].value`, which is why the wipe registers.
+
+Verified on the built site under the subpath: tabs filter correctly (8→5→2→1→8), counts
+derived, preset URLs land, 20/20 resources with **0 failures**, all card imagery loads,
+mobile single-column with 52px tab taps and no horizontal scroll, no-JS drops the tabs
+and stands all eight cards, and the detail pages are untouched and intact.
+
+---
+
+## 2026-08-19 — CASE STUDIES REDESIGNED: the wall, the sentence, the wipe
+
+The first cut (below) was **structurally templated** — a pill-filter bar over a card
+grid, and detail pages that alternated copy-left/image-right three times. The
+"drawing register" idea lived in the COPY, not the STRUCTURE. Rebuilt so the idea is
+enacted. **The sections below describe the superseded version; this one is current.**
+
+### The register IS an elevation (`.reg-wall` / `.reg-course`)
+The card grid is gone. Each scheme is now a full-width **course**: a solid title block
+beside a slice of its facade, and the panel **trades sides down the wall** with
+**golden-ratio staggered splits** (`--split`, 40–52%, written per course by the
+builder) so the joints never line up — the contact wall's own bond. Verified in
+browser: sides `lrlrlrlr`, splits 42.8/50.2/45.6/41.0/48.4/43.8/51.3/46.7, panel
+`order` alternating 0/2. Hover chrome is compositor-only (a lit top lip via `scaleX`,
+plus an image `scale`) — no height animation anywhere near a hover target.
+
+### The filter is a SENTENCE, not 22 pills (`.reg-q`)
+"Show me [any system] in [any finish] for [any sector], [any contract] in [any
+region]." Each token is a real `<select>` styled down to an underlined inline token,
+so the option list, keyboard, mobile picker and ARIA all come from the platform. The
+sentence doubles as the readout, which deleted a whole UI row (the old
+`SHOWING NN OF NN` strip); the count now sits under it. A token with a real choice
+goes ink-on-blue (`.is-set`).
+Applying a query **re-clads the wall**: courses sweep out toward their own panel side
+and the rest close up under a Flip pass (`away()` keys off `data-side`). Reduced
+motion skips it. Filter state still round-trips through the querystring.
+
+### The project file's centrepiece: THE TRANSFORMATION (`.tx*`)
+A **bottom-up course wipe** between the bare substrate and the finished elevation —
+the divider is a lit course line, so it reads as cladding going ON, not as a slider
+lying on its side. `--y` drives `clip-path: inset(calc(100% - var(--y)) 0 0 0)` on the
+AFTER image, which sits over the BEFORE. It runs itself once on scroll-in, then the
+reader owns it: the range input carries keyboard + ARIA, and on **fine pointers only**
+the stage is draggable (a vertical drag on touch would fight page scroll).
+⚠️ **CSS defaults to `--y: 100%` and the markup ships `value="1000"`** so a no-JS
+reader gets the FINISHED building, not a building site. Verified: clip 100%→0%, the
+line tracking 0→489px across a 491px stage, tags cross-fading 1/0 → 0.15/1.
+
+### Detail-page flow, reflowed
+hero → cover sheet → **01 the brief (type only, no picture)** → **02 the constraint
+(oversized, navy, up to 5.6rem)** → **03 the answer = the transformation** → **the
+plates (4 numbered, mixed spans)** → the record (ledger) → the survey → specify →
+next file. The alternating ladder is gone; the first photograph the reader meets is
+the one that argues.
+
+### Imagery: aligned before/after pairs
+The "before" states were **derived from their own "after" with `nano_banana_2`
+image-to-image**, passing the prior generation's **job_id** as `medias[].value` — that
+holds the camera, so the wipe reads as one building. Both pairs verified by eye:
+window grid, balconies and roofline register across the divider. Knights =
+substrate-to-clad (membrane, rails, brackets, scaffold); Merle = strip-and-reclad
+(failed panels off, exposed concrete, cradles). `public/assets/img/cases/` is now
+20 files / ~2.2 MB. Both pair members are exactly 16:9, so `object-fit: cover`
+renders them identically even where intrinsic sizes differ (kh-before 1600x900 vs
+kh-court 1920x1080) — **keep any replacement pair at the same aspect**.
+
+### ⚠️ A CSS comment can break the stylesheet
+The header comment contained `.cs*/.tx*` — the `*/` **closed the comment early** and
+the rest of the header parsed as CSS (`Unexpected "*"`, `Unterminated string token`).
+esbuild recovered, so the page looked fine, but the bundle carried garbage: fixing it
+took the built CSS 17.34 kB → 16.56 kB. Never write a star followed by a slash inside
+a CSS comment.
+
+### ⚠️ Two verification traps hit again (both harness, neither a bug)
+- **`window.gsap` is NOT exposed** (module import, same as ScrollTrigger). A probe
+  doing `if (window.gsap) gsap.set('[data-reveal]', {opacity:1})` silently no-ops, so
+  every `[data-reveal]` still reads `opacity: 0` and a contrast check on it returns
+  **exactly 1.00** (the text composites into its own background). Set
+  `el.style.opacity` directly before measuring contrast on revealed copy.
+- **Transitioned properties read their OLD value** while the pane isn't compositing —
+  the `.tx-tag` opacities looked frozen at 1/0. Strip `transition` then re-read.
+
+Verified: filter matrix 5→2→1→0→8 with tokens/URL/empty state tracking, wipe exact
+across its range, contrast AA on every new element (constraint copy 10.98:1 on navy,
+captions 5.2–7.1:1), 40–43px taps, mobile stacks to one column with no side-trading,
+no-JS hides the query and stands the full wall + finished elevations, subpath build
+swept 20/20 resources with **0 failures** and preset-URL filtering working on the
+built site.
+
+---
+
+## 2026-08-18 (evening) — CASE STUDIES BUILT: the register + two project files
+
+Three new pages, per the client's item 5 (filterable case studies, tile → detail,
+only substantial projects get a full study). The conceit extends the site's
+documentation voice: **the listing is a drawing register** (every scheme a numbered
+plate with a title block), **a full case study is the opened project file**, and
+**filtering is a specification query** in the spec-bench voice.
+
+- **`cases.html`** — the register. Query bench (5 axes: System / Finish / Sector /
+  Contract / Region, radio-per-axis + All), live readout that composes the query back
+  ("SHOWING 02 OF 08 — VULCABAR® · RECLADDING"), FLIP re-sort (gsap Flip, `absolute:
+  true`), **filters sync to the querystring** so a filtered view is shareable — arriving
+  on `?system=vulcabar&contract=recladding` lands pre-filtered with buttons pressed.
+  Empty state converts ("make your scheme the first…"). 8 schemes: 2 full case studies
+  (Merle tall plate, Knights wide plate) + 6 records — records are NOT links, per the
+  brief. Contact-wall finale (id="enquire").
+- **`case-knights-hill.html`** (VCS-033, new-build story, **cost DISCLOSED** variant £1.9m)
+  and **`case-merle-court.html`** (VCS-041, occupied-tower recladding story, **cost NOT
+  disclosed** variant) — the folder structure: full-bleed hero + cover-sheet title block
+  (6 cells) → 01 The brief → 02 The constraint (navy band) → 03 The answer (plates beside
+  chapters) → The record (LEDGER table, never stat tiles — the impeccable register bans
+  hero-metrics) → The survey (drone slot: Knights = aerial still w/ slow CSS drift;
+  Merle = the designed "footage pending" state, both states demonstrated) → Specify this
+  build-up (as-specified sheet + mailto CTA firing `case_spec_request` dataLayer event,
+  id="enquire") → next-file band linking the two files in a loop.
+- **`src/cases.css` + `src/cases.js`** — one entry for all three pages; chrome duplicated
+  from vulcalap.js per the project convention (wall block spliced byte-exact). QA hook
+  `window.__reg = { state, apply, plates }`.
+- **Vite**: 3 new rollup inputs. All asset URLs live in HTML (base-URL trap avoided by
+  construction); subpath build swept clean — 21/21 resources, 0 failures, preset-URL
+  filtering verified against the built site.
+- **Nav**: the "Case Studies" item (all pages, nav/mobile/footer) now points at
+  `cases.html` instead of the homepage carousel anchor; the homepage projects-head
+  placeholder button is a real link. Burger breakpoint untouched (no link added).
+
+### ⚠️ The legacy case images NEVER matched their captions — now they do
+`case-knights.jpg` is a SILVER metallic tower (not cedar), `case-merle-court.jpg` is a
+low curved-roof leisure building (not an 18-storey tower), `case-leamington.jpg` reads
+cedar-orange (not anthracite). On a register whose title blocks assert system/finish per
+plate, the pictures must corroborate the data, so:
+- `case-knights.jpg` → **renamed `case-meridian-works.jpg`** (git mv) and now IS the
+  Meridian Works "Anodised Silver" record + homepage carousel card (caption updated).
+- Merle/Knights tiles + plates use NEW Higgsfield **soul_location** imagery
+  (`public/assets/img/cases/`, 12 webps, ~1.4 MB total): mc-tower (3:4 tall plate),
+  mc-podium (blue-hour hero, 1920), mc-corner, kh-court (hero 1920), kh-street,
+  kh-reveal (cedar re-gen — first attempt came out ivory), kh-aerial (true top-down
+  re-gen), reg-* records. `case-merle-court.jpg` is now UNUSED (left on disk).
+- Leamington re-tagged Western Red Cedar; Elmwood re-tagged Dark Oak (what the images
+  show); homepage carousel captions aligned. **SWAP ALL for client photography** — every
+  page carries "indicative pending the client's content pass".
+- Register/detail content (schemes, refs VCS-0xx, narratives, figures) is PLACEHOLDER
+  in the documentation voice; brief hard-rule respected (remediation stories say WHAT
+  was replaced/evidenced, never HOW certification is achieved).
+- Builder scripts (`build_cases.py`, `build_files.py`, scratchpad) assemble the pages
+  from vulcalap.html's chrome — the durable record is the pages themselves; edit them
+  directly from here on.
+
+Verified: filter matrix exact (5→2→1→0→1→8 with empty state at 0, aria-pressed exclusive,
+URL round-trip), contrast AA on every new element measured (one finding: disabled clear
+button 1.72:1 — WCAG-exempt, enabled state 6.64:1), 40px tap targets, mobile 1-col
+(tall/wide spans collapse), no-JS = bench hidden + full register + native content intact,
+no horizontal scroll anywhere, dataLayer event fires with scheme id.
+
+---
+
+## 2026-08-18 (later still) — CLIENT INSTALL VIDEO IS NOW IN 02 (`.iv*`)
+
+`T-G-Buildup.mp4` is **no longer unused** — it ships as a chaptered player at the
+bottom of 02 Engineered detail, so that section now carries the detail twice: drawn
+above (the SVG section), built below. Took the recommendation recorded below: in 02,
+**played not scrubbed**, one beat after the drawing.
+
+- **Assets** (`public/assets/`): `video/tg150-install.webm` **2.01 MB** (VP9, listed
+  FIRST so nearly everyone gets it) + `video/tg150-install.mp4` **3.17 MB** (h264
+  fallback) + `img/tg150-install.webp` 75 KB poster. Page JS 29.4 → 34.2 kB.
+- **Trim: 5.0s → 53.0s** (48.000s, 1200 frames). Measured, not guessed: frames 0-7 are
+  pure white (Y=235 = full-range white), 8-22 are a fade, and the scene settles at
+  frame 23 — but the supplied file ALSO holds a static title card
+  ("VulcaLap T&G 150 - Installation Guide") until it clears at **4.8s**, and the tail
+  is a frozen frame from **52.60s**. Cutting to 5.0s drops the white AND the title
+  card and loses no install content. ⚠️ **The title card is a client asset — this is an
+  editorial call, reversible by re-encoding from 0.92s** (that keeps the card and its
+  ~4s of dead air).
+- **CRF 28, deliberately**: CRF 24 was 6.2 MB, 28 is 3.24 MB, and at 2x zoom on the
+  fixing close-up they are indistinguishable (PSNR 44.67 dB). It is a CAD render — flat
+  faces compress hard. Do not "improve" it back to 24.
+- **Chapters were read off the footage, not invented** — `data-t` on each button:
+  0 membrane · 5.5 brackets & rails · 12 corner post & first course · **26 the concealed
+  fixing** (the camera pushes IN at src 31s = t'26) · 43 clad (it pulls back at src 48s).
+  Verified frame-by-frame; boundary flips land exactly on those values.
+- **Never upscaled**: `.iv` is capped at **1280px**, the source's native width. At the
+  section's full 1560 the render was blown up 1.22x (far worse at DPR 2). Measured
+  after the cap: 1278 CSS px against a 1280 source = 0.999. Do not widen it.
+- Controls sit **below** the picture, not over it: the render's ground plane is white
+  and its membrane near-black, so an overlaid readout fights both inside one clip.
+- The rail is a real `<input type="range">` (drag, arrow keys and ARIA for free); its
+  thumb is a **playhead tick, not a round handle** — this site sets `border-radius: 0`
+  on every control (the only circles on the page are the record plate's countersunk
+  screws).
+- Chapter progress is a compositor-only `scaleX(var(--f))`, never a width — five
+  siblings would relayout every frame otherwise (same trap as the 05 coat swatches).
+
+### Behaviour, and the two contrast bugs found in verification
+Autoplays MUTED once at ≥50% visible, pauses when it leaves, resumes if it was the
+SCROLL that paused it, and **stays paused if the user paused it**. Never loops (it opens
+on bare sheathing and ends clad, so a loop would hard-cut to nothing); on `ended` the
+overlay returns reading "Watch it again". No autoplay under reduced-motion or
+Save-Data/2G. `controls` ships in the markup and JS removes it, so **no-JS keeps a
+working native player** — the custom furniture is hidden by `html:not(.js)` rules
+(mirrored in the `<noscript>` block; keep the two in step).
+
+- ⚠️ **`--grey` (#bdbfbf) on white is 1.85:1.** The chapter numbers used it and failed
+  badly at 11px. Now `--muted` = 7.14:1, with blue as the active tell. Don't put grey
+  text on white anywhere on this page.
+- ⚠️ `--muted` at **opacity 0.8** composites to **4.36:1** — just under AA for 12.5px.
+  `.iv-note` AND the pre-existing `.pd-footnote` are now 0.9 (5.55:1).
+
+### ⚠️ Verification traps hit here (all harness, none were real bugs)
+1. **A non-compositing browser never delivers IntersectionObserver callbacks at all** —
+   not just rAF. `rafRuns: 0` and a fresh IO gets zero callbacks in both the preview
+   pane AND a background Chrome tab, so "autoplay didn't fire" is meaningless there.
+   The autoplay decision is therefore factored out as `__iv.considerAutoplay(visible)`
+   so the guards can be driven directly. The REAL observer was proved by loading
+   `vulcalap.html#ivFig`: the fragment puts the component in view for the initial paint,
+   and the page came back `started:true, currentTime:10.85, autoPaused:true` with no
+   user gesture — autoplay AND auto-pause, end to end.
+2. **CSS transitions don't progress either**, so a transitioned property reads its OLD
+   value forever. `.iv-play` read `opacity: 1` while `pointer-events` from the SAME rule
+   read `none`. To read the target, set `style.transition='none'`, flush, then read.
+3. **Preview-pane screenshots are STALE composites** — they returned frames from an
+   earlier scroll position that contradicted the measured layout. Do not trust a
+   screenshot from a pane that is not displayed; measure numerically.
+4. **A stale `python -m http.server` from an old session was still bound to :8123**,
+   serving an OLD dist — so the new assets 404'd and the subpath check looked broken.
+   The served `vulcalap.html` was 97,189 bytes against 101,637 built. Check
+   `curl -s .../vulcalap.html | grep -c ivFig` before believing a 404, and use a fresh
+   port. On :8137 the subpath run was 153 resources, **0 failures**.
+
+**QA hook:** `window.__iv = { paint, video, marks, considerAutoplay, state(), setMayAutoplay(b) }`.
+rAF is dead in the pane, so call `__iv.paint()` after setting `currentTime`.
+
+**Open:** client sign-off on dropping their title card; swap for real site footage if the
+shoot ever supersedes the CAD.
+
+---
+
 ## 2026-08-18 (later) — HERO REPLACED: scroll-scrubbed frame sequence
 
 The procedural 3D hero was swapped for a **scroll-scrubbed frame sequence** generated
@@ -478,13 +1008,13 @@ Scripts are in the session scratchpad; the recipe above is the durable record.
 ⚠️ A faint diagonal ghost remains in the wood base (render lighting). Subtle, behind
 the veil, but visible if you look.
 
-## Client video supplied, NOT yet used: `T-G-Buildup.mp4`
+## ~~Client video supplied, NOT yet used~~ — SHIPPED, see the 02 install-film section above: `T-G-Buildup.mp4`
 User's Downloads, 2026-08-18. Vulcan's REAL CAD install animation — 1280x720, 25fps,
 54s, no audio, 6.7 MB (re-encodes to 3.1 MB h264 / 1.6 MB VP9 at 720p).
 Arc: membrane roll -> substructure -> planks bottom-up round a corner -> close-up on
 the concealed fixing -> clad. Real geometry, not an AI reinterpretation.
-**Recommendation given: put it in 02 "The joint does the work"** (same subject as that
-section's SVG joint drawing), NOT the hero — it is 16:9 in a dark OSB environment vs
+**Recommendation given — and TAKEN on 2026-08-18: put it in 02 "The joint does the work"**
+(same subject as that section's SVG joint drawing), NOT the hero — it is 16:9 in a dark OSB environment vs
 the hero's portrait paper stage, its camera moves constantly (scrubbing a moving camera
 needs ~300+ frames = 8-12 MB, worse than the current 4.2 MB), and it opens on a membrane
 roll. **PLAY it, do not scrub it.** Gotchas: frame 0 is ~0.9s of PURE WHITE (RGB 255,
@@ -638,7 +1168,11 @@ gh run rerun <run-id> --failed   # the transient Pages error clears on rerun (ma
   `window.__wall.render(x, y)` (0..1 stage coords) to force a settled frame, then read
   pixels via `getImageData` (screenshots time out entirely while the panel is hidden).
 - Git identity is set repo-locally (Sahan Liyanage / sahanhliyanage@gmail.com).
-- Static ffmpeg (not on PATH): `find "$LOCALAPPDATA/Temp/claude/C--IPS" -name ffmpeg.exe`.
+- **ffmpeg/ffprobe ARE on PATH now** (winget Gyan.FFmpeg 9.0) — just call `ffmpeg`.
+  The old scratchpad-hunt note is dead. ⚠️ `bc` is NOT available in this bash; use
+  `$((...))` or python for arithmetic. ⚠️ ffprobe's `-read_intervals` does nothing on a
+  `lavfi movie=` source, and `pkt_pts_time` prints empty in v9 — dump the whole series
+  and index by frame number instead.
 - Image gen: Higgsfield MCP `generate_image`, model `nano_banana_pro` (server maps to
   nano_banana_2, defaults 1k — fine for small assets; pass `resolution: "2k"` for hero-size).
 - Deploys: 30s–8min, sequential per push; watch with a background
@@ -743,9 +1277,10 @@ never how. Do not add them. The caption says they are specified per project.
       premium B2B audience. Built only from certs already asserted elsewhere — no client number
       needed. Reversible if the client would rather show a real rating.
 - [ ] **Hero poster** `hero.jpg` doesn't match the new footage — regenerate from a frame.
-- [ ] **Inner pages** — Products ×3 (VulcaLap/VulcaBar/VulcaFrame, NBS spec + booking), About,
-      Case Studies (filterable), Downloads, Colours, Contact (name+number → Pipedrive). The
-      nav dropdown and Downloads/Colours items are positioned to receive real URLs.
+- [ ] **Inner pages** — Products ×2 remaining (VulcaBar/VulcaFrame), About, Downloads, Colours,
+      Contact (name+number → Pipedrive). ~~Case Studies (filterable)~~ — BUILT 2026-08-18
+      (cases.html + 2 project files, see above). The nav dropdown and Downloads/Colours
+      items are positioned to receive real URLs.
 - [ ] **Real content pass** — case-study captions/project names/stats are placeholders. The
       gallery is now a **paged carousel**: prev/next arrows + an `NN–NN / NN` counter in the
       `.projects-head`, backed by the `CASES` array in `main.js` (single source of truth). It

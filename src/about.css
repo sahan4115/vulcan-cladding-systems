@@ -1,0 +1,184 @@
+/*
+ * About — about.html. Loads after styles.css; all page-scoped with an ab- prefix.
+ * (Never write a star followed by a slash inside a CSS comment: it closes the
+ * comment early and the rest parses as CSS.)
+ *
+ * THE ARGUMENT, taken from Vulcan's own words rather than invented:
+ *   their FAQ says "No. We are supply only." They never set foot on the
+ *   building — so everything has to be right before it leaves them. Every one
+ *   of their four client testimonials independently praises the same thing:
+ *   the take-off, the schedule, the packaging, the delivery arriving as
+ *   promised. The page is built on that, and its signature section is THE
+ *   TAKE-OFF: the Estimating team's itemised schedule, issued line by line.
+ *
+ * Straight edges throughout (site rule). No eyebrows (inner-page rule).
+ * --grey on white is 1.85:1 — never use it for text here.
+ */
+
+/* ---------- Hero ---------- */
+.ab-hero { position: relative; background: var(--navy); overflow: hidden; }
+.ab-hero > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.5; }
+.ab-hero::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(2, 20, 33, 0.92) 0%, rgba(2, 20, 33, 0.72) 45%, rgba(2, 20, 33, 0.5) 100%);
+}
+.ab-hero-inner {
+  position: relative; z-index: 1; max-width: 1560px; margin: 0 auto;
+  padding: clamp(9rem, 17vh, 12.5rem) var(--pad) clamp(3.5rem, 7vw, 6rem);
+}
+.ab-hero h1 { color: var(--white); font-size: clamp(2.9rem, 7vw, 6rem); max-width: 15ch; }
+.ab-hero-row {
+  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(1.4rem, 5vw, 5rem); align-items: end; margin-top: clamp(1.6rem, 3vw, 2.6rem);
+}
+.ab-lede { color: rgba(244, 247, 250, 0.88); font-size: clamp(1.02rem, 1.5vw, 1.22rem); line-height: 1.7; max-width: 50ch; }
+.ab-hero-facts {
+  display: flex; flex-wrap: wrap; gap: 0.5rem 1.8rem; justify-self: end;
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--lblue);
+}
+.ab-hero-facts span { display: inline-flex; align-items: center; gap: 0.5rem; }
+.ab-hero-facts i { width: 8px; height: 10px; background: var(--lblue); transform: skewX(-18deg); }
+
+/* ---------- 01 Ethos: three principles, in their voice ---------- */
+.ab-eth { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--hairline); margin-top: clamp(2rem, 4vw, 3.2rem); }
+.ab-eth > div { background: var(--white); padding: clamp(1.4rem, 2.6vw, 2.2rem); }
+.ab-eth h3 { font-size: clamp(1.15rem, 1.7vw, 1.45rem); font-weight: 700; letter-spacing: -0.02em; }
+.ab-eth p { color: var(--muted); margin-top: 0.8rem; font-size: 0.95rem; }
+
+/* ---------- 02 THE TAKE-OFF ------------------------------------------------
+   The signature. Vulcan's Estimating team prices a facade off the drawings and
+   issues a schedule; a client testimonial describes "a spreadsheet for areas
+   and numbers of material including lengths with all quantities of ancillary
+   items and spares". This is that document, issued line by line as you read,
+   with a running item count. It is a real ledger, not a stat wall — the rows
+   are all present without JS and the total is stated in the markup. */
+.tk-doc { margin-top: clamp(2rem, 4vw, 3.2rem); border: 1px solid var(--hairline); background: var(--white); }
+.tk-top {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+  padding: 1rem clamp(1rem, 2vw, 1.6rem); border-bottom: 1px solid var(--hairline); background: var(--paper);
+}
+.tk-title { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.tk-title b { color: var(--ink); }
+.tk-issued { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue); font-variant-numeric: tabular-nums; }
+
+.tk-table { width: 100%; border-collapse: collapse; }
+.tk-table th {
+  text-align: left; padding: 0.7rem clamp(1rem, 2vw, 1.6rem); border-bottom: 1px solid var(--hairline);
+  font-size: 0.6rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+}
+.tk-table th.num, .tk-table td.num { text-align: right; }
+.tk-row { border-bottom: 1px solid var(--hairline); }
+.tk-row:last-child { border-bottom: 0; }
+.tk-table td { padding: 0.72rem clamp(1rem, 2vw, 1.6rem); font-size: 0.92rem; color: var(--ink); font-variant-numeric: tabular-nums; }
+.tk-item b { font-weight: 700; }
+.tk-item span { display: block; font-size: 0.78rem; color: var(--muted); margin-top: 0.12rem; }
+.tk-code { color: var(--blue); font-weight: 700; font-size: 0.74rem; letter-spacing: 0.08em; white-space: nowrap; }
+/* a line that has been issued reads at full strength; unissued lines sit back.
+   Default is ISSUED so the schedule is complete with no JS. */
+html.js:not(.reduced) .tk-row { opacity: 0.22; transition: opacity 0.45s var(--ease); }
+html.js:not(.reduced) .tk-row.is-issued { opacity: 1; }
+
+.tk-foot {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+  padding: clamp(1rem, 2vw, 1.4rem) clamp(1rem, 2vw, 1.6rem);
+  border-top: 1px solid var(--hairline); background: var(--paper);
+}
+.tk-total { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.tk-total b { font-size: 1.6rem; font-weight: 300; letter-spacing: -0.02em; color: var(--ink); font-variant-numeric: tabular-nums; margin-right: 0.5rem; }
+.tk-stamp {
+  display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.55rem 1rem;
+  border: 1px solid var(--blue); color: var(--blue);
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+}
+.tk-stamp i { width: 8px; height: 10px; background: var(--blue); transform: skewX(-18deg); }
+.tk-note { margin-top: 1rem; font-size: 0.78rem; color: var(--muted); opacity: 0.9; max-width: 72ch; }
+
+/* ---------- 03 What we make ---------- */
+.ab-mk { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(1.2rem, 2.4vw, 2rem); margin-top: clamp(2rem, 4vw, 3.2rem); }
+.ab-mk figure { margin: 0; }
+.ab-mk img { width: 100%; height: 100%; object-fit: cover; display: block; aspect-ratio: 16 / 10; border: 1px solid var(--hairline); }
+.ab-mk figcaption { margin-top: 0.7rem; font-size: 0.78rem; color: var(--muted); letter-spacing: 0.03em; }
+
+/* ---------- Where it lands: the destination register (the page's spine) ----------
+   Six sectors at display scale. Rows, not cards: the payload differs per row and
+   the hairline between them is the only container. No bespoke motion here — the
+   rows ride the page's existing [data-reveal] rise, and the take-off's issuing
+   schedule stays the one authored moment. */
+.dst { list-style: none; margin: clamp(2.4rem, 5vw, 4rem) 0 0; padding: 0; }
+.dst-row {
+  display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: clamp(0.5rem, 3vw, 3rem); align-items: baseline;
+  padding: clamp(1.4rem, 2.6vw, 2.1rem) 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.dst-row:first-child { border-top: 1px solid var(--hairline); }
+.dst-row h3 {
+  font-size: clamp(1.6rem, 3.6vw, 2.9rem); font-weight: 700;
+  letter-spacing: -0.035em; line-height: 1.05; text-wrap: balance;
+}
+.dst-row p { color: var(--muted); font-size: clamp(0.95rem, 1.1vw, 1.02rem); max-width: 46ch; }
+.dst-reach {
+  margin-top: clamp(1.6rem, 3vw, 2.4rem); max-width: 62ch;
+  font-size: clamp(0.98rem, 1.15vw, 1.08rem); color: var(--muted);
+}
+.dst-reach b { color: var(--ink); font-weight: 700; }
+
+/* ---------- 05 To site: the delivery promise ---------- */
+.ab-ship { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(1.6rem, 4vw, 4rem); align-items: center; margin-top: clamp(2rem, 4vw, 3.2rem); }
+.ab-ship img { width: 100%; height: auto; display: block; border: 1px solid var(--hairline-light); }
+.ab-steps { list-style: none; margin: 0; padding: 0; }
+.ab-steps li { display: flex; gap: 1rem; padding: 0.95rem 0; border-top: 1px solid rgba(255, 255, 255, 0.22); color: rgba(244, 247, 250, 0.88); font-size: 0.98rem; line-height: 1.55; }
+.ab-steps li:first-child { border-top: 0; }
+.ab-steps i { flex: none; width: 9px; height: 11px; margin-top: 0.45em; background: var(--lblue); transform: skewX(-18deg); }
+.ab-steps b { color: var(--white); font-weight: 700; }
+
+/* ---------- 06 Testimonials ---------- */
+.ab-quotes { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 2vw, 1.6rem); margin-top: clamp(2rem, 4vw, 3.2rem); }
+.ab-q { background: var(--white); border: 1px solid var(--hairline); padding: clamp(1.3rem, 2.4vw, 2rem); display: flex; flex-direction: column; }
+.ab-q--wide { grid-column: span 3; }
+.ab-q blockquote { margin: 0; color: var(--ink); font-size: clamp(0.98rem, 1.2vw, 1.05rem); line-height: 1.65; }
+.ab-q--wide blockquote { font-size: clamp(1.15rem, 1.9vw, 1.6rem); line-height: 1.5; font-weight: 300; letter-spacing: -0.02em; max-width: 46ch; }
+.ab-q cite {
+  display: block; font-style: normal; margin-top: auto; padding-top: clamp(1rem, 2vw, 1.4rem);
+  font-size: 0.78rem; font-weight: 700; letter-spacing: 0.06em; color: var(--ink);
+}
+.ab-q cite span { display: block; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; font-size: 0.68rem; color: var(--muted); margin-top: 0.2rem; }
+.ab-q-mark { width: 9px; height: 11px; background: var(--blue); transform: skewX(-18deg); margin-bottom: 1rem; }
+
+/* ---------- 07 Questions ---------- */
+.ab-faq { margin-top: clamp(2rem, 4vw, 3.2rem); border-top: 1px solid var(--hairline); }
+.ab-faq details { border-bottom: 1px solid var(--hairline); }
+.ab-faq summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
+  padding: clamp(1rem, 2vw, 1.4rem) 0; cursor: pointer; list-style: none;
+  font-size: clamp(1rem, 1.4vw, 1.15rem); font-weight: 600; letter-spacing: -0.01em; color: var(--ink);
+}
+.ab-faq summary::-webkit-details-marker { display: none; }
+.ab-faq summary::after {
+  content: ''; flex: none; width: 12px; height: 12px; border-right: 2px solid var(--blue); border-bottom: 2px solid var(--blue);
+  transform: rotate(45deg) translateY(-3px); transition: transform 0.35s var(--ease);
+}
+.ab-faq details[open] summary::after { transform: rotate(-135deg) translateY(-3px); }
+.ab-faq summary:hover, .ab-faq summary:focus-visible { color: var(--blue); }
+.ab-faq-a { padding: 0 0 clamp(1.1rem, 2vw, 1.5rem); color: var(--muted); max-width: 68ch; }
+.ab-faq-a a { color: var(--blue); }
+.ab-visit { margin-top: clamp(1.6rem, 3vw, 2.4rem); padding: clamp(1.1rem, 2vw, 1.5rem); border: 1px solid var(--hairline); background: var(--paper); }
+.ab-visit strong { display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.ab-visit p { margin-top: 0.5rem; color: var(--ink); font-size: 0.95rem; }
+
+/* ---------- Mobile ---------- */
+@media (max-width: 900px) {
+  .ab-hero-row, .ab-head, .ab-ship { grid-template-columns: 1fr; }
+  .ab-hero-facts { justify-self: start; }
+  .ab-eth { grid-template-columns: 1fr; }
+  .ab-mk { grid-template-columns: 1fr; }
+  .ab-quotes { grid-template-columns: 1fr; }
+  .ab-q--wide { grid-column: auto; }
+  .dst-row { grid-template-columns: 1fr; gap: 0.55rem; }
+  /* the schedule cannot hold 4 columns at 375px: drop the section column and
+     let the item cell carry it */
+  .tk-table .col-sec { display: none; }
+}
+@media (max-width: 640px) {
+  .tk-table td, .tk-table th { padding-left: 0.9rem; padding-right: 0.9rem; }
+}

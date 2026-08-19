@@ -212,7 +212,128 @@ html.reduced .phero-pin { display: flex; flex-direction: column; }
 }
 .pd-draw .dwg-note { font-family: var(--font); font-size: 13.5px; font-weight: 700; fill: var(--ink); }
 .pd-draw .dwg-sub { font-family: var(--font); font-size: 12px; font-weight: 400; fill: var(--muted); }
-.pd-footnote { margin-top: 1.1rem; font-size: 0.78rem; color: var(--muted); opacity: 0.8; }
+/* 0.9: at 0.8 this composites to 4.36:1 on white, under AA for 12.5px text */
+.pd-footnote { margin-top: 1.1rem; font-size: 0.78rem; color: var(--muted); opacity: 0.9; }
+
+/* ---------- 02 the install film ----------------------------------------
+   Vulcan's own CAD sequence, PLAYED not scrubbed (see the note in the HTML).
+   The controls sit BELOW the picture rather than over it: the render's ground
+   plane is white and its membrane is near-black, so any overlaid readout would
+   have to fight both within one clip. Below the frame it is always ink on
+   paper. The chapter row is the section's numbered-ledger voice reused as a
+   timeline — coarse, semantic seeking; the rail handles fine seeking. */
+/* capped at the source's native 1280 so the render is NEVER upscaled — at the
+   section's full 1560 it was blown up 1.22x (and far worse at DPR 2). The whole
+   block shares the cap so the head, rail and ledger stay flush with the plate. */
+.iv {
+  max-width: 1280px; margin: clamp(4.5rem, 8vw, 7rem) auto 0;
+  padding-top: clamp(2.8rem, 5vw, 4.2rem); border-top: 1px solid var(--hairline);
+}
+.iv-head {
+  display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.2rem, 4vw, 4rem);
+  align-items: end; margin-bottom: clamp(1.6rem, 3vw, 2.4rem);
+}
+.iv-head h3 { font-size: clamp(1.7rem, 3.1vw, 2.7rem); }
+.iv-head p { color: var(--muted); max-width: 46ch; }
+
+/* the picture: a plate, like the drawing above it */
+.iv-stage {
+  position: relative; background: var(--paper);
+  border: 1px solid var(--hairline); box-shadow: 0 18px 44px -28px rgba(14, 36, 52, 0.4);
+}
+.iv-video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: var(--paper); }
+
+/* the invitation, until it is playing */
+.iv-play {
+  position: absolute; inset: 0; margin: auto; width: max-content; height: max-content;
+  display: inline-flex; align-items: center; gap: 0.7rem;
+  padding: 0.95rem 1.7rem 0.95rem 1.35rem; border: 0; cursor: pointer;
+  background: var(--white); color: var(--ink);
+  font: 600 1rem/1 var(--font); letter-spacing: 0.01em;
+  box-shadow: 0 10px 30px -12px rgba(14, 36, 52, 0.55);
+  transition: background 0.3s var(--ease), color 0.3s var(--ease), opacity 0.35s var(--ease);
+}
+.iv-play svg { width: 22px; height: 22px; flex: none; }
+.iv-play:hover, .iv-play:focus-visible { background: var(--blue); color: var(--white); }
+/* once it is running the invitation is gone, and it must not eat clicks */
+.iv.is-playing .iv-play, .iv.is-started .iv-play { opacity: 0; pointer-events: none; }
+
+/* the instrument strip */
+.iv-bar { display: flex; align-items: center; gap: clamp(0.7rem, 1.6vw, 1.2rem); margin-top: 0.9rem; }
+.iv-toggle {
+  flex: none; width: 40px; height: 40px; display: grid; place-items: center;
+  background: transparent; border: 1px solid var(--hairline); color: var(--ink);
+  cursor: pointer; transition: background 0.25s var(--ease), color 0.25s var(--ease), border-color 0.25s var(--ease);
+}
+.iv-toggle svg { width: 18px; height: 18px; }
+.iv-toggle:hover, .iv-toggle:focus-visible { background: var(--blue); border-color: var(--blue); color: var(--white); }
+.iv-i-pause { display: none; }
+.iv.is-playing .iv-i-pause { display: block; }
+.iv.is-playing .iv-i-play { display: none; }
+
+/* a range input, so drag / arrow keys / ARIA all come for free */
+.iv-seek {
+  flex: 1 1 auto; min-width: 0; height: 40px; margin: 0; padding: 0;
+  -webkit-appearance: none; appearance: none; background: transparent; cursor: pointer;
+  --p: 0%;
+}
+.iv-seek::-webkit-slider-runnable-track {
+  height: 3px; border-radius: 0;
+  background: linear-gradient(to right, var(--blue) var(--p), var(--hairline) var(--p));
+}
+.iv-seek::-moz-range-track { height: 3px; background: var(--hairline); }
+.iv-seek::-moz-range-progress { height: 3px; background: var(--blue); }
+/* the thumb is a PLAYHEAD TICK, not a round handle — the site sets
+   border-radius: 0 on every control, and a drawing tick suits the voice */
+.iv-seek::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none; width: 4px; height: 15px; margin-top: -6px;
+  border-radius: 0; background: var(--blue); border: 0;
+}
+.iv-seek::-moz-range-thumb {
+  width: 4px; height: 15px; border-radius: 0; background: var(--blue); border: 0;
+}
+.iv-time {
+  flex: none; font-size: 0.8rem; font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em; color: var(--muted);
+}
+
+/* the chapter ledger = the timeline, in the page's own numbered voice */
+.iv-chapters {
+  list-style: none; margin: 1.5rem 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px;
+  background: var(--hairline);
+}
+.iv-chapters button {
+  position: relative; width: 100%; height: 100%; min-height: 62px;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 0.3rem;
+  padding: 0.85rem 0.95rem 1rem; text-align: left; cursor: pointer;
+  background: var(--white); border: 0; color: var(--muted);
+  font-family: var(--font); transition: color 0.3s var(--ease), background 0.3s var(--ease);
+}
+/* --grey on white is 1.85:1 — nowhere near readable for an 11px label, so the
+   resting number is --muted (7.14:1) and the blue is the active tell */
+.iv-ch-no { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; color: var(--muted); transition: color 0.3s var(--ease); }
+.iv-ch-t { font-size: 0.88rem; line-height: 1.3; }
+.iv-chapters button:hover, .iv-chapters button:focus-visible { color: var(--ink); background: var(--paper); }
+.iv-chapters button:hover .iv-ch-no, .iv-chapters button:focus-visible .iv-ch-no { color: var(--blue); }
+.iv-chapters button.is-on { color: var(--ink); }
+.iv-chapters button.is-on .iv-ch-no { color: var(--blue); }
+/* progress THROUGH the active chapter — a compositor-only scaleX, never a width
+   (animating layout here would relay out all five siblings on every frame) */
+.iv-ch-fill {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--blue);
+  transform: scaleX(var(--f, 0)); transform-origin: left center;
+}
+/* 0.9 not 0.8: muted at 0.8 composites to 4.36:1, just under AA for 12.5px
+   (the sibling .pd-footnote was raised to match) */
+.iv-note { margin-top: 1.1rem; font-size: 0.78rem; color: var(--muted); opacity: 0.9; }
+
+/* no JS: the markup still carries `controls`, so the native player works and is
+   fully seekable. Our custom furniture would be dead buttons on top of it, so
+   it goes. ⚠️ Keep in step with the <noscript> block in vulcalap.html. */
+html:not(.js) .iv-play,
+html:not(.js) .iv-bar,
+html:not(.js) .iv-chapters { display: none; }
 
 /* ---------- 03 PERFORMANCE (the record plate) --------------------------
    A machined aluminium plate on the navy. The claims are engraved into it —
@@ -770,6 +891,16 @@ html.reduced .coat-panel { bottom: 4rem; }
   .po-split { grid-template-columns: 1fr; }
   .pd-inner { grid-template-columns: 1fr; }
   .pd-draw { order: 2; }
+  .iv-head { grid-template-columns: 1fr; align-items: start; }
+  /* five columns would give each chapter ~70px; wrap instead of scroll so no
+     chapter can hide off-screen */
+  .iv-chapters { grid-template-columns: repeat(2, 1fr); }
+  .iv-play span { display: none; }
+  .iv-play { padding: 1.05rem 1.15rem; }
+  .iv-play svg { width: 26px; height: 26px; }
+}
+@media (max-width: 460px) {
+  .iv-chapters { grid-template-columns: 1fr; }
 }
 
 /* ---------- SAMPLE REQUEST DIALOG -------------------------------------

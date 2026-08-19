@@ -56,6 +56,9 @@
         display: flex; flex-wrap: wrap; gap: 0.5rem 1.8rem;
         padding: 1rem var(--gutter) 3rem; font-size: 0.85rem; color: var(--muted);
       }
+      /* the install film keeps its native controls; our custom furniture would
+         be dead buttons over them (mirrors the html:not(.js) rules) */
+      .iv-play, .iv-bar, .iv-chapters { display: none; }
     </style>
   </noscript>
 </head>
@@ -180,7 +183,7 @@
         <svg class="logo-mark" viewBox="0 0 184 61" role="img" aria-label="Vulcan Cladding Systems"><use href="#vulcan-logo-color"/></svg>
       </a>
       <nav class="nav-links" aria-label="Primary">
-        <a href="./#story">About</a>
+        <a href="about.html">About</a>
         <div class="nav-drop">
           <button type="button" class="nav-drop-btn" aria-expanded="false" aria-haspopup="true">
             Products
@@ -192,7 +195,7 @@
             <a href="./#systems">VulcaFrame<sup>&trade;</sup><span>Modular system</span></a>
           </div>
         </div>
-        <a href="./#projects">Case Studies</a>
+        <a href="cases.html">Case Studies</a>
         <div class="nav-drop">
           <button type="button" class="nav-drop-btn" aria-expanded="false" aria-haspopup="true">
             Colours
@@ -204,7 +207,7 @@
           </div>
         </div>
         <a href="./#downloads">Downloads</a>
-        <a href="./#contact">Contact</a>
+        <a href="contact.html">Contact</a>
       </nav>
       <a class="btn btn-solid nav-cta" href="#enquire">Start a conversation</a>
       <button type="button" class="nav-burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
@@ -231,12 +234,12 @@
 
   <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
     <nav aria-label="Mobile">
-      <a href="./#story">About</a>
+      <a href="about.html">About</a>
       <a href="./#systems">Products</a>
-      <a href="./#projects">Case Studies</a>
+      <a href="cases.html">Case Studies</a>
       <a href="./#finishes">Colours</a>
       <a href="./#downloads">Downloads</a>
-      <a href="./#contact">Contact</a>
+      <a href="contact.html">Contact</a>
       <button type="button" class="btn btn-solid" data-enquire>Request a sample</button>
     </nav>
   </div>
@@ -419,6 +422,57 @@
           <figcaption class="pd-footnote">Vertical section through T&amp;G150 at a cladding rail. Build-up after Vulcan&rsquo;s published installation details; cavity barriers and fire-stopping are specified per project and are not shown. Confirm all dimensions against the current datasheet.</figcaption>
         </figure>
       </div>
+
+      <!-- ---- The install film: the drawn joint, then the real one ------------
+           Vulcan's OWN CAD installation sequence, so this section carries the
+           detail twice: drawn above, built below. It is PLAYED, not scrolled:
+           the camera moves throughout, so a scroll-scrubbed frame sequence
+           would need ~300 frames (8-12 MB against 2 MB streamed) — and the
+           hero already owns the scrub gesture on this page.
+           Source trimmed 5.0s-53.0s: the supplied file opens on a white flash
+           and a static title card, and ends on a frozen frame.
+           `controls` ships in the markup and JS removes it when it takes over,
+           so the no-JS case keeps a usable native player. -->
+      <figure class="iv" id="ivFig">
+        <div class="iv-head">
+          <h3 data-reveal>The same detail, <strong>going up.</strong></h3>
+          <p data-reveal>Vulcan&rsquo;s own installation sequence for T&amp;G150 &mdash; breather membrane to finished corner, with the concealed fixing in close-up. Jump to any stage of the build-up.</p>
+        </div>
+
+        <div class="iv-stage" id="ivStage">
+          <video id="ivVideo" class="iv-video" playsinline muted preload="metadata" controls
+                 poster="/assets/img/tg150-install.webp"
+                 aria-label="Installation sequence for VulcaLap T and G 150: breather membrane over the sheathing board, helping-hand brackets and vertical cladding rails, corner post and starter, then courses laid bottom-up with each fixing concealed by the course above, ending on a completed clad corner.">
+            <source src="/assets/video/tg150-install.webm" type="video/webm">
+            <source src="/assets/video/tg150-install.mp4" type="video/mp4">
+          </video>
+
+          <button class="iv-play" id="ivPlay" type="button" aria-label="Play the installation sequence">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+            <span>Watch it go up</span>
+          </button>
+        </div>
+
+        <div class="iv-bar">
+          <button class="iv-toggle" id="ivToggle" type="button" aria-label="Play the installation sequence">
+            <svg class="iv-i-play" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+            <svg class="iv-i-pause" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M7 5h3.5v14H7zm6.5 0H17v14h-3.5z"/></svg>
+          </button>
+          <input class="iv-seek" id="ivSeek" type="range" min="0" max="1000" value="0" step="1"
+                 aria-label="Seek through the installation sequence">
+          <span class="iv-time" id="ivTime">0:00&thinsp;/&thinsp;0:48</span>
+        </div>
+
+        <ol class="iv-chapters" id="ivChapters">
+          <li><button type="button" data-t="0"><span class="iv-ch-no" aria-hidden="true">01</span><span class="iv-ch-t">Breather membrane</span><span class="iv-ch-fill" aria-hidden="true"></span></button></li>
+          <li><button type="button" data-t="5.5"><span class="iv-ch-no" aria-hidden="true">02</span><span class="iv-ch-t">Brackets &amp; rails</span><span class="iv-ch-fill" aria-hidden="true"></span></button></li>
+          <li><button type="button" data-t="12"><span class="iv-ch-no" aria-hidden="true">03</span><span class="iv-ch-t">Corner post &amp; first course</span><span class="iv-ch-fill" aria-hidden="true"></span></button></li>
+          <li><button type="button" data-t="26"><span class="iv-ch-no" aria-hidden="true">04</span><span class="iv-ch-t">The concealed fixing</span><span class="iv-ch-fill" aria-hidden="true"></span></button></li>
+          <li><button type="button" data-t="43"><span class="iv-ch-no" aria-hidden="true">05</span><span class="iv-ch-t">Clad</span><span class="iv-ch-fill" aria-hidden="true"></span></button></li>
+        </ol>
+
+        <figcaption class="iv-note">Vulcan installation sequence, VulcaLap&#174; T&amp;G150, trimmed for the web from the supplied film. Cavity barriers and fire-stopping are specified per project.</figcaption>
+      </figure>
     </section>
 
     <!-- ============ 03 PERFORMANCE =======================================
@@ -802,12 +856,12 @@
         </div>
         <nav class="footer-col" aria-label="Explore">
           <h3>Explore</h3>
-          <a href="./#story">About</a>
+          <a href="about.html">About</a>
           <a href="./#systems">Products</a>
-          <a href="./#projects">Case Studies</a>
+          <a href="cases.html">Case Studies</a>
           <a href="./#finishes">Colours</a>
           <a href="./#downloads">Downloads</a>
-          <a href="./#contact">Contact</a>
+          <a href="contact.html">Contact</a>
         </nav>
         <nav class="footer-col" aria-label="Systems">
           <h3>Systems</h3>

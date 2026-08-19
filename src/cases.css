@@ -1,0 +1,309 @@
+/*
+ * Case studies — the register (cases.html) and the project files (case-*.html).
+ * Loads after styles.css; page-scoped prefixes: reg- = register, cs- / tx- / gal-
+ * = case study. (Do not write a star followed by a slash in here — it closes the
+ * comment early and the rest of the header parses as CSS.)
+ *
+ * THE LISTING: tabs on top, cards below. One filter axis (system), one grid.
+ *   Deliberately plain — earlier cuts tried a query sentence, an elevation of
+ *   full-width courses and a two-zone split; all of it got in the way of just
+ *   showing the work.
+ *   A project file's centrepiece is THE TRANSFORMATION: a bottom-up course wipe
+ *   between the bare substrate and the finished elevation.
+ *
+ * Straight edges throughout (site rule). No eyebrows (inner-page rule).
+ * --grey on white is 1.85:1 — never use it for text here.
+ */
+
+/* ---------- Listing hero ----------
+   A real two-column header: title left, lede right, both sitting on the same
+   bottom line. It was previously a one-child grid, which left the whole right
+   half of the page empty. */
+.reg-hero { background: var(--white); padding: clamp(8.5rem, 15vh, 11rem) var(--pad) clamp(1.6rem, 3vw, 2.6rem); }
+.reg-hero-inner {
+  max-width: 1560px; margin: 0 auto;
+  display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: clamp(1.2rem, 5vw, 5rem); align-items: end;
+}
+.reg-hero h1 { font-size: clamp(2.8rem, 6.6vw, 5.8rem); max-width: 13ch; }
+.reg-hero-lede { color: var(--muted); max-width: 46ch; padding-bottom: 0.5rem; }
+
+/* ---------- The tabs ---------------------------------------------------
+   One axis, one row. The systems are how this site is organised everywhere
+   else (nav, products, the register refs), so they are the axis worth having.
+   Real buttons with aria-pressed: Tab reaches them, Enter/Space activates,
+   and there is no tabpanel contract to fake. */
+.tabs { position: relative; background: var(--white); padding: 0 var(--pad); }
+.tabs::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--hairline); }
+.tabs-inner { max-width: 1560px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: clamp(1.2rem, 3.2vw, 2.8rem); }
+.tab {
+  position: relative; z-index: 1; background: none; border: 0; border-radius: 0; cursor: pointer;
+  padding: clamp(1rem, 2vw, 1.5rem) 0; margin: 0; font-family: var(--font);
+  font-size: clamp(0.92rem, 1.2vw, 1.05rem); font-weight: 600; letter-spacing: -0.01em;
+  color: var(--muted); transition: color 0.25s var(--ease);
+}
+.tab::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--blue);
+  transform: scaleX(0); transform-origin: left center; transition: transform 0.4s var(--ease);
+}
+.tab:hover, .tab:focus-visible { color: var(--ink); }
+.tab[aria-pressed='true'] { color: var(--ink); }
+.tab[aria-pressed='true']::after { transform: scaleX(1); }
+.tab i {
+  font-style: normal; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+  color: var(--muted); margin-left: 0.5rem; font-variant-numeric: tabular-nums;
+}
+.tab[aria-pressed='true'] i { color: var(--blue); }
+
+/* ---------- The cards --------------------------------------------------- */
+.cards { background: var(--paper); padding: clamp(2.6rem, 5vw, 4.2rem) var(--pad) clamp(4rem, 8vw, 6.5rem); }
+.cards-inner { max-width: 1560px; margin: 0 auto; }
+.cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.2rem, 2.4vw, 2rem); }
+
+.cc {
+  position: relative; display: flex; flex-direction: column;
+  background: var(--white); border: 1px solid var(--hairline);
+  color: inherit; text-decoration: none;
+}
+.cc[hidden] { display: none !important; }
+/* the lit top lip, the site's own hover gesture — only on the ones you can open */
+a.cc::before {
+  content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px; z-index: 2; background: var(--blue);
+  transform: scaleX(0); transform-origin: left center; transition: transform 0.5s var(--ease);
+}
+a.cc:hover::before, a.cc:focus-visible::before { transform: scaleX(1); }
+
+.cc-shot { position: relative; aspect-ratio: 3 / 2; overflow: hidden; background: var(--navy); }
+.cc-shot img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.85s var(--ease); }
+a.cc:hover .cc-shot img, a.cc:focus-visible .cc-shot img { transform: scale(1.05); }
+
+.cc-body { flex: 1 1 auto; display: flex; flex-direction: column; padding: clamp(1.1rem, 2vw, 1.5rem); }
+.cc-top { display: flex; align-items: baseline; justify-content: space-between; gap: 0.8rem; }
+.cc-ref { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; color: var(--blue); font-variant-numeric: tabular-nums; }
+.cc-tag { font-size: 0.64rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+a.cc .cc-tag { color: var(--ink); }
+a.cc .cc-tag::before {
+  content: ''; display: inline-block; width: 7px; height: 9px; margin-right: 0.4rem;
+  background: var(--blue); transform: skewX(-18deg);
+}
+.cc-name { font-size: clamp(1.22rem, 1.7vw, 1.5rem); font-weight: 700; letter-spacing: -0.02em; margin-top: 0.75rem; }
+.cc-loc { font-size: 0.86rem; color: var(--muted); margin-top: 0.15rem; }
+.cc-meta {
+  display: grid; grid-template-columns: repeat(3, auto); justify-content: start;
+  gap: 0 clamp(1rem, 2vw, 1.9rem); margin: clamp(1rem, 2vw, 1.3rem) 0 0;
+  padding-top: 0.85rem; border-top: 1px solid var(--hairline);
+}
+.cc-meta dt { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.cc-meta dd { grid-row: 2; margin: 0.2rem 0 0; font-size: 0.82rem; color: var(--ink); font-variant-numeric: tabular-nums; }
+.cc-go {
+  display: inline-flex; align-items: center; gap: 0.5rem; margin-top: auto; padding-top: clamp(1rem, 2vw, 1.3rem);
+  font-size: 0.85rem; font-weight: 700; color: var(--blue);
+}
+.cc-go .btn-arrow { transition: transform 0.4s var(--ease); }
+a.cc:hover .cc-go .btn-arrow, a.cc:focus-visible .cc-go .btn-arrow { transform: translateX(6px); }
+
+/* no JS: the tabs are inert, so they go; every card stands */
+html:not(.js) .tabs { display: none; }
+
+/* nothing matched: say so, and turn it into a conversation */
+.reg-empty { background: var(--white); border-bottom: 1px solid var(--hairline); padding: clamp(3rem, 7vw, 5rem) var(--pad); }
+.reg-empty[hidden] { display: none; }
+.reg-empty-inner { max-width: 1560px; margin: 0 auto; }
+.reg-empty h2 { font-size: clamp(1.6rem, 3vw, 2.4rem); }
+.reg-empty p { color: var(--muted); margin-top: 0.9rem; max-width: 52ch; }
+.reg-empty .btn { margin-top: 1.5rem; }
+.reg-note { background: var(--paper); padding: clamp(1.4rem, 3vw, 2.2rem) var(--pad) clamp(3.5rem, 7vw, 5.5rem); }
+.reg-note p { max-width: 1560px; margin: 0 auto; font-size: 0.78rem; color: var(--muted); opacity: 0.9; }
+
+/* ---------- Project file: hero + cover sheet ---------- */
+.cs-hero { position: relative; min-height: min(82vh, 900px); display: flex; align-items: flex-end; background: var(--navy); }
+.cs-hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.cs-hero::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(2, 20, 33, 0.84) 0%, rgba(2, 20, 33, 0.26) 44%, rgba(2, 20, 33, 0.12) 100%);
+}
+.cs-hero-inner { position: relative; z-index: 1; width: 100%; padding: clamp(8rem, 16vh, 11rem) var(--gutter) clamp(2.6rem, 5vh, 4rem); }
+.cs-kicker { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--lblue); font-variant-numeric: tabular-nums; }
+.cs-hero h1 { color: var(--white); font-size: clamp(3rem, 7.4vw, 6.4rem); margin-top: 0.7rem; }
+.cs-hero-loc { color: rgba(255, 255, 255, 0.84); font-size: clamp(1rem, 1.5vw, 1.22rem); margin-top: 0.7rem; max-width: 46ch; }
+
+.cs-block { background: var(--white); border-bottom: 1px solid var(--hairline); }
+.cs-block dl { max-width: 1560px; margin: 0 auto; padding: 0 var(--pad); display: grid; grid-template-columns: repeat(6, 1fr); }
+.cs-block .cell { padding: 1.05rem 1.2rem 1.15rem; border-left: 1px solid var(--hairline); }
+.cs-block .cell:last-child { border-right: 1px solid var(--hairline); }
+.cs-block dt { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.cs-block dd { font-size: 0.95rem; color: var(--ink); margin-top: 0.3rem; font-variant-numeric: tabular-nums; }
+
+/* ---------- 01 The brief: typographic, no picture -----------------------
+   The old page opened copy-left/image-right and then repeated that twice. The
+   brief now carries itself on type alone, so the first photograph the reader
+   meets is the transformation — which is the one that argues. */
+.cs-open { background: var(--white); padding: clamp(5rem, 10vw, 8.5rem) var(--pad); }
+.cs-open-inner {
+  max-width: 1560px; margin: 0 auto;
+  display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: clamp(1.6rem, 5vw, 5.5rem);
+  align-items: start;
+}
+.cs-no { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; color: var(--blue); font-variant-numeric: tabular-nums; }
+.cs-open h2 { font-size: clamp(2rem, 4.2vw, 3.6rem); margin-top: 0.8rem; }
+.cs-open p { color: var(--muted); font-size: clamp(1rem, 1.35vw, 1.12rem); max-width: 56ch; }
+.cs-open p + p { margin-top: 1.2rem; }
+
+/* ---------- 02 The constraint: the drama beat, oversized ---------------- */
+.cs-constraint { background: var(--navy); padding: clamp(6rem, 13vw, 11rem) var(--pad); }
+.cs-constraint-inner { max-width: 1560px; margin: 0 auto; }
+.cs-constraint .cs-no { color: var(--lblue); }
+.cs-constraint h2 {
+  color: var(--white); font-size: clamp(2.4rem, 6.6vw, 5.6rem); margin-top: 0.9rem; max-width: 16ch;
+  letter-spacing: -0.05em; line-height: 1.02;
+}
+.cs-constraint-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(1.6rem, 5vw, 5.5rem); margin-top: clamp(2rem, 4vw, 3.2rem); }
+.cs-constraint-body p { grid-column: 2; color: rgba(244, 247, 250, 0.86); font-size: clamp(1.02rem, 1.5vw, 1.2rem); line-height: 1.7; max-width: 54ch; }
+
+/* ---------- 03 The answer: THE TRANSFORMATION ---------------------------
+   The page's signature. The wipe runs BOTTOM-UP and its divider is a course
+   line with a lit leading edge, so the reveal reads as cladding going on —
+   not as a generic before/after slider lying on its side.
+   Scroll-triggered once, then the reader takes over (drag the stage, or use
+   the range input, which is what carries the keyboard and ARIA). */
+.tx { background: var(--paper); padding: clamp(5rem, 10vw, 8.5rem) var(--pad); }
+.tx-inner { max-width: 1560px; margin: 0 auto; }
+.tx-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(1.6rem, 5vw, 5.5rem); align-items: end; margin-bottom: clamp(1.6rem, 3vw, 2.6rem); }
+.tx-head h2 { font-size: clamp(2rem, 4.2vw, 3.6rem); margin-top: 0.8rem; }
+.tx-head p { color: var(--muted); max-width: 52ch; }
+
+.tx-stage {
+  position: relative; margin: 0; overflow: hidden; background: var(--navy);
+  border: 1px solid var(--hairline); aspect-ratio: 16 / 9;
+  /* 0 = all BEFORE, 100% = all AFTER. It defaults to the FINISHED building so
+     the no-JS reader gets the completed elevation, not a building site. */
+  --y: 100%;
+}
+/* dragging the stage is a FINE-POINTER affordance only: on touch a vertical
+   drag here would fight the page scroll, so those users get the range input */
+@media (pointer: fine) { .tx-stage { cursor: ns-resize; } }
+.tx-stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+/* the clad state is revealed from the bottom up */
+.tx-after { clip-path: inset(calc(100% - var(--y)) 0 0 0); }
+.tx-line {
+  position: absolute; left: 0; right: 0; bottom: var(--y); height: 2px; background: var(--lblue);
+  box-shadow: 0 0 18px rgba(167, 172, 216, 0.55); pointer-events: none;
+}
+.tx-line::after { /* the grip: a course-end mark, not a round handle */
+  content: ''; position: absolute; right: clamp(0.8rem, 2vw, 1.6rem); bottom: -9px;
+  width: 34px; height: 20px; background: var(--white); border: 1px solid var(--hairline);
+}
+.tx-tag {
+  position: absolute; left: 0; padding: 0.55rem 1rem; background: var(--navy); color: var(--white);
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  pointer-events: none; transition: opacity 0.4s var(--ease);
+}
+.tx-tag--before { top: 0; opacity: calc(1 - (var(--yn, 1) * 0.85)); }
+.tx-tag--after { bottom: 0; background: var(--blue); opacity: var(--yn, 1); }
+/* the accessible control: it IS the slider, visually seated under the stage */
+.tx-ctl { display: flex; align-items: center; gap: clamp(0.7rem, 1.6vw, 1.2rem); margin-top: 0.9rem; }
+.tx-ctl label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); flex: none; }
+.tx-range {
+  flex: 1 1 auto; min-width: 0; height: 40px; margin: 0; padding: 0;
+  -webkit-appearance: none; appearance: none; background: transparent; cursor: pointer; --p: 0%;
+}
+.tx-range::-webkit-slider-runnable-track { height: 3px; background: linear-gradient(to right, var(--blue) var(--p), var(--hairline) var(--p)); }
+.tx-range::-moz-range-track { height: 3px; background: var(--hairline); }
+.tx-range::-moz-range-progress { height: 3px; background: var(--blue); }
+/* playhead tick, matching the install film's control (no round handles on this site) */
+.tx-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 4px; height: 15px; margin-top: -6px; border-radius: 0; background: var(--blue); border: 0; }
+.tx-range::-moz-range-thumb { width: 4px; height: 15px; border-radius: 0; background: var(--blue); border: 0; }
+.tx-cap { margin-top: 0.8rem; font-size: 0.78rem; color: var(--muted); opacity: 0.9; }
+
+/* ---------- The plates: the folder's photography, numbered -------------- */
+.gal { background: var(--white); padding: clamp(5rem, 10vw, 8.5rem) var(--pad); }
+.gal-inner { max-width: 1560px; margin: 0 auto; }
+.gal-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; margin-bottom: clamp(1.6rem, 3vw, 2.4rem); }
+.gal h2 { font-size: clamp(2rem, 4.2vw, 3.6rem); }
+.gal-head p { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.gal-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 2vw, 1.6rem); }
+.gal-item { margin: 0; }
+.gal-item--wide { grid-column: span 2; }
+.gal-item figure { margin: 0; }
+.gal-item img { width: 100%; height: 100%; object-fit: cover; display: block; border: 1px solid var(--hairline); aspect-ratio: 4 / 3; }
+.gal-item--wide img { aspect-ratio: 16 / 9.4; }
+.gal-item figcaption { margin-top: 0.7rem; font-size: 0.76rem; color: var(--muted); letter-spacing: 0.03em; font-variant-numeric: tabular-nums; }
+
+/* ---------- The record: a ledger, never stat tiles ---------------------- */
+.cs-record { background: var(--paper); padding: clamp(5rem, 10vw, 8.5rem) var(--pad); }
+.cs-record-inner { max-width: 1080px; margin: 0 auto; }
+.cs-record h2 { font-size: clamp(2rem, 4.2vw, 3.6rem); }
+.cs-record table { width: 100%; border-collapse: collapse; margin-top: clamp(1.6rem, 3vw, 2.4rem); background: var(--white); border: 1px solid var(--hairline); }
+.cs-record th, .cs-record td { text-align: left; padding: 1rem 1.3rem; border-bottom: 1px solid var(--hairline); }
+.cs-record tr:last-child th, .cs-record tr:last-child td { border-bottom: 0; }
+.cs-record th { width: 36%; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); vertical-align: top; padding-top: 1.2rem; }
+.cs-record td { font-size: 1rem; color: var(--ink); font-variant-numeric: tabular-nums; }
+.cs-record td small { display: block; font-size: 0.78rem; color: var(--muted); margin-top: 0.25rem; }
+.cs-record-note { margin-top: 1rem; font-size: 0.78rem; color: var(--muted); opacity: 0.9; max-width: 64ch; }
+
+/* ---------- The survey: the drone slot ---------------------------------- */
+.cs-survey { background: var(--navy); padding: clamp(5rem, 10vw, 8.5rem) var(--pad); }
+.cs-survey-inner { max-width: 1280px; margin: 0 auto; }
+.cs-survey-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; margin-bottom: clamp(1.4rem, 2.6vw, 2rem); }
+.cs-survey h2 { color: var(--white); font-size: clamp(2rem, 4.2vw, 3.6rem); }
+.cs-survey-head p { color: var(--lblue); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+.cs-survey-stage { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid var(--hairline-light); }
+.cs-survey-stage img { width: 100%; height: 100%; object-fit: cover; display: block; }
+html.js:not(.reduced) .cs-survey-stage img { animation: cs-drift 26s ease-in-out infinite alternate; }
+@keyframes cs-drift { from { transform: scale(1) translate(0, 0); } to { transform: scale(1.08) translate(-1.6%, 1.2%); } }
+.cs-survey-tag {
+  position: absolute; left: 0; bottom: 0; display: inline-flex; align-items: center; gap: 0.55rem;
+  padding: 0.6rem 1rem; background: var(--navy); color: var(--white);
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+}
+.cs-survey-tag i { width: 8px; height: 10px; background: var(--lblue); transform: skewX(-18deg); }
+.cs-survey-stage.is-pending { display: grid; place-items: center; background: var(--navy-2); }
+.cs-survey-pending { text-align: center; padding: 2rem; }
+.cs-survey-pending strong { display: block; color: var(--white); font-size: clamp(1.2rem, 2vw, 1.6rem); font-weight: 300; letter-spacing: -0.02em; }
+.cs-survey-pending span { display: block; margin-top: 0.7rem; color: var(--lblue); font-size: 0.8rem; letter-spacing: 0.05em; }
+.cs-survey-note { margin-top: 1rem; font-size: 0.78rem; color: rgba(244, 247, 250, 0.72); max-width: 70ch; }
+
+/* ---------- Specify this build-up ---------------------------------------- */
+.cs-spec { background: var(--white); padding: clamp(5rem, 10vw, 8.5rem) var(--pad); }
+.cs-spec-inner { max-width: 1560px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(2rem, 5vw, 5.5rem); align-items: start; }
+.cs-spec h2 { font-size: clamp(2rem, 4.2vw, 3.6rem); }
+.cs-spec-copy p { color: var(--muted); margin-top: 1.3rem; max-width: 50ch; }
+.cs-ctas { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 1.8rem; }
+.cs-spec-sheet { border: 1px solid var(--hairline); background: var(--paper); padding: clamp(1.4rem, 2.6vw, 2rem); }
+.cs-spec-sheet h3 { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.cs-spec-sheet ol { list-style: none; margin: 1.1rem 0 0; padding: 0; }
+.cs-spec-sheet li { display: flex; gap: 1rem; padding: 0.75rem 0; border-top: 1px solid var(--hairline); font-size: 0.94rem; color: var(--ink); }
+.cs-spec-sheet li b { flex: none; width: 8.5rem; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding-top: 0.2em; }
+.cs-spec-sheet li span { font-variant-numeric: tabular-nums; }
+
+/* ---------- Next file ---------------------------------------------------- */
+.cs-next { position: relative; display: block; background: var(--navy); overflow: hidden; }
+.cs-next img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.42; transition: opacity 0.6s var(--ease), transform 0.9s var(--ease); }
+.cs-next:hover img, .cs-next:focus-visible img { opacity: 0.58; transform: scale(1.03); }
+.cs-next-inner { position: relative; z-index: 1; max-width: 1560px; margin: 0 auto; padding: clamp(3.4rem, 8vw, 6rem) var(--pad); }
+.cs-next-kicker { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--lblue); }
+.cs-next strong { display: block; color: var(--white); font-size: clamp(2rem, 4.6vw, 4rem); font-weight: 300; letter-spacing: -0.04em; margin-top: 0.5rem; }
+.cs-next strong b { font-weight: 700; }
+.cs-next .btn-arrow { color: var(--white); }
+
+/* ---------- Mobile ------------------------------------------------------- */
+@media (max-width: 900px) {
+  .reg-hero-inner { grid-template-columns: 1fr; align-items: start; }
+  .reg-hero-lede { padding-bottom: 0; }
+  .cards-grid { grid-template-columns: repeat(2, 1fr); }
+  .cs-block dl { grid-template-columns: repeat(2, 1fr); }
+  .cs-block .cell { border-left: 0; border-top: 1px solid var(--hairline); padding-left: 0; }
+  .cs-block .cell:last-child { border-right: 0; }
+  .cs-open-inner, .tx-head, .cs-spec-inner { grid-template-columns: 1fr; }
+  .cs-constraint-body { grid-template-columns: 1fr; }
+  .cs-constraint-body p { grid-column: 1; }
+  .gal-grid { grid-template-columns: repeat(2, 1fr); }
+  .gal-item--wide { grid-column: span 2; }
+}
+@media (max-width: 640px) {
+  .cards-grid { grid-template-columns: 1fr; }
+  .tabs-inner { gap: 1.15rem; }
+  .gal-grid { grid-template-columns: 1fr; }
+  .gal-item--wide img { aspect-ratio: 4 / 3; }
+  .tx-stage { aspect-ratio: 4 / 3; }
+}

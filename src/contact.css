@@ -1,0 +1,175 @@
+/* ---------------------------------------------------------------------------
+   Contact — the page that answers the ask every other page ends on.
+   Inherits the world documented in DESIGN.md: square edges, hairline rules,
+   ledger over card, one light theme with deliberate navy blocks.
+   Shares .ab-sec / .ab-inner / .ab-head with the About page.
+--------------------------------------------------------------------------- */
+
+/* ---------- Hero: navy, no photograph. The ask is the only thing on it. ---------- */
+.ct-hero {
+  background: var(--navy);
+  padding: calc(clamp(7rem, 13vw, 11rem) + 2.5rem) var(--pad) clamp(4rem, 8vw, 6.5rem);
+}
+.ct-hero-inner { max-width: 1560px; margin: 0 auto; }
+.ct-hero h1 {
+  color: var(--white);
+  font-size: clamp(2.6rem, 7vw, 5.6rem);
+  line-height: 1.02; letter-spacing: -0.04em;
+  max-width: 16ch; text-wrap: balance;
+}
+.ct-hero h1 strong { color: var(--lblue); font-weight: 700; }
+.ct-hero-row {
+  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(1.6rem, 5vw, 5rem); align-items: end;
+  margin-top: clamp(2rem, 4vw, 3.2rem);
+  padding-top: clamp(1.6rem, 3vw, 2.4rem);
+  border-top: 1px solid var(--hairline-light);
+}
+.ct-lede {
+  color: rgba(244, 247, 250, 0.86);
+  font-size: clamp(1rem, 1.25vw, 1.14rem);
+  max-width: 58ch;
+}
+
+/* ---------- Direct lines: a ledger, not a card ---------- */
+.ct-direct { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.9rem; }
+.ct-direct li {
+  display: grid; grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: 1rem; align-items: baseline;
+  padding-bottom: 0.9rem; border-bottom: 1px solid var(--hairline);
+}
+.ct-direct li:last-child { border-bottom: 0; padding-bottom: 0; }
+.ct-direct span {
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted);
+}
+.ct-direct a {
+  font-size: clamp(1rem, 1.5vw, 1.22rem); font-weight: 600;
+  color: var(--ink); text-decoration: none;
+  border-bottom: 1px solid var(--hairline);
+  transition: border-color 0.3s var(--ease), color 0.3s var(--ease);
+}
+.ct-direct a:hover { color: var(--blue); border-bottom-color: var(--blue); }
+.ct-direct--navy li { border-bottom-color: var(--hairline-light); }
+.ct-direct--navy span { color: var(--lblue); }
+.ct-direct--navy a { color: var(--white); border-bottom-color: var(--hairline-light); }
+.ct-direct--navy a:hover { color: var(--lblue); border-bottom-color: var(--lblue); }
+/* on the navy hero the direct lines sit on navy too */
+.ct-hero .ct-direct li { border-bottom-color: var(--hairline-light); }
+.ct-hero .ct-direct span { color: var(--lblue); }
+.ct-hero .ct-direct a { color: var(--white); border-bottom-color: var(--hairline-light); }
+.ct-hero .ct-direct a:hover { color: var(--lblue); border-bottom-color: var(--lblue); }
+
+/* ---------- The form ---------- */
+.ct-form { margin-top: clamp(2.2rem, 4.5vw, 3.6rem); }
+.ct-grid {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.1rem, 2.2vw, 1.9rem);
+}
+.ct-field { display: grid; gap: 0.55rem; align-content: start; }
+.ct-field--wide { grid-column: 1 / -1; }
+.ct-field label {
+  font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--ink);
+}
+.ct-field label i {
+  font-style: normal; font-weight: 400; letter-spacing: 0.04em;
+  text-transform: none; color: var(--muted);
+}
+
+.ct-field input,
+.ct-field select,
+.ct-field textarea {
+  font: inherit; color: var(--ink); background: var(--white);
+  border: 1px solid var(--hairline); border-radius: 0;
+  padding: 0.85rem 1rem; width: 100%;
+  transition: border-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+}
+.ct-field textarea { resize: vertical; min-height: 8.5rem; line-height: 1.55; }
+.ct-field input::placeholder,
+.ct-field textarea::placeholder { color: var(--muted); opacity: 0.75; }
+
+.ct-field input:hover,
+.ct-field select:hover,
+.ct-field textarea:hover { border-color: rgba(14, 36, 52, 0.3); }
+
+.ct-field input:focus-visible,
+.ct-field select:focus-visible,
+.ct-field textarea:focus-visible {
+  outline: none; border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(0, 87, 150, 0.18);
+}
+
+/* native select needs its own mark; a drawn chevron, not a glyph */
+.ct-field select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%230e2434' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.6rem;
+}
+
+/* error state */
+.ct-field.is-invalid input,
+.ct-field.is-invalid textarea { border-color: #a8321f; }
+.ct-err { color: #a8321f; font-size: 0.85rem; }
+
+.ct-submit {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: clamp(1rem, 2.5vw, 2rem);
+  margin-top: clamp(1.6rem, 3vw, 2.4rem);
+  padding-top: clamp(1.4rem, 2.6vw, 2rem);
+  border-top: 1px solid var(--hairline);
+}
+.ct-note { color: var(--muted); font-size: 0.9rem; max-width: 48ch; }
+.ct-note b { color: var(--ink); font-weight: 600; }
+.ct-status { margin-top: 1rem; font-size: 0.95rem; color: var(--blue); font-weight: 600; }
+.ct-status:empty { margin-top: 0; }
+
+/* ---------- What happens next: a numbered sequence that IS the information ---------- */
+.ct-steps {
+  list-style: none; margin: clamp(2rem, 4vw, 3.2rem) 0 0; padding: 0;
+  counter-reset: step;
+  border-top: 1px solid var(--hairline);
+}
+.ct-steps li {
+  counter-increment: step;
+  display: grid; grid-template-columns: 3.5rem minmax(0, 1fr);
+  gap: clamp(0.8rem, 2vw, 2rem);
+  padding: clamp(1.3rem, 2.4vw, 1.9rem) 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.ct-steps li::before {
+  content: counter(step, decimal-leading-zero);
+  font-size: 0.8rem; font-weight: 700; color: var(--blue);
+  font-variant-numeric: tabular-nums; letter-spacing: 0.08em;
+  padding-top: 0.35rem;
+}
+.ct-steps h3 {
+  font-size: clamp(1.1rem, 1.8vw, 1.5rem); font-weight: 700;
+  letter-spacing: -0.025em; text-wrap: balance;
+}
+.ct-steps p { color: var(--muted); margin-top: 0.5rem; max-width: 62ch; }
+
+/* ---------- Visiting ---------- */
+.ct-visit {
+  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(1.6rem, 5vw, 5rem); align-items: start;
+}
+.ct-visit h2 { color: var(--white); font-size: clamp(1.9rem, 4vw, 3.2rem); }
+.ct-visit p {
+  color: rgba(244, 247, 250, 0.86); margin-top: 1rem; max-width: 54ch;
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 900px) {
+  .ct-hero-row, .ct-visit { grid-template-columns: 1fr; align-items: start; }
+  .ct-grid { grid-template-columns: 1fr; }
+  .ct-field--wide { grid-column: auto; }
+  .ct-direct li { grid-template-columns: 6rem minmax(0, 1fr); }
+  .ct-submit { flex-direction: column; align-items: stretch; }
+  .ct-submit .btn { justify-content: center; }
+}
+@media (max-width: 640px) {
+  .ct-steps li { grid-template-columns: 2.5rem minmax(0, 1fr); }
+}

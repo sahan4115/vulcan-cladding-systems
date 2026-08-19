@@ -14,6 +14,11 @@ export default defineConfig(({ command }) => ({
       input: {
         main: resolve(__dirname, 'index.html'),
         vulcalap: resolve(__dirname, 'vulcalap.html'),
+        cases: resolve(__dirname, 'cases.html'),
+        about: resolve(__dirname, 'about.html'),
+        contact: resolve(__dirname, 'contact.html'),
+        caseKnights: resolve(__dirname, 'case-knights-hill.html'),
+        caseMerle: resolve(__dirname, 'case-merle-court.html'),
       },
     },
   },

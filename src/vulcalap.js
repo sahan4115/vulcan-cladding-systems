@@ -244,6 +244,161 @@ if (draw && !reduce) {
     .from(draw.querySelectorAll('.dwg-dims, .dwg-notes, .dwg-fill, #hatch'), { opacity: 0, duration: 0.35, stagger: 0.08 }, 0.45);
 }
 
+/* ---------- 02 THE INSTALL FILM -------------------------------------------
+   Vulcan's own CAD install sequence: the joint drawn above, built below.
+   PLAYED, not scrubbed — the camera moves throughout, so a scrubbed frame
+   sequence would need ~300 frames (8-12 MB against 2 MB streamed), and the
+   hero already owns the scrub gesture on this page.
+   Autoplays MUTED once when it scrolls into view and pauses when it leaves.
+   It never loops: the clip opens on bare sheathing and ends clad, so a loop
+   would hard-cut back to nothing. Under reduced motion or Save-Data it waits
+   to be asked. `controls` ships in the markup for the no-JS case and is
+   removed here, once JS is proven to be running. */
+const ivFig = document.getElementById('ivFig');
+if (ivFig) {
+  const vid = document.getElementById('ivVideo');
+  const seek = document.getElementById('ivSeek');
+  const readout = document.getElementById('ivTime');
+  const bigPlay = document.getElementById('ivPlay');
+  const toggleBtn = document.getElementById('ivToggle');
+  const chaps = [...ivFig.querySelectorAll('.iv-chapters button')];
+  const marks = chaps.map((b) => parseFloat(b.dataset.t));
+
+  vid.removeAttribute('controls');
+
+  const conn = navigator.connection || {};
+  const lite = conn.saveData === true || /(^|-)2g$/.test(conn.effectiveType || '');
+  let mayAutoplay = !reduce && !lite;
+
+  let userPaused = false;   /* an explicit pause is respected for good */
+  let autoPaused = false;   /* a pause we caused by scrolling away is resumable */
+  let dragging = false;
+
+  const clock = (s) => {
+    const t = Number.isFinite(s) ? Math.max(0, s) : 0;
+    return `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
+  };
+
+  const paint = () => {
+    const d = vid.duration || 48;
+    const t = vid.currentTime;
+    const p = d ? Math.min(1, t / d) : 0;
+    if (!dragging) seek.value = String(Math.round(p * 1000));
+    seek.style.setProperty('--p', `${(p * 100).toFixed(2)}%`);
+    readout.textContent = `${clock(t)} / ${clock(d)}`;
+
+    let active = 0;
+    for (let i = 0; i < marks.length; i++) if (t >= marks[i] - 0.02) active = i;
+    chaps.forEach((b, i) => {
+      const from = marks[i];
+      const to = i + 1 < marks.length ? marks[i + 1] : d;
+      const f = to > from ? Math.min(1, Math.max(0, (t - from) / (to - from))) : 0;
+      b.style.setProperty('--f', f.toFixed(4));
+      const on = i === active;
+      b.classList.toggle('is-on', on);
+      if (on) b.setAttribute('aria-current', 'true');
+      else b.removeAttribute('aria-current');
+    });
+  };
+
+  /* paint off the ticker while it runs, so the chapter fills move smoothly —
+     `timeupdate` only fires ~4x a second and the fills visibly step */
+  const label = (playing) => {
+    const s = playing ? 'Pause the installation sequence' : 'Play the installation sequence';
+    toggleBtn.setAttribute('aria-label', s);
+    bigPlay.setAttribute('aria-label', s);
+  };
+  const start = () => {
+    const pr = vid.play();
+    if (pr && pr.catch) pr.catch(() => {});  /* autoplay refused: the invitation stays */
+  };
+
+  vid.addEventListener('play', () => {
+    ivFig.classList.add('is-playing', 'is-started');
+    label(true);
+    gsap.ticker.add(paint);
+  });
+  vid.addEventListener('pause', () => {
+    ivFig.classList.remove('is-playing');
+    label(false);
+    gsap.ticker.remove(paint);
+    paint();
+  });
+  vid.addEventListener('ended', () => {
+    /* offer it again rather than looping */
+    ivFig.classList.remove('is-started');
+    bigPlay.querySelector('span').textContent = 'Watch it again';
+    userPaused = false;
+    paint();
+  });
+  vid.addEventListener('loadedmetadata', paint);
+  vid.addEventListener('seeked', paint);
+
+  const toggle = () => {
+    if (vid.paused) { userPaused = false; autoPaused = false; start(); }
+    else { userPaused = true; vid.pause(); }
+  };
+  bigPlay.addEventListener('click', toggle);
+  toggleBtn.addEventListener('click', toggle);
+  vid.addEventListener('click', toggle);
+
+  seek.addEventListener('pointerdown', () => { dragging = true; });
+  window.addEventListener('pointerup', () => { dragging = false; });
+  seek.addEventListener('input', () => {
+    const d = vid.duration || 48;
+    vid.currentTime = (Number(seek.value) / 1000) * d;
+    paint();
+  });
+
+  chaps.forEach((b, i) => {
+    b.addEventListener('click', () => {
+      vid.currentTime = marks[i];
+      userPaused = false; autoPaused = false;
+      start();
+      paint();
+    });
+  });
+
+  /* The autoplay decision is factored OUT of the observer on purpose: a browser
+     that is not compositing (the preview pane, a background tab) never delivers
+     IntersectionObserver callbacks at all, so driving this directly is the only
+     way to exercise the guards. */
+  const considerAutoplay = (visible) => {
+    const begun = ivFig.classList.contains('is-started');
+    if (visible) {
+      if (mayAutoplay && !userPaused && !vid.ended && (!begun || autoPaused)) {
+        autoPaused = false;
+        start();
+        return 'play';
+      }
+      return 'hold';
+    }
+    if (!vid.paused) {
+      autoPaused = true;
+      vid.pause();
+      return 'pause';
+    }
+    return 'idle';
+  };
+
+  new IntersectionObserver((entries) => {
+    entries.forEach((e) => considerAutoplay(e.isIntersecting));
+  }, { threshold: 0.5 }).observe(ivFig);
+
+  paint();
+  /* QA hooks, in the same spirit as __plank / __wall / __facade. rAF is
+     suspended while the pane is not compositing, so the ticker never runs
+     there — call __iv.paint() after setting currentTime. */
+  window.__iv = {
+    paint, video: vid, marks, considerAutoplay,
+    state: () => ({
+      userPaused, autoPaused, mayAutoplay, ended: vid.ended, paused: vid.paused,
+      started: ivFig.classList.contains('is-started'),
+    }),
+    setMayAutoplay: (b) => { mayAutoplay = !!b; },
+  };
+}
+
 /* ---------- 03 THE RECORD PLATE -------------------------------------------
    Scroll runs a cutting pass that machines each line into the plate; the lines
    are engraved by default in CSS, so this only ever ENHANCES something already
