@@ -9,7 +9,78 @@ Last session: 2026-07-03. Live URL: https://sahan4115.github.io/vulcan-cladding-
 
 ---
 
-## 2026-08-19 (latest) — CONTACT PAGE BUILT (`contact.html`) + FIRST DEPLOY OF THE WHOLE PENDING SET
+## 2026-08-19 (latest) — DOWNLOADS PAGE BUILT (`downloads.html`)
+
+Replaces the `#downloads` homepage anchor. Rebuilt from the **real** inventory at
+`vulcansystems.co.uk/vulcalap-vulcabar-downloads/`, fetched and verified, not from the
+homepage's list.
+
+### 🔴 THE HOMEPAGE `#downloads` SECTION LISTS DOCUMENTS THAT DO NOT EXIST
+`index.html`'s section offers **EPDs, Revit/BIM objects, installation guides and
+"25-year finish warranty terms"**, and says "Direct downloads are being prepared."
+None of those appear in Vulcan's published document set, four direct downloads DO exist,
+and the warranty claim was already flagged unconfirmed earlier in this file. **The new
+page deliberately does not carry them.** The homepage section still does — worth cleaning
+up, and worth asking the client whether EPDs/Revit exist at all.
+
+### The idea: what you can have now vs what you ask for
+Their page presents eight items as one flat list of "Click here" links. Four are a click
+away; four are controlled documents that come back by email. That split is the page.
+
+- `.dl-reg` / `.dl-item` — one schedule, four columns (marker · document · meta · action).
+  The marker is the brand's skewed plank: **filled** = in hand, **outline** = on request.
+  Action reads `Download ↓` or `Request →`, with the chevron rotated per kind.
+- **Real file sizes** — 7.7 MB / 9.8 MB / 138 KB / 561 KB, taken from the live PDFs'
+  Content-Length, because a 9.8 MB download on site wifi is worth knowing before clicking.
+  All four URLs return 200; they are absolute to vulcansystems.co.uk so they work here and
+  on the production domain.
+- `.dl-tabs` — All / Download now / On request. **Every count on the page is derived from
+  the rows** (tab counts and both hero figures), same discipline as the take-off total and
+  the cases tabs, so a figure can never drift. Syncs to `?show=`, so a filtered view is
+  shareable. Verified 8 → 4 → 4 → 8.
+- The authored moment is the filter reflow, via **GSAP Flip** (already a dependency).
+- ⚠️ `.dl-item[hidden]` needs `display: none !important` — it is a grid, which beats the
+  UA `[hidden]` rule. Third time this trap has appeared (case cards, register rows).
+
+### One certificate, both systems
+Their most useful fact, currently buried in a run-on sentence: the systems are the same
+extrusion and finishes, so VulcaLap's reaction-to-fire certification **applies to
+VulcaBar too**. Given its own navy section with the ratings ledger — RAL A2 / WOOD A2 /
+Anodised A1. All verbatim-derived from their page; no mechanism is described, so
+PRODUCT.md's "never show HOW fire certification is achieved" holds.
+
+### 🔴 SECOND HALF OF THE about.css → styles.css MOVE
+The contact build moved `.ab-sec/.ab-inner/.ab-head` into `styles.css` but **left the
+responsive override behind** in about.css (`.ab-hero-row, .ab-head, .ab-ship { 1fr }`).
+So `.ab-head` stayed **two columns on phones** for every page that does not import
+about.css — that shipped live on **contact.html** and was caught here by looking at a
+mobile screenshot. The `.ab-head` half of that rule now lives in styles.css under its own
+900px query; about.css keeps `.ab-hero-row, .ab-ship`. **Lesson: when promoting a shared
+primitive, move its media queries with it.**
+
+### Verified
+All 15 contrast probes AA or better (hero lede 10.98:1, tab count 7.49:1, doc title
+15.9:1, meta label 7.14:1, request action 7.14:1, finish copy 6.64:1); filter 8/4/4/8 with
+derived counts and URL sync; no horizontal scroll at 1280 or 375 with 0 offending
+elements; register collapses to marker + content on mobile with 42px tab taps; `.ab-head`
+now single-column on downloads, contact AND about at 375px; no console errors;
+`detect.mjs --json downloads.html` → **[]** (still DEGRADED — undercount, see earlier
+entries). **Walked the whole page in screenshots at desktop and mobile before shipping.**
+
+### Wiring
+24 Downloads links rewired across all eight pages (index, vulcalap, cases, about, contact,
+both case pages, downloads itself); `aria-current="page"` on all three; 8th vite input.
+The homepage keeps its `id="downloads"` section — now orphaned by nav, see above.
+
+### ⚠️ Routing decision to confirm with the client
+Their live page cc's **ray.cooper@vulcansystems.co.uk** on the certificate requests. The
+new page routes everything to **sales@** instead, to avoid hard-coding one person's
+address into the site. If certificates genuinely need Ray, add the cc back into the four
+`mailto:` subjects.
+
+---
+
+## 2026-08-19 — CONTACT PAGE BUILT (`contact.html`) + FIRST DEPLOY OF THE WHOLE PENDING SET
 
 A real contact page, replacing the `#contact` anchor every nav pointed at.
 

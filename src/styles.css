@@ -980,3 +980,10 @@ html.js.reduced [data-clip] { clip-path: none; }
 .ab-sec--navy h2 { color: var(--white); }
 .ab-head p { color: var(--muted); max-width: 52ch; }
 .ab-sec--navy .ab-head p { color: rgba(244, 247, 250, 0.86); }
+
+/* The shared section head stacks with everything else below 900px. This lived in
+   about.css beside the About-only rules, so pages that import only their own sheet
+   kept a two-column head on a phone. */
+@media (max-width: 900px) {
+  .ab-head { grid-template-columns: 1fr; }
+}

@@ -17,6 +17,7 @@ export default defineConfig(({ command }) => ({
         cases: resolve(__dirname, 'cases.html'),
         about: resolve(__dirname, 'about.html'),
         contact: resolve(__dirname, 'contact.html'),
+        downloads: resolve(__dirname, 'downloads.html'),
         caseKnights: resolve(__dirname, 'case-knights-hill.html'),
         caseMerle: resolve(__dirname, 'case-merle-court.html'),
       },

@@ -168,7 +168,7 @@ html.js:not(.reduced) .tk-row.is-issued { opacity: 1; }
 
 /* ---------- Mobile ---------- */
 @media (max-width: 900px) {
-  .ab-hero-row, .ab-head, .ab-ship { grid-template-columns: 1fr; }
+  .ab-hero-row, .ab-ship { grid-template-columns: 1fr; }
   .ab-hero-facts { justify-self: start; }
   .ab-eth { grid-template-columns: 1fr; }
   .ab-mk { grid-template-columns: 1fr; }
