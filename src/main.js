@@ -63,9 +63,96 @@ const splitTitle = (title) => {
 const heroTitle = document.querySelector('.hero-title');
 if (!reduce) splitTitle(heroTitle);
 
+/* ---------- Hero headline follows the film (desktop split state) ----------
+   The film alternates anthracite and woodgrain buildings. Each entry is the time (s) a run of
+   shots begins and the phrase that names it; re-measure these if hero.mp4 is ever re-cut
+   (ffmpeg scene detect: select='gt(scene,0.15)'). */
+const HERO_CUTS = [
+  [0, 'alu'],
+  [5.205, 'timber'],
+  [10.21, 'alu'],
+  [15.215, 'timber'],
+];
+const SWAP_LEAD = 0.25; // old words leave just before the cut so the new ones land on it
+const heroSync = window.matchMedia('(min-width: 861px) and (prefers-reduced-motion: no-preference)');
+const phraseChars = (key) => heroTitle.querySelectorAll(`[data-phrase="${key}"] .ch`);
+/* the full-bleed second beat carries the same pair, line by line */
+const revealLines = (key) => document.querySelectorAll(`.reveal-phrase[data-phrase="${key}"] .swap`);
+const otherPhrase = (key) => (key === 'alu' ? 'timber' : 'alu');
+const phraseAt = (t) => HERO_CUTS.reduce((key, [start, k]) => (t >= start ? k : key), HERO_CUTS[0][1]);
+const upcomingPhrase = () => {
+  const dur = heroVideo.duration || 0;
+  return phraseAt(dur ? (heroVideo.currentTime + SWAP_LEAD) % dur : heroVideo.currentTime);
+};
+let heroPhrase = null;
+let heroSwap = null;
+
+const showPhrase = (key) => {
+  if (key === heroPhrase) return;
+  const prev = heroPhrase;
+  const leaving = prev && phraseChars(prev);
+  heroPhrase = key;
+  if (heroSwap) heroSwap.kill();
+  heroSwap = gsap.timeline();
+  if (leaving) {
+    heroSwap.to(leaving, { yPercent: -120, duration: 0.32, stagger: 0.006, ease: 'power2.in', overwrite: 'auto' }, 0);
+    heroSwap.to(revealLines(prev), { yPercent: -120, duration: 0.32, stagger: 0.05, ease: 'power2.in', overwrite: 'auto' }, 0);
+  } else {
+    gsap.set(revealLines(otherPhrase(key)), { yPercent: 120 });
+  }
+  heroSwap.fromTo(
+    revealLines(key),
+    { yPercent: 120 },
+    { yPercent: 0, duration: 0.8, stagger: 0.08, ease: 'power4.out', overwrite: 'auto' },
+    leaving ? SWAP_LEAD : 0
+  );
+  heroSwap.fromTo(
+    phraseChars(key),
+    { yPercent: 120 },
+    { yPercent: 0, duration: 0.8, stagger: 0.014, ease: 'power4.out', overwrite: 'auto' },
+    leaving ? SWAP_LEAD : 0
+  );
+};
+const syncTick = () => showPhrase(upcomingPhrase());
+const startHeroSync = () => {
+  if (heroSync.matches) gsap.ticker.add(syncTick);
+};
+const stopHeroSync = () => {
+  gsap.ticker.remove(syncTick);
+  if (heroSwap) heroSwap.kill();
+  heroSwap = null;
+  heroPhrase = null;
+  gsap.set(heroTitle.querySelectorAll('.ch'), { clearProps: 'transform' });
+  gsap.set('.reveal-title .swap', { clearProps: 'transform' });
+};
+/* crossing the breakpoint after the intro: mobile reads both phrases, desktop resumes the sync */
+heroSync.addEventListener('change', (e) => {
+  if (!heroIntro.progress()) return; // intro not run yet, it picks the mode itself
+  if (e.matches) {
+    gsap.set(heroTitle.querySelectorAll('.ch'), { yPercent: 120 });
+    showPhrase(upcomingPhrase());
+    startHeroSync();
+  } else {
+    stopHeroSync();
+  }
+});
+
+/* desktop: only the phrase matching the shot on screen enters; the other waits below its mask */
+const introChars = () => {
+  if (reduce || !heroSync.matches) return heroTitle.querySelectorAll('.ch');
+  heroPhrase = upcomingPhrase();
+  gsap.set(phraseChars(otherPhrase(heroPhrase)), { yPercent: 120 });
+  gsap.set(revealLines(otherPhrase(heroPhrase)), { yPercent: 120 });
+  return phraseChars(heroPhrase);
+};
+
+if (!reduce) gsap.set(heroTitle.querySelectorAll('.ch'), { yPercent: 120 });
+
 const heroIntro = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
 heroIntro
-  .from('.hero-title .ch', { yPercent: 120, duration: 0.85, stagger: 0.014, ease: 'power4.out' }, 0)
+  /* the phrase is picked when the intro plays (the film has been running under the preloader) */
+  .add(() => gsap.to(introChars(), { yPercent: 0, duration: 0.85, stagger: 0.014, ease: 'power4.out' }), 0)
+  .add(startHeroSync, 1.3)
   .add(() => heroTitle.classList.add('filled'), 0.95)
   .from('.hero-side > *', { y: 26, opacity: 0, duration: 0.8, stagger: 0.12 }, 0.55)
   .from('.hero-stamp', { scale: 0.6, opacity: 0, duration: 0.9, ease: 'back.out(1.5)' }, 0.85)
@@ -92,6 +179,12 @@ if (reduce) {
     .to('.pre-bar', { scaleX: 1, duration: 0.5, stagger: 0.12, ease: 'power3.inOut' })
     .to('.pre-logo', { opacity: 1, duration: 0.4 }, '-=0.3')
     .to('.pre-core', { opacity: 0, duration: 0.35, delay: 0.4 })
+    /* still hidden behind the wall: rewind so the opening headline gets the whole first shot */
+    .call(() => {
+      if (!heroVideo) return;
+      heroVideo.currentTime = 0;
+      heroVideo.play().catch(() => {}); // autoplay refused: the poster shows frame 0, which matches
+    })
     /* the wall strips away plank by plank */
     .to('.pre-slats span', {
       xPercent: (i) => (i % 2 ? 102 : -102),

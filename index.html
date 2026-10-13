@@ -266,11 +266,18 @@
         <div class="hero-scrim"></div>
       </div>
       <div class="hero-content">
+        <!-- Two phrases. Desktop stacks them in one cell and main.js swaps them on the
+             film's cuts (timber line over woodgrain shots, aluminium line over anthracite);
+             mobile and reduced motion read them in sequence. -->
         <h1 class="hero-title" aria-label="The warmth of timber. The certainty of aluminium.">
-          <span class="line"><span class="line-inner">The warmth</span></span>
-          <span class="line"><span class="line-inner">of <strong>timber.</strong></span></span>
-          <span class="line hero-line-b"><span class="line-inner">The certainty</span></span>
-          <span class="line hero-line-b"><span class="line-inner">of <strong>aluminium.</strong></span></span>
+          <span class="hero-phrase" data-phrase="timber">
+            <span class="line"><span class="line-inner">The warmth</span></span>
+            <span class="line"><span class="line-inner">of <strong>timber.</strong></span></span>
+          </span>
+          <span class="hero-phrase" data-phrase="alu">
+            <span class="line"><span class="line-inner">The certainty</span></span>
+            <span class="line"><span class="line-inner">of <strong>aluminium.</strong></span></span>
+          </span>
         </h1>
         <div class="hero-side">
           <p class="hero-sub">A2 fire-rated aluminium cladding with the character of natural timber &mdash; designed, extruded and finished in Britain, for performance that matters.</p>
@@ -306,9 +313,17 @@
       </div>
       <!-- Second beat: revealed as the media wedge expands to full bleed (desktop scroll) -->
       <div class="hero-reveal" aria-hidden="true">
+        <!-- same two phrases as the h1, swapped on the same cuts (.swap moves on the film's
+             cuts; .line-inner keeps the scroll entrance) -->
         <p class="reveal-title">
-          <span class="line"><span class="line-inner">The certainty</span></span>
-          <span class="line"><span class="line-inner">of <strong>aluminium.</strong></span></span>
+          <span class="reveal-phrase" data-phrase="timber">
+            <span class="line"><span class="line-inner"><span class="swap">The warmth</span></span></span>
+            <span class="line"><span class="line-inner"><span class="swap">of <strong>timber.</strong></span></span></span>
+          </span>
+          <span class="reveal-phrase" data-phrase="alu">
+            <span class="line"><span class="line-inner"><span class="swap">The certainty</span></span></span>
+            <span class="line"><span class="line-inner"><span class="swap">of <strong>aluminium.</strong></span></span></span>
+          </span>
         </p>
       </div>
     </section>

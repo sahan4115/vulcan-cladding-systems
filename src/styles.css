@@ -252,6 +252,7 @@ html.js.reduced .preloader, html.js .preloader.done { display: none; }
 .hero-title { font-size: clamp(2.7rem, 6.6vw, 6.6rem); color: var(--hero-fg); line-height: 1.02; letter-spacing: -0.05em; }
 .hero-title .word, .reveal-title .word { display: inline-block; white-space: nowrap; }
 .hero-title .ch { display: inline-block; will-change: transform; }
+.hero-phrase { display: block; }
 /* emphasis words land as strokes, then fill */
 html.js:not(.reduced) .hero-title strong {
   color: transparent; -webkit-text-stroke: 2px var(--hero-fg);
@@ -290,6 +291,9 @@ html.js:not(.reduced) .hero-title.filled strong { color: var(--hero-fg); }
   color: var(--white); line-height: 1.02; letter-spacing: -0.05em;
 }
 .reveal-title strong { font-weight: 700; }
+.reveal-title { display: grid; }
+.reveal-phrase { grid-area: 1 / 1; display: block; }
+.reveal-title .swap { display: inline-block; will-change: transform; }
 
 /* ---------- Split hero (desktop, motion allowed): text on paper, media wedge right ---------- */
 @media (min-width: 861px) {
@@ -322,7 +326,9 @@ html.js:not(.reduced) .hero-title.filled strong { color: var(--hero-fg); }
     width: min(50%, 720px); gap: clamp(2.2rem, 4vh, 3rem);
   }
   html.js:not(.reduced) .hero-title { font-size: clamp(2.6rem, 5.2vw, 5.4rem); }
-  html.js:not(.reduced) .hero-line-b { display: none; }
+  /* both phrases share one cell; main.js shows whichever matches the shot on screen */
+  html.js:not(.reduced) .hero-title { display: grid; }
+  html.js:not(.reduced) .hero-phrase { grid-area: 1 / 1; }
   html.js:not(.reduced) .hero-side { justify-self: start; max-width: 52ch; }
   html.js:not(.reduced) .hero-sub { color: var(--muted); border-left-color: var(--hairline); }
   html.js:not(.reduced) .hero-proof { color: var(--muted); }
