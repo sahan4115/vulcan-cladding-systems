@@ -1372,7 +1372,7 @@ never how. Do not add them. The caption says they are specified per project.
       14001", shield-check icon) after a brief-alignment review flagged it as off-tone for the
       premium B2B audience. Built only from certs already asserted elsewhere — no client number
       needed. Reversible if the client would rather show a real rating.
-- [ ] **Hero poster** `hero.jpg` doesn't match the new footage — regenerate from a frame.
+- [x] **Hero poster** `hero.jpg` regenerated from frame 0 of the 2026-10-13 hero footage (22.8s drone clip, 1080p, 7.8MB).
 - [ ] **Inner pages** — Products ×2 remaining (VulcaBar/VulcaFrame), About, Downloads, Colours,
       Contact (name+number → Pipedrive). ~~Case Studies (filterable)~~ — BUILT 2026-08-18
       (cases.html + 2 project files, see above). The nav dropdown and Downloads/Colours
