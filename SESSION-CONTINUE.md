@@ -5,11 +5,62 @@ for the original project context, **but note it is stale in places** (it still d
 constellation contact, product-name marquee, factory band, "400 Series" and wedge clip-paths —
 all replaced this session; trust this file and the code over it).
 
-Last session: 2026-07-03. Live URL: https://sahan4115.github.io/vulcan-cladding-systems/
+Last session: 2026-10-22. Live URL: https://sahan4115.github.io/vulcan-cladding-systems/
 
 ---
 
-## 2026-08-19 (latest) — DOWNLOADS PAGE BUILT (`downloads.html`)
+## 2026-10-22 (latest) — ALFIE'S 16 OCT REVIEW APPLIED (branch `alfie-feedback-2026-10-16`, NOT deployed)
+
+Source: the Fathom recording of the 16 Oct call with Alfie ("Vulcan Inner pages"). All work
+is on the branch; `main` (which auto-deploys to Pages) is untouched.
+
+### Done
+- **Homepage hero = Alfie's showreel stage** (`src/hero-showreel.css/js`, all `.sr-*`). Ported
+  from his standalone `vulcan-showreel.html` (Downloads). He asked for HIS build, not a
+  rebuild, minus the reel numbers: the REEL 01 tag, timecode/acts, SHOT nn/09 slate, shot index
+  and the "Hero exploration 02" strip are gone. His HUD logo row is dropped (site nav covers
+  it). His boot mark + shutters replace the slat **preloader**, which is removed from the
+  homepage (two curtain reveals back to back otherwise). His reel is byte-identical to
+  `hero (1).mp4`, the client clip already in the repo as the faststart remux, so no new video.
+  Secondary CTA is "Start a conversation" → contact.html (his said "Full site").
+- **Homepage plank** (`plank.js`) now extrudes the real **TG150 section** from Nick's DWG,
+  316 points in `src/tg150-profile.js` (lifted from Alfie's `TG150_viewer.html`), flipped
+  face-side to camera. VulcaBar / VulcaFrame are still procedural.
+- **VulcaLap**: 02 drawing → Vulcan's own build-up render (`vulcalap-buildup.webp`, 591x710,
+  from their live page; get high-res). 03 metal plate → plain white evidence schedule (no
+  sheen, fixings, engraving, cutting pass or tilt; selection + mailto unchanged). 05 coat →
+  one panel + swatch list, hover/focus/tap shows the finish (no pin, pour, bands or building
+  resolve; the old coat-arch also pointed at the renamed `case-knights.jpg`). Finale wall is
+  drawn once, evenly lit (no cursor spotlight) and `data-magnetic` is off on this page.
+- **Case studies**: `.tx` before/after wipe and `.cs-survey` aerial section removed from both
+  project files (Vulcan supply only, so no before photos exist; no aerial footage exists).
+  `kh-before`, `mc-before`, `kh-aerial` deleted.
+
+### Still open — decisions, not code
+- **VulcaLap first fold** (the scroll build-up with callouts): Fathom's summary says remove
+  the "pop-out" animation, but Alfie never clearly rejected it in the transcript. Ask him.
+- **Homepage** still has the cursor-lit contact wall, magnetic CTAs and the finishes
+  swatcher. The client has seen the homepage; Alfie's comments were about the inner pages.
+- **Case studies are still placeholder schemes with generated images.** Alfie: no stock
+  images at all. Real photos must NOT go under invented names, so this needs the client's
+  real project list + photos (ask Nick). Known real projects from their files: Mace
+  Greenwich (VulcaLap TG125, Western Red Cedar), Bolanachi Phase 1.
+- **04 Applications** images are generated too; swap for client photography.
+- **RAL colours page**: Alfie said "potentially" make one instead of linking the PDF
+  (`Vulcan-RAL-COLOUR-CHART-2020_opt.pdf`). Not built.
+- From Nick: DWGs for VulcaBar, VulcaFrame and VulcaLap TNG 120/180, high-res plank images
+  for accurate swatches, client project photos.
+
+### Verified
+Production build with the Pages base path: every src/href/poster and every JS-built image URL
+resolves (0 missing). Homepage hero at desktop and 375px (no horizontal overflow; CTAs wrap),
+act/accent swap follows the cut list, page script runs end to end. Plank renders the TG150
+face. VulcaLap 02/03/05/finale in browser, finish hover swaps panel + readout, no console
+errors. Case pages: section order cs-hero → cs-open → cs-constraint → gal → cs-record → cs-spec.
+
+---
+
+## 2026-08-19 — DOWNLOADS PAGE BUILT (`downloads.html`)
 
 Replaces the `#downloads` homepage anchor. Rebuilt from the **real** inventory at
 `vulcansystems.co.uk/vulcalap-vulcabar-downloads/`, fetched and verified, not from the
