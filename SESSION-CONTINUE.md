@@ -42,6 +42,15 @@ is on the branch; `main` (which auto-deploys to Pages) is untouched.
   project files (Vulcan supply only, so no before photos exist; no aerial footage exists).
   `kh-before`, `mc-before`, `kh-aerial` deleted.
 
+- **RAL colours page** (`ral-colours.html`, `src/ral-colours.js/.css`; Sahan confirmed 22 Oct).
+  All 187 codes, names and chip colours come from Vulcan's own chart PDF: chips are sampled
+  from the PDF's swatch images; names the text layer garbles (3007-3014, 6026-6033, typos,
+  "20 03") use standard RAL Classic names. Search by number/name, family tabs (counts
+  derived), shareable `?family=` / `?q=`, pick a swatch for a pre-filled sample mailto
+  (`ral_colour_pick` dataLayer event). No JS: full chart, controls hidden. Every nav "RAL
+  Colours" link (8 pages) now points here; Downloads "Choosing a finish" lists it; the PDF
+  stays linked from both pages. Reuses .dl-hero/.dl-tabs, so it imports downloads.css.
+
 ### Still open — decisions, not code
 - **VulcaLap first fold** (the scroll build-up with callouts): Fathom's summary says remove
   the "pop-out" animation, but Alfie never clearly rejected it in the transcript. Ask him.
@@ -56,8 +65,6 @@ is on the branch; `main` (which auto-deploys to Pages) is untouched.
   real project list + photos (ask Nick). Known real projects from their files: Mace
   Greenwich (VulcaLap TG125, Western Red Cedar), Bolanachi Phase 1.
 - **04 Applications** images are generated too; swap for client photography.
-- **RAL colours page**: Alfie said "potentially" make one instead of linking the PDF
-  (`Vulcan-RAL-COLOUR-CHART-2020_opt.pdf`). Not built.
 - From Nick: DWGs for VulcaBar, VulcaFrame and VulcaLap TNG 120/180, high-res plank images
   for accurate swatches, client project photos.
 

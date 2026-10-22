@@ -1,0 +1,59 @@
+/* ---------------------------------------------------------------------------
+   RAL colours: the finder. Loads after styles.css and downloads.css (it reuses
+   the .dl-hero and .dl-tabs furniture). Square edges, hairline rules, as DESIGN.md.
+--------------------------------------------------------------------------- */
+
+.ral-find { margin-top: clamp(2rem, 4vw, 3rem); }
+.ral-search { display: grid; gap: 0.45rem; max-width: 26rem; }
+.ral-search-l { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.ral-search input {
+  font: inherit; font-size: 1rem; color: var(--ink); height: 52px; padding: 0 1rem;
+  background: var(--paper); border: 1px solid rgba(14, 36, 52, 0.52); border-radius: 0;
+}
+.ral-search input:hover { border-color: rgba(14, 36, 52, 0.68); }
+.ral-search input:focus-visible { outline: 2px solid var(--blue); outline-offset: 1px; background: var(--white); }
+.ral-tabs { margin-top: 1.6rem; gap: 0.9rem 1.5rem; }
+.ral-status { min-height: 1.4em; margin-top: 1rem; font-size: 0.82rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+.ral-grid {
+  list-style: none; margin: 0.6rem 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr)); gap: 1.4rem 1rem;
+}
+.ral-sw[hidden] { display: none !important; }
+.ral-sw button {
+  display: grid; gap: 0.15rem; width: 100%; padding: 0; text-align: left; cursor: pointer;
+  background: none; border: 0; border-radius: 0; font: inherit; color: var(--ink);
+}
+.ral-chip {
+  display: block; aspect-ratio: 4 / 3; margin-bottom: 0.55rem; background: var(--c);
+  box-shadow: inset 0 0 0 1px rgba(14, 36, 52, 0.08);
+  transition: box-shadow 0.2s var(--ease);
+}
+.ral-sw--light .ral-chip { box-shadow: inset 0 0 0 1px rgba(14, 36, 52, 0.22); }
+.ral-sw b { font-size: 0.9rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.ral-sw span:not(.ral-chip) { font-size: 0.82rem; color: var(--muted); line-height: 1.35; }
+.ral-sw button:hover .ral-chip { box-shadow: inset 0 0 0 1px rgba(14, 36, 52, 0.3), 0 0 0 1px var(--ink); }
+.ral-sw button:focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; }
+.ral-sw button[aria-pressed="true"] .ral-chip { box-shadow: 0 0 0 2px var(--white), 0 0 0 4px var(--ink); }
+
+/* the picked colour, held at the foot of the viewport while you browse */
+.ral-pick {
+  position: sticky; bottom: 1rem; z-index: 5; margin-top: 2rem;
+  display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+  background: var(--white); border: 1px solid var(--hairline); box-shadow: 0 12px 32px rgba(1, 16, 27, 0.14);
+  padding: 0.8rem 0.9rem;
+}
+.ral-pick[hidden] { display: none !important; }
+.ral-pick .ral-chip { width: 52px; aspect-ratio: 1; margin: 0; }
+.ral-pick p { margin: 0; flex: 1 1 12rem; }
+.ral-pick p b { font-variant-numeric: tabular-nums; margin-right: 0.4rem; }
+.ral-pick p span { color: var(--muted); }
+
+/* no JS: the full chart stands; the controls would be dead, so they go */
+html:not(.js) .ral-find, html:not(.js) .ral-tabs { display: none; }
+
+@media (max-width: 640px) {
+  .ral-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ral-tabs { gap: 1rem 1.2rem; }
+  .ral-pick .btn { width: 100%; justify-content: center; }
+}
