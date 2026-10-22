@@ -228,22 +228,6 @@ if (!reduce) {
   gsap.set('[data-reveal]', { opacity: 1, y: 0 });
 }
 
-/* ---------- Engineered detail: the section drawing draws itself ---------- */
-const draw = document.getElementById('pdDraw');
-if (draw && !reduce) {
-  const traces = [...draw.querySelectorAll('[data-trace]')];
-  traces.forEach((el) => {
-    const len = el.getTotalLength ? el.getTotalLength() : 1200;
-    el.style.strokeDasharray = String(len);
-    el.style.strokeDashoffset = String(len);
-  });
-  const tl = gsap.timeline({
-    scrollTrigger: { trigger: draw, start: 'top 78%', end: 'top 22%', scrub: 0.6 },
-  });
-  tl.to(traces, { strokeDashoffset: 0, ease: 'none', stagger: 0.06 })
-    .from(draw.querySelectorAll('.dwg-dims, .dwg-notes, .dwg-fill, #hatch'), { opacity: 0, duration: 0.35, stagger: 0.08 }, 0.45);
-}
-
 /* ---------- 02 THE INSTALL FILM -------------------------------------------
    Vulcan's own CAD install sequence: the joint drawn above, built below.
    PLAYED, not scrubbed — the camera moves throughout, so a scrubbed frame
@@ -399,16 +383,13 @@ if (ivFig) {
   };
 }
 
-/* ---------- 03 THE RECORD PLATE -------------------------------------------
-   Scroll runs a cutting pass that machines each line into the plate; the lines
-   are engraved by default in CSS, so this only ever ENHANCES something already
-   readable (no-JS and reduced-motion both ship a complete plate).
+/* ---------- 03 THE EVIDENCE SCHEDULE ---------------------------------------
    Selecting a line picks the document that evidences that claim, and the pack
-   CTA turns on once anything is chosen.
+   CTA turns on once anything is chosen. (The scroll cutting pass and plate tilt
+   were removed after the 16 Oct review: too much.)
    ------------------------------------------------------------------------- */
 const recPlate = document.getElementById('recPlate');
 if (recPlate) {
-  const lines = gsap.utils.toArray('.rec-line');
   const hits = gsap.utils.toArray('.rec-hit');
   const countEl = document.getElementById('recCount');
   const meterEl = document.getElementById('recMeter');
@@ -434,11 +415,6 @@ if (recPlate) {
       hit.setAttribute('aria-pressed', String(on));
       const doc = hit.dataset.doc;
       on ? picked.add(doc) : picked.delete(doc);
-      if (on && !reduce) {
-        /* the tick is struck, not faded: a short hard punch into the metal */
-        gsap.fromTo(hit.querySelector('.rec-tick'),
-          { scale: 0.82 }, { scale: 1, duration: 0.34, ease: 'back.out(2.6)' });
-      }
       sync();
     });
   });
@@ -456,34 +432,6 @@ if (recPlate) {
     window.location.href = `mailto:sales@vulcansystems.co.uk?subject=${subject}&body=${body}`;
   });
 
-  if (!reduce) {
-    /* machine them in, one line after the next */
-    gsap.set(lines, { '--cut': '100%' });
-    const tl = gsap.timeline({
-      scrollTrigger: { trigger: recPlate, start: 'top 78%', end: 'bottom 72%', scrub: 0.6 },
-    });
-    lines.forEach((ln, i) => {
-      tl.to(ln, {
-        '--cut': '0%', duration: 1, ease: 'power1.inOut',
-        onStart: () => ln.classList.add('cutting'),
-        onComplete: () => ln.classList.remove('cutting'),
-        onReverseComplete: () => ln.classList.remove('cutting'),
-      }, i * 0.72);
-    });
-
-    /* the plate sits on the navy as an object: it leans a little toward you */
-    if (fine) {
-      const rx = gsap.quickTo(recPlate, 'rotationX', { duration: 0.6, ease: 'power3.out' });
-      const ry = gsap.quickTo(recPlate, 'rotationY', { duration: 0.6, ease: 'power3.out' });
-      gsap.set(recPlate, { transformPerspective: 1400 });
-      recPlate.addEventListener('pointermove', (e) => {
-        const r = recPlate.getBoundingClientRect();
-        rx((0.5 - (e.clientY - r.top) / r.height) * 3.2);
-        ry(((e.clientX - r.left) / r.width - 0.5) * 4);
-      });
-      recPlate.addEventListener('pointerleave', () => { rx(0); ry(0); });
-    }
-  }
 }
 
 /* ---------- 04 WHERE IT BELONGS -------------------------------------------
@@ -624,257 +572,64 @@ if (wbPin) {
   }
 }
 
-/* ---------- 05 THE COAT ----------------------------------------------------
-   One pinned composition. Scroll pours coat after coat down the stage: a single
-   hard edge crosses the wall, the product panel and the headline together, then
-   the wall splits into every coat at once and resolves into a finished building.
-   The rail underneath reaches all 15 states at any time (hover / tap), and the
-   scroll takes back over the moment you move.
-   Assets: the client's own renders, background-keyed (panel-*) with the plank
-   face sampled out as the wall surface (tile-*).
+/* ---------- 05 FINISHES ----------------------------------------------------
+   Hover, focus or tap a finish and the panel shows it; that is all. The panels
+   are the client's own renders (panel-*.webp).
    -------------------------------------------------------------------------- */
 const COATS = {
-  raw:          { name: 'Uncoated extrusion',   spec: 'Mill finish — before coating',                 lum: 105 },
-  cedar:        { name: 'Western Red Cedar',    spec: 'Wood-effect powder coat · A2 fire-rated',      lum: 144 },
-  'light-oak':  { name: 'Light Oak',            spec: 'Wood-effect powder coat · A2 fire-rated',      lum: 134 },
-  'golden-oak': { name: 'Golden Oak',           spec: 'Wood-effect powder coat · A2 fire-rated',      lum: 107 },
-  teak:         { name: 'Teak',                 spec: 'Wood-effect powder coat · A2 fire-rated',      lum: 76 },
-  'dark-oak':   { name: 'Dark Oak',             spec: 'Wood-effect powder coat · A2 fire-rated',      lum: 88 },
-  rosewood:     { name: 'Rosewood',             spec: 'Wood-effect powder coat · A2 fire-rated',      lum: 89 },
-  chestnut:     { name: 'Chestnut',             spec: 'Wood-effect powder coat · A2 fire-rated',      lum: 136 },
-  ebony:        { name: 'Ebony',                spec: 'Wood-effect powder coat · A2 fire-rated',      lum: 50 },
-  corten:       { name: 'Weathered Steel',      spec: 'Wood-effect powder coat · A2 fire-rated',      lum: 78 },
-  bronze:       { name: 'Anodised Bronze',      spec: 'Anodised aluminium · A1 non-combustible',      lum: 108 },
-  anthracite:   { name: 'RAL 7016 Anthracite',  spec: 'Powder coat · ISO 12944-6 (C4), 25 years',     lum: 54 },
-  moss:         { name: 'RAL 7003 Moss Grey',   spec: 'Powder coat · ISO 12944-6 (C4), 25 years',     lum: 115 },
-  ivory:        { name: 'RAL 1015 Light Ivory', spec: 'Powder coat · ISO 12944-6 (C4), 25 years',     lum: 183 },
-  platinum:     { name: 'RAL 7036 Platinum',    spec: 'Powder coat · ISO 12944-6 (C4), 25 years',     lum: 131 },
+  raw:          { name: 'Uncoated extrusion',   spec: 'Mill finish — before coating' },
+  cedar:        { name: 'Western Red Cedar',    spec: 'Wood-effect powder coat · A2 fire-rated' },
+  'light-oak':  { name: 'Light Oak',            spec: 'Wood-effect powder coat · A2 fire-rated' },
+  'golden-oak': { name: 'Golden Oak',           spec: 'Wood-effect powder coat · A2 fire-rated' },
+  teak:         { name: 'Teak',                 spec: 'Wood-effect powder coat · A2 fire-rated' },
+  'dark-oak':   { name: 'Dark Oak',             spec: 'Wood-effect powder coat · A2 fire-rated' },
+  rosewood:     { name: 'Rosewood',             spec: 'Wood-effect powder coat · A2 fire-rated' },
+  chestnut:     { name: 'Chestnut',             spec: 'Wood-effect powder coat · A2 fire-rated' },
+  ebony:        { name: 'Ebony',                spec: 'Wood-effect powder coat · A2 fire-rated' },
+  corten:       { name: 'Weathered Steel',      spec: 'Wood-effect powder coat · A2 fire-rated' },
+  bronze:       { name: 'Anodised Bronze',      spec: 'Anodised aluminium · A1 non-combustible' },
+  anthracite:   { name: 'RAL 7016 Anthracite',  spec: 'Powder coat · ISO 12944-6 (C4), 25 years' },
+  moss:         { name: 'RAL 7003 Moss Grey',   spec: 'Powder coat · ISO 12944-6 (C4), 25 years' },
+  ivory:        { name: 'RAL 1015 Light Ivory', spec: 'Powder coat · ISO 12944-6 (C4), 25 years' },
+  platinum:     { name: 'RAL 7036 Platinum',    spec: 'Powder coat · ISO 12944-6 (C4), 25 years' },
 };
-/* `raw` has no wall surface: the building is simply unclad, so the navy stage
-   shows through and the bare-metal panel reads bright against it. The first
-   pour clads the wall and coats the panel in the same sweep. */
-const tileUrl = (k) =>
-  (k === 'raw' ? 'none' : `url(${import.meta.env.BASE_URL}assets/img/finishes/tile-${k}.webp)`);
 const panelUrl = (k) => `${import.meta.env.BASE_URL}assets/img/finishes/panel-${k}.webp`;
-/* the wall is dark-veiled on the left, so type stays white until the coat is
-   genuinely pale — ivory is the only one that needs ink */
-const inkFor = (k) => (COATS[k].lum > 170 ? '#0e2434' : '#ffffff');
 
-/* The narrative: every pour keeps the SAME panel geometry (all four are the
-   shiplap-horizontal render), so only the coat appears to change. */
-const POURS = [
-  { to: 'cedar',      a: 0.10, b: 0.27 },
-  { to: 'corten',     a: 0.30, b: 0.47 },
-  { to: 'anthracite', a: 0.50, b: 0.66 },
-];
-const SPECTRUM = { a: 0.68, b: 0.83 };
-const ARCH = { a: 0.84, b: 0.97 };
+const coatPanel = document.getElementById('coatPanel');
+if (coatPanel) {
+  const nameEl = document.getElementById('coatName');
+  const specEl = document.getElementById('coatSpec');
+  const sws = [...document.querySelectorAll('.coat-sw')];
+  let chosen = 'cedar';
 
-const coatPin = document.getElementById('coatPin');
-if (coatPin) {
-  const wallBase = document.getElementById('wallBase');
-  const wallPour = document.getElementById('wallPour');
-  const panelBase = document.getElementById('panelBase');
-  const panelPour = document.getElementById('panelPour');
-  const copyBase = document.getElementById('copyBase');
-  const copyPour = document.getElementById('copyPour');
-  const edge = document.getElementById('coatEdge');
-  const spectrum = document.getElementById('coatSpectrum');
-  const bands = gsap.utils.toArray('.coat-band');
-  const arch = document.getElementById('coatArch');
-  const closeEl = document.getElementById('coatClose');
-  const panel = document.getElementById('coatPanel');
-  const sws = gsap.utils.toArray('.coat-sw');
+  /* warm the cache so a hover swaps instantly */
+  Object.keys(COATS).forEach((k) => { new Image().src = panelUrl(k); });
 
-  /* Where each free-floating pour layer sits inside the stage. clip-path
-     percentages resolve against the element's own box, so the panel and the
-     headline would cut at their own mid-points instead of the wall's line —
-     these are measured once and the cut is then set in absolute px. */
-  const boxes = new Map();
-  const measure = () => {
-    const r0 = coatPin.getBoundingClientRect();
-    [panelPour, copyPour, copyBase].forEach((el) => {
-      const r = el.getBoundingClientRect();
-      boxes.set(el, { top: r.top - r0.top, h: r.height, stage: r0.height });
+  const show = (k) => {
+    const c = COATS[k];
+    coatPanel.src = panelUrl(k);
+    coatPanel.alt = `A VulcaLap panel in ${c.name}, shown with its cladding rails and helping-hand brackets`;
+    nameEl.textContent = c.name;
+    specEl.textContent = c.spec;
+  };
+  const choose = (k) => {
+    chosen = k;
+    sws.forEach((b) => {
+      const on = b.dataset.coat === k;
+      b.classList.toggle('is-on', on);
+      b.setAttribute('aria-pressed', String(on));
     });
-  };
-  /* `above` keeps the part of the element above the edge (the incoming coat),
-     `below` keeps the part under it (the coat being replaced). The wall and the
-     panel only need `above`, because those layers are opaque images and simply
-     cover what is behind them — but the copy is transparent text, so its two
-     versions have to be cut complementarily or they read on top of each other. */
-  const cutAt = (el, edgePx, side) => {
-    const b = boxes.get(el);
-    if (!b) return;
-    if (side === 'below') {
-      const top = gsap.utils.clamp(0, b.h, edgePx - b.top);
-      el.style.clipPath = `inset(${top.toFixed(1)}px 0 0 0)`;
-    } else {
-      const bottom = gsap.utils.clamp(0, b.h, b.top + b.h - edgePx);
-      el.style.clipPath = `inset(0 0 ${bottom.toFixed(1)}px 0)`;
-    }
+    show(k);
   };
 
-  const setRead = (el, k) => {
-    el.querySelector('[data-read="name"]').textContent = COATS[k].name;
-    el.querySelector('[data-read="spec"]').textContent = COATS[k].spec;
-  };
-
-  /* paint(base, pour, t) — t is the pour progress, 0 = base only, 1 = poured */
-  let painted = { base: null, pour: null };
-  const paint = (base, pour, t) => {
-    if (painted.base !== base) {
-      wallBase.style.backgroundImage = tileUrl(base);
-      panelBase.src = panelUrl(base);
-      copyBase.style.setProperty('--ink-a', inkFor(base));
-      setRead(copyBase, base);
-      painted.base = base;
-    }
-    if (painted.pour !== pour) {
-      wallPour.style.backgroundImage = tileUrl(pour);
-      panelPour.src = panelUrl(pour);
-      copyPour.style.setProperty('--ink-b', inkFor(pour));
-      setRead(copyPour, pour);
-      painted.pour = pour;
-    }
-    coatPin.style.setProperty('--edge', `${(t * 100).toFixed(2)}%`);
-    const edgePx = t * (boxes.get(panelPour)?.stage || coatPin.offsetHeight);
-    cutAt(panelPour, edgePx);
-    cutAt(copyPour, edgePx);
-    cutAt(copyBase, edgePx, 'below');
-    edge.style.opacity = t > 0.001 && t < 0.999 ? '1' : '0';
-    const shown = t > 0.5 ? pour : base;
-    sws.forEach((b) => b.classList.toggle('is-on', b.dataset.coat === shown));
-    return shown;
-  };
-
-  /* where the narrative is at scroll progress p */
-  const narrativeAt = (p) => {
-    let base = 'raw';
-    let pour = POURS[0].to;
-    let t = 0;
-    for (const seg of POURS) {
-      if (p >= seg.b) { base = seg.to; t = 0; pour = seg.to; }
-      else if (p >= seg.a) {
-        pour = seg.to;
-        t = gsap.parseEase('power2.inOut')((p - seg.a) / (seg.b - seg.a));
-        break;
-      } else { pour = seg.to; break; }
-    }
-    /* after the last pour the wall holds the final coat */
-    if (p >= POURS[POURS.length - 1].b) { base = POURS[POURS.length - 1].to; pour = base; t = 0; }
-    return { base, pour, t };
-  };
-
-  let scrollP = 0;
-  let override = null;     /* { key, t } — a rail pick */
-  let overrideAtP = 0;     /* the scroll position it was made at */
-
-  const render = () => {
-    if (override) {
-      const n = narrativeAt(scrollP);
-      paint(n.t > 0.5 ? n.pour : n.base, override.key, override.t);
-    } else {
-      const n = narrativeAt(scrollP);
-      paint(n.base, n.pour, n.t);
-    }
-  };
-
-  /* ---- rail: hover or tap coats the whole stage ---- */
-  const applyOverride = (key) => {
-    if (reduce) {
-      override = { key, t: 1 };
-      render();
-      return;
-    }
-    if (override && override.key === key) return;
-    if (override) gsap.killTweensOf(override);   /* kill the OLD object's tween first */
-    override = { key, t: 0 };
-    overrideAtP = scrollP;
-    gsap.to(override, { t: 1, duration: 0.62, ease: 'power2.inOut', onUpdate: render });
-  };
   sws.forEach((b) => {
     const k = b.dataset.coat;
-    b.addEventListener('pointerenter', () => { if (fine) applyOverride(k); });
-    b.addEventListener('focus', () => applyOverride(k));
-    b.addEventListener('click', () => applyOverride(k));
+    b.addEventListener('pointerenter', () => { if (fine) show(k); });
+    b.addEventListener('focus', () => show(k));
+    b.addEventListener('click', () => choose(k));
   });
-
-  /* preload the range once the section is near — the whole set is ~430 KB */
-  const warm = new IntersectionObserver((es) => {
-    if (es.some((e) => e.isIntersecting)) {
-      warm.disconnect();
-      Object.keys(COATS).forEach((k) => {
-        const i = new Image(); i.src = panelUrl(k);
-        const j = new Image(); j.src = panelUrl(k).replace('panel-', 'tile-');
-      });
-    }
-  }, { rootMargin: '700px' });
-  warm.observe(coatPin);
-
-  measure();
-  window.addEventListener('resize', () => { measure(); render(); });
-  ScrollTrigger.addEventListener('refresh', () => { measure(); render(); });
-  paint('raw', 'cedar', 0);
-
-  if (!reduce) {
-    gsap.set([spectrum, arch, closeEl], { opacity: 0 });
-    gsap.set(bands, { scaleY: 0 });
-
-    const proxy = { p: 0 };
-    ScrollTrigger.create({
-      trigger: coatPin,
-      start: 'top top',
-      end: '+=420%',
-      pin: true,
-      scrub: 0.5,
-      anticipatePin: 1,
-      onUpdate: (self) => {
-        const p = self.progress;
-        scrollP = p;
-        /* a real scroll hands control back to the narrative — but a scrub tween
-           settling, or inertial jitter, must not cancel the pick the moment it
-           is made, so this needs a genuine change in position */
-        if (override && Math.abs(p - overrideAtP) > 0.004) {
-          gsap.killTweensOf(override);
-          override = null;
-        }
-        render();
-
-        /* every coat at once */
-        const sp = gsap.utils.clamp(0, 1, (p - SPECTRUM.a) / (SPECTRUM.b - SPECTRUM.a));
-        spectrum.style.opacity = String(sp > 0 ? 1 : 0);
-        bands.forEach((b, i) => {
-          const d = i / bands.length * 0.45;
-          const t = gsap.utils.clamp(0, 1, (sp - d) / (1 - 0.45));
-          b.style.transform = `scaleY(${gsap.parseEase('power3.out')(t).toFixed(3)})`;
-        });
-
-        /* resolve into the building */
-        const ap = gsap.utils.clamp(0, 1, (p - ARCH.a) / (ARCH.b - ARCH.a));
-        arch.style.opacity = String(ap > 0 ? 1 : 0);
-        arch.style.clipPath = `inset(${((1 - gsap.parseEase('power2.inOut')(ap)) * 100).toFixed(2)}% 0 0 0)`;
-        closeEl.style.opacity = gsap.utils.clamp(0, 1, (p - 0.9) / 0.07).toFixed(3);
-
-        /* the panel steps forward through the pours, then hands over to the building */
-        const rise = gsap.parseEase('power2.out')(gsap.utils.clamp(0, 1, p / 0.1));
-        const exit = gsap.parseEase('power2.in')(gsap.utils.clamp(0, 1, (p - 0.82) / 0.14));
-        gsap.set(panel, {
-          yPercent: (1 - rise) * 14 + exit * 26,
-          scale: 0.96 + rise * 0.04 + exit * 0.08,
-          opacity: 1 - exit,
-        });
-        /* the copy steps aside for the closing statement */
-        gsap.set([copyBase, copyPour], { opacity: 1 - gsap.utils.clamp(0, 1, (p - 0.85) / 0.07) });
-      },
-    });
-
-    /* the headline sets before the scroll takes over */
-    gsap.from('#copyBase > *', {
-      y: 30, opacity: 0, duration: 0.9, ease: 'power3.out', stagger: 0.1,
-      scrollTrigger: { trigger: coatPin, start: 'top 72%', once: true },
-    });
-  }
+  /* a hover preview falls back to the chosen finish when the pointer leaves the list */
+  document.querySelector('.coat-sws').addEventListener('pointerleave', () => show(chosen));
 }
 
 /* ---------- 06 THE SPEC BENCH ---------------------------------------------
@@ -1015,143 +770,45 @@ if (sbControls) {
   });
 }
 
-/* ---------- Contact finale: "the facade answers" wall (ported from the homepage) ---------- */
+/* ---------- Contact finale: a still plank wall ----------
+   The homepage version is lit by the cursor; here it is drawn once, evenly lit (Alfie,
+   16 Oct: the spotlight was "a bit over the top"). Redrawn only on resize. */
 const wallCanvas = document.querySelector('.contact-wall');
 if (wallCanvas) {
   const wctx = wallCanvas.getContext('2d');
   const wallStage = wallCanvas.closest('.contact-stage');
-  const wallCta = wallStage.querySelector('.btn');
   const COURSE = 46;
-  let W = 0;
-  let H = 0;
-  let planks = [];
-
-  const light = { x: 0.5, y: 1.2, tx: 0.5, ty: 0.55, pointer: false, focus: 0, focusT: 0 };
+  const LIT = 0.34; /* one even tone across the wall: navy lifted toward the brand blue */
 
   const mixc = (a, b, t) => a + (b - a) * t;
   const plankColor = (I) => {
-    let r, g, b;
-    if (I < 0.72) {
-      const t = I / 0.72;
-      r = mixc(4, 0, t); g = mixc(38, 87, t); b = mixc(61, 150, t);
-    } else {
-      const t = (I - 0.72) / 0.28;
-      r = mixc(0, 84, t); g = mixc(87, 118, t); b = mixc(150, 186, t);
-    }
-    return `rgb(${r | 0},${g | 0},${b | 0})`;
+    const t = I / 0.72;
+    return `rgb(${mixc(4, 0, t) | 0},${mixc(38, 87, t) | 0},${mixc(61, 150, t) | 0})`;
   };
 
-  const drawWall = (settle) => {
-    const lx = light.x * W;
-    const ly = light.y * H;
-    const sigX = W * (0.21 - light.focusT * 0.07);
-    const sigY = H * (0.24 - light.focusT * 0.07);
-    planks.forEach((p) => {
-      const cy = p.y + p.h / 2;
-      const fy = Math.exp(-(((cy - ly) / sigY) ** 2) / 2);
-      p.lit = settle ? fy : p.lit + (fy - p.lit) * 0.16;
-      const grad = wctx.createLinearGradient(0, 0, W, 0);
-      const lip = wctx.createLinearGradient(0, 0, W, 0);
-      for (let s = 0; s <= 8; s++) {
-        const fx = Math.exp(-((((s / 8) * W - lx) / sigX) ** 2) / 2);
-        const I = Math.min(0.88, p.lit * fx * (0.95 + light.focusT * 0.25));
-        grad.addColorStop(s / 8, plankColor(I));
-        lip.addColorStop(s / 8, `rgba(167,172,216,${(I * 0.6).toFixed(3)})`);
-      }
-      wctx.fillStyle = grad;
-      wctx.fillRect(0, p.y, W, p.h + 1);
-      wctx.fillStyle = lip;
-      wctx.fillRect(0, p.y, W, 1.25);
-      wctx.fillStyle = 'rgba(1, 16, 27, 0.5)';
-      wctx.fillRect(0, p.y + p.h - 1, W, 1);
-      wctx.fillStyle = `rgba(1, 16, 27, ${(0.1 + p.lit * 0.18).toFixed(3)})`;
-      wctx.fillRect(p.joint * W, p.y, 1, p.h);
-    });
-  };
-
-  const wallLayout = () => {
+  const drawWall = () => {
     const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-    W = wallStage.clientWidth;
-    H = wallStage.clientHeight;
+    const W = wallStage.clientWidth;
+    const H = wallStage.clientHeight;
     wallCanvas.width = Math.round(W * dpr);
     wallCanvas.height = Math.round(H * dpr);
     wctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     const n = Math.max(10, Math.round(H / COURSE));
-    planks = Array.from({ length: n }, (_, i) => ({
-      y: (i * H) / n,
-      h: H / n,
-      lit: 0,
-      joint: (i * 0.618034 + 0.23) % 1,
-    }));
-    if (reduce) { light.x = 0.5; light.y = 0.58; drawWall(true); }
-  };
-  wallLayout();
-  window.addEventListener('resize', wallLayout);
-
-  window.__wall = { render: (x = 0.5, y = 0.55) => { light.x = x; light.y = y; drawWall(true); } };
-
-  if (!reduce) {
-    if (fine) {
-      wallStage.addEventListener('pointermove', (e) => {
-        const r = wallStage.getBoundingClientRect();
-        light.pointer = true;
-        light.tx = (e.clientX - r.left) / r.width;
-        light.ty = (e.clientY - r.top) / r.height;
-      });
-      wallStage.addEventListener('pointerleave', () => { light.pointer = false; });
-      if (wallCta) {
-        wallCta.addEventListener('pointerenter', () => { light.focus = 1; });
-        wallCta.addEventListener('pointerleave', () => { light.focus = 0; });
-      }
+    for (let i = 0; i < n; i++) {
+      const y = (i * H) / n;
+      const h = H / n;
+      wctx.fillStyle = plankColor(LIT);
+      wctx.fillRect(0, y, W, h + 1);
+      wctx.fillStyle = `rgba(167,172,216,${(LIT * 0.6).toFixed(3)})`;
+      wctx.fillRect(0, y, W, 1.25);
+      wctx.fillStyle = 'rgba(1, 16, 27, 0.5)';
+      wctx.fillRect(0, y + h - 1, W, 1);
+      wctx.fillStyle = 'rgba(1, 16, 27, 0.2)';
+      wctx.fillRect(((i * 0.618034 + 0.23) % 1) * W, y, 1, h);
     }
-    let wallVisible = false;
-    let sweep = -1;
-    const wio = new IntersectionObserver((es) => {
-      const vis = es.some((e) => e.isIntersecting);
-      if (vis && !wallVisible && sweep < 0) sweep = 0;
-      wallVisible = vis;
-    }, { threshold: 0.2 });
-    wio.observe(wallStage);
-    gsap.ticker.add((t, dtMs) => {
-      if (!wallVisible) return;
-      const dt = Math.min(dtMs, 100) / 1000;
-      if (sweep >= 0 && sweep < 1) {
-        sweep = Math.min(1, sweep + dt / 1.8);
-        light.tx = -0.25 + sweep * 1.5;
-        light.ty = 0.5;
-      } else if (!light.pointer) {
-        light.tx = 0.5 + 0.42 * Math.sin(t * 0.21);
-        light.ty = 0.52 + 0.3 * Math.sin(t * 0.14 + 2);
-      }
-      if (light.focus && wallCta) {
-        const r = wallCta.getBoundingClientRect();
-        const s = wallStage.getBoundingClientRect();
-        light.tx = (r.left + r.width / 2 - s.left) / s.width;
-        light.ty = (r.top + r.height / 2 - s.top) / s.height;
-      }
-      light.focusT += (light.focus - light.focusT) * 0.1;
-      light.x += (light.tx - light.x) * 0.085;
-      light.y += (light.ty - light.y) * 0.085;
-      drawWall(false);
-    });
-  }
-}
-
-/* ---------- Magnetic primary CTAs (desktop, motion allowed) ---------- */
-if (!reduce && fine) {
-  document.querySelectorAll('[data-magnetic]').forEach((btn) => {
-    const qx = gsap.quickTo(btn, 'x', { duration: 0.4, ease: 'power3.out' });
-    const qy = gsap.quickTo(btn, 'y', { duration: 0.4, ease: 'power3.out' });
-    btn.addEventListener('pointermove', (e) => {
-      const r = btn.getBoundingClientRect();
-      qx((e.clientX - r.left - r.width / 2) * 0.28);
-      qy((e.clientY - r.top - r.height / 2) * 0.34);
-    });
-    btn.addEventListener('pointerleave', () => {
-      qx(0);
-      qy(0);
-    });
-  });
+  };
+  drawWall();
+  window.addEventListener('resize', drawWall);
 }
 
 /* ---------- Footer: staggered entrance + the final course ---------- */

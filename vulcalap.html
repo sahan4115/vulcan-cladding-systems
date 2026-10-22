@@ -264,7 +264,7 @@
             <i aria-hidden="true"></i><span>TG125 &amp; T&amp;G150</span>
           </div>
           <div class="phero-ctas">
-            <button type="button" class="btn btn-solid" data-enquire data-magnetic>Request a sample</button>
+            <button type="button" class="btn btn-solid" data-enquire>Request a sample</button>
             <a class="link-cta" href="#technical">
               Technical information
               <svg class="link-arrow" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 11.5 11.5 2.5M4.5 2.5h7v7" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
@@ -330,96 +330,11 @@
             <li data-reveal><i aria-hidden="true"></i><span><b>Matching trims</b> &mdash; corners, closers and reveals extruded and coated in the same finish.</span></li>
           </ul>
         </div>
-        <figure class="pd-draw" id="pdDraw">
-          <!-- Section through T&G150 at a vertical rail, drawn by scroll.
-               True proportions from the procedural profile (1px = 0.5mm). -->
-          <svg viewBox="0 0 720 560" role="img" aria-label="Vertical section through the VulcaLap T and G 150 plank at a vertical cladding rail, showing the interlock, the concealed fixing and the wall build-up">
-            <defs>
-              <pattern id="dwg-insul" width="11" height="11" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-                <line x1="0" y1="0" x2="0" y2="11" stroke="#3f5b70" stroke-width="1" opacity="0.32" />
-              </pattern>
-              <pattern id="dwg-board" width="7" height="7" patternUnits="userSpaceOnUse">
-                <circle cx="1.8" cy="1.8" r="0.9" fill="#3f5b70" opacity="0.42" />
-              </pattern>
-            </defs>
-
-            <!-- ===== build-up, contiguous, exterior (left) to interior ===== -->
-            <g class="dwg-buildup">
-              <!-- vertical cladding rail: spans the cavity, the plank fixes to its outer face -->
-              <rect x="154" y="40" width="55" height="480" class="dwg-rail" />
-              <rect x="154" y="40" width="55" height="480" class="dwg-line" data-trace />
-              <!-- insulation, drawn broken: its depth is a project decision -->
-              <rect x="209" y="40" width="132" height="480" fill="url(#dwg-insul)" />
-              <rect x="209" y="40" width="132" height="480" class="dwg-line lite" data-trace />
-              <path class="dwg-brk" d="M275 40 L282 66 L268 92 L282 118 L268 144 L282 170 L268 196 L282 222 L268 248 L282 274 L268 300 L282 326 L268 352 L282 378 L268 404 L282 430 L268 456 L282 482 L268 508 L282 520" />
-              <path class="dwg-brk" d="M290 40 L297 66 L283 92 L297 118 L283 144 L297 170 L283 196 L297 222 L283 248 L297 274 L283 300 L297 326 L283 352 L297 378 L283 404 L297 430 L283 456 L297 482 L283 508 L297 520" />
-              <!-- breather membrane: a single line, as on a real detail -->
-              <line x1="341" y1="40" x2="341" y2="520" class="dwg-line" data-trace />
-              <rect x="341" y="40" width="26" height="480" fill="url(#dwg-board)" />
-              <rect x="341" y="40" width="26" height="480" class="dwg-line lite" data-trace />
-              <rect x="367" y="40" width="30" height="480" fill="rgba(14,36,52,0.11)" />
-              <line x1="367" y1="40" x2="367" y2="520" class="dwg-line lite" data-trace />
-            </g>
-
-            <!-- helping-hand bracket: carries the rail back to the structure -->
-            <g class="dwg-bracket">
-              <path class="dwg-line lite" data-trace d="M209 486 L367 486 L367 497 L209 497 Z" />
-              <path class="dwg-line lite" data-trace d="M367 470 L377 470 L377 512 L367 512" />
-            </g>
-
-            <!-- ===== the courses ===== -->
-            <g class="dwg-planks">
-              <path class="dwg-line" data-trace d="M110 40 L154 40 L154 86 L132 86 L132 120 L110 120 L110 40 Z" />
-              <path class="dwg-fill" d="M118 120 L132 120 L132 86 L154 86 L154 416 L132 416 L132 450 L110 450 L110 133 L118 133 Z" />
-              <path class="dwg-line" data-trace d="M118 120 L132 120 L132 86 L154 86 L154 416 L132 416 L132 450 L110 450 L110 133 L118 133 Z" />
-              <path class="dwg-line" data-trace d="M118 450 L132 450 L132 416 L154 416 L154 520 L110 520 L110 463 L118 463 Z" />
-              <rect x="128" y="82" width="30" height="42" class="dwg-accent" data-trace />
-            </g>
-
-            <!-- concealed fixing: through the rear leg, straight into the rail -->
-            <g class="dwg-fix">
-              <line x1="138" y1="103" x2="201" y2="103" class="dwg-accent" data-trace />
-              <line x1="138" y1="95" x2="138" y2="111" class="dwg-accent" data-trace />
-            </g>
-
-            <!-- ===== dimensions: only what Vulcan publish ===== -->
-            <g class="dwg-dims">
-              <line x1="74" y1="120" x2="74" y2="450" class="dwg-dim" />
-              <line x1="68" y1="120" x2="80" y2="120" class="dwg-dim" />
-              <line x1="68" y1="450" x2="80" y2="450" class="dwg-dim" />
-              <text class="dwg-dim-t" transform="translate(66 285) rotate(-90)">150 cover</text>
-              <line x1="154" y1="536" x2="209" y2="536" class="dwg-dim" />
-              <line x1="154" y1="530" x2="154" y2="542" class="dwg-dim" />
-              <line x1="209" y1="530" x2="209" y2="542" class="dwg-dim" />
-              <text class="dwg-dim-t" x="152" y="558">25 cavity</text>
-            </g>
-
-            <!-- ===== annotation: every leader starts on the layer it names ===== -->
-            <g class="dwg-notes">
-              <path d="M132 62 L434 62" class="dwg-dim" />
-      <text class="dwg-note" x="446" y="59">VulcaLap&#174; T&amp;G150</text>
-      <text class="dwg-sub" x="446" y="78">single aluminium extrusion</text>
-              <path d="M158 103 L382 103 L404 136 L434 136" class="dwg-dim" />
-      <text class="dwg-note" x="446" y="133">Interlock &amp; concealed fixing</text>
-      <text class="dwg-sub" x="446" y="152">fixed through the rear leg, into the rail</text>
-              <path d="M181 212 L434 212" class="dwg-dim" />
-      <text class="dwg-note" x="446" y="209">Vertical cladding rail</text>
-      <text class="dwg-sub" x="446" y="228">Vulcan 25mm ZED, at 600mm c/c</text>
-              <path d="M242 288 L434 288" class="dwg-dim" />
-      <text class="dwg-note" x="446" y="285">Wall insulation</text>
-      <text class="dwg-sub" x="446" y="304">depth to suit the project</text>
-              <path d="M341 356 L434 356" class="dwg-dim" />
-      <text class="dwg-note" x="446" y="353">Breather membrane</text>
-      <text class="dwg-sub" x="446" y="372">over the sheathing board</text>
-              <path d="M354 422 L434 422" class="dwg-dim" />
-      <text class="dwg-note" x="446" y="419">Sheathing board</text>
-      <text class="dwg-sub" x="446" y="438">on the structural wall</text>
-              <path d="M377 492 L434 492" class="dwg-dim" />
-      <text class="dwg-note" x="446" y="489">Helping-hand bracket</text>
-      <text class="dwg-sub" x="446" y="508">carries the rail back to the structure</text>
-            </g>
-          </svg>
-          <figcaption class="pd-footnote">Vertical section through T&amp;G150 at a cladding rail. Build-up after Vulcan&rsquo;s published installation details; cavity barriers and fire-stopping are specified per project and are not shown. Confirm all dimensions against the current datasheet.</figcaption>
+        <!-- Product image in place of the scroll-drawn section (Alfie, 16 Oct: the page was
+             jumping into tech detail; show the product). Vulcan's own build-up render, from
+             their live VulcaLap page; ask Nick for a high-res copy. -->
+        <figure class="pd-shot" data-reveal>
+          <img src="/assets/img/vulcalap-buildup.webp" alt="VulcaLap planks fixed over their cladding rails and helping-hand brackets, with insulation behind" width="591" height="710" loading="lazy" />
         </figure>
       </div>
 
@@ -501,10 +416,6 @@
         </div>
 
         <figure class="rec-plate" id="recPlate">
-          <span class="rec-fix rec-fix-tl" aria-hidden="true"></span>
-          <span class="rec-fix rec-fix-tr" aria-hidden="true"></span>
-          <span class="rec-fix rec-fix-bl" aria-hidden="true"></span>
-          <span class="rec-fix rec-fix-br" aria-hidden="true"></span>
 
           <figcaption class="rec-plate-head">
             <span>Vulcan Cladding Systems</span>
@@ -512,7 +423,7 @@
           </figcaption>
 
           <ul class="rec-lines">
-            <li class="rec-line" style="--i:0">
+            <li class="rec-line">
               <button type="button" class="rec-hit" aria-pressed="false" data-doc="Classification report">
                 <span class="rec-cut">
                   <span class="rec-fig">A2<i>-s1,d0</i></span>
@@ -521,9 +432,8 @@
                   <span class="rec-doc"><span class="rec-tick" aria-hidden="true"></span>Classification report</span>
                 </span>
               </button>
-              <span class="rec-tool" aria-hidden="true"></span>
             </li>
-            <li class="rec-line" style="--i:1">
+            <li class="rec-line">
               <button type="button" class="rec-hit" aria-pressed="false" data-doc="Product datasheet">
                 <span class="rec-cut">
                   <span class="rec-fig">&#8531;</span>
@@ -532,9 +442,8 @@
                   <span class="rec-doc"><span class="rec-tick" aria-hidden="true"></span>Product datasheet</span>
                 </span>
               </button>
-              <span class="rec-tool" aria-hidden="true"></span>
             </li>
-            <li class="rec-line" style="--i:2">
+            <li class="rec-line">
               <button type="button" class="rec-hit" aria-pressed="false" data-doc="Warranty terms">
                 <span class="rec-cut">
                   <span class="rec-fig">25<i>yr</i></span>
@@ -543,9 +452,8 @@
                   <span class="rec-doc"><span class="rec-tick" aria-hidden="true"></span>Warranty terms</span>
                 </span>
               </button>
-              <span class="rec-tool" aria-hidden="true"></span>
             </li>
-            <li class="rec-line" style="--i:3">
+            <li class="rec-line">
               <button type="button" class="rec-hit" aria-pressed="false" data-doc="Environmental declaration">
                 <span class="rec-cut">
                   <span class="rec-fig">100<i>%</i></span>
@@ -554,9 +462,8 @@
                   <span class="rec-doc"><span class="rec-tick" aria-hidden="true"></span>Environmental declaration</span>
                 </span>
               </button>
-              <span class="rec-tool" aria-hidden="true"></span>
             </li>
-            <li class="rec-line" style="--i:4">
+            <li class="rec-line">
               <button type="button" class="rec-hit" aria-pressed="false" data-doc="Installation detail">
                 <span class="rec-cut">
                   <span class="rec-fig">0</span>
@@ -565,7 +472,6 @@
                   <span class="rec-doc"><span class="rec-tick" aria-hidden="true"></span>Installation detail</span>
                 </span>
               </button>
-              <span class="rec-tool" aria-hidden="true"></span>
             </li>
           </ul>
         </figure>
@@ -621,96 +527,40 @@
       </div>
     </section>
 
-    <!-- ============ 05 THE COAT ============================================
-         One pinned composition, not a component stack. The whole stage IS the
-         surface: a wall of the real coated material with the product panel in
-         front of it. Scrolling pours a new coat down the stage — a single hard
-         edge crossing wall, panel and headline together, the way a dip line
-         actually coats an extrusion. It ends by splitting into every coat at
-         once, then resolving into a finished building.
-         Assets are the client's own product renders (fin-*.webp), background-keyed
-         to panel-*.webp with the plank face sampled out to tile-*.webp. -->
+    <!-- ============ 05 FINISHES ===========================================
+         Kept deliberately simple (Alfie, 16 Oct: the pinned pour, colour bars and
+         transitions were "an assault on the senses"). One panel; hover, focus or
+         tap a finish and the panel shows it. The panels are the client's own
+         renders (panel-*.webp, keyed from fin-*.webp). They are low-res, so colour
+         is indicative until Nick supplies high-res plank images. -->
     <section class="coat" id="finishes" aria-label="VulcaLap finishes">
-      <div class="coat-pin" id="coatPin">
-
-        <!-- the surface, at wall scale: base coat + the coat being poured over it -->
-        <div class="coat-wall" aria-hidden="true">
-          <div class="coat-wall-l" id="wallBase"></div>
-          <div class="coat-wall-l coat-wall-pour" id="wallPour"></div>
-          <div class="coat-courses"></div>
+      <div class="coat-inner">
+        <div class="coat-copy">
+          <h2 data-reveal>Coat it in <strong>anything.</strong></h2>
+          <p class="coat-sub" data-reveal>Eleven wood-effect coats, the full RAL range, anodised and stone to order &mdash; on one unchanged aluminium extrusion.</p>
+          <p class="coat-read" aria-live="polite"><strong id="coatName">Western Red Cedar</strong><span id="coatSpec">Wood-effect powder coat &middot; A2 fire-rated</span></p>
+          <ul class="coat-sws" role="group" aria-label="Show a VulcaLap finish">
+            <li><button type="button" class="coat-sw" data-coat="raw" aria-pressed="false"><span class="coat-chip" style="--sw:url(/assets/img/finishes/tile-raw.webp)" aria-hidden="true"></span>Uncoated</button></li>
+            <li><button type="button" class="coat-sw is-on" data-coat="cedar" aria-pressed="true"><span class="coat-chip" style="--sw:url(/assets/img/finishes/tile-cedar.webp)" aria-hidden="true"></span>Western Red Cedar</button></li>
+            <li><button type="button" class="coat-sw" data-coat="light-oak" aria-pressed="false"><span class="coat-chip" style="--sw:url(/assets/img/finishes/tile-light-oak.webp)" aria-hidden="true"></span>Light Oak</button></li>
+            <li><button type="button" class="coat-sw" data-coat="golden-oak" aria-pressed="false"><span class="coat-chip" style="--sw:url(/assets/img/finishes/tile-golden-oak.webp)" aria-hidden="true"></span>Golden Oak</button></li>
+            <li><button type="button" class="coat-sw" data-coat="teak" aria-pressed="false"><span class="coat-chip" style="--sw:url(/assets/img/finishes/tile-teak.webp)" aria-hidden="true"></span>Teak</button></li>
+            <li><button type="button" class="coat-sw" data-coat="dark-oak" aria-pressed="false"><span class="coat-chip" style="--sw:url(/assets/img/finishes/tile-dark-oak.webp)" aria-hidden="true"></span>Dark Oak</button></li>
+            <li><button type="button" class="coat-sw" data-coat="rosewood" aria-pressed="false"><span class="coat-chip" style="--sw:url(/assets/img/finishes/tile-rosewood.webp)" aria-hidden="true"></span>Rosewood</button></li>
+            <li><button type="button" class="coat-sw" data-coat="chestnut" aria-pressed="false"><span class="coat-chip" style="--sw:url(/assets/img/finishes/tile-chestnut.webp)" aria-hidden="true"></span>Chestnut</button></li>
+            <li><button type="button" class="coat-sw" data-coat="ebony" aria-pressed="false"><span class="coat-chip" style="--sw:url(/assets/img/finishes/tile-ebony.webp)" aria-hidden="true"></span>Ebony</button></li>
+            <li><button type="button" class="coat-sw" data-coat="corten" aria-pressed="false"><span class="coat-chip" style="--sw:url(/assets/img/finishes/tile-corten.webp)" aria-hidden="true"></span>Weathered Steel</button></li>
+            <li><button type="button" class="coat-sw" data-coat="bronze" aria-pressed="false"><span class="coat-chip" style="--sw:url(/assets/img/finishes/tile-bronze.webp)" aria-hidden="true"></span>Anodised Bronze</button></li>
+            <li><button type="button" class="coat-sw" data-coat="anthracite" aria-pressed="false"><span class="coat-chip" style="--sw:url(/assets/img/finishes/tile-anthracite.webp)" aria-hidden="true"></span>RAL 7016 Anthracite</button></li>
+            <li><button type="button" class="coat-sw" data-coat="moss" aria-pressed="false"><span class="coat-chip" style="--sw:url(/assets/img/finishes/tile-moss.webp)" aria-hidden="true"></span>RAL 7003 Moss Grey</button></li>
+            <li><button type="button" class="coat-sw" data-coat="ivory" aria-pressed="false"><span class="coat-chip" style="--sw:url(/assets/img/finishes/tile-ivory.webp)" aria-hidden="true"></span>RAL 1015 Light Ivory</button></li>
+            <li><button type="button" class="coat-sw" data-coat="platinum" aria-pressed="false"><span class="coat-chip" style="--sw:url(/assets/img/finishes/tile-platinum.webp)" aria-hidden="true"></span>RAL 7036 Platinum</button></li>
+          </ul>
+          <p class="coat-note">Colours are indicative on screen. <button type="button" class="coat-link" data-enquire>Request a physical sample</button> before you specify.</p>
         </div>
-
-        <!-- every coat at once: the wall splits into the range -->
-        <div class="coat-spectrum" id="coatSpectrum" aria-hidden="true">
-          <span class="coat-band" style="--sw:url(/assets/img/finishes/tile-cedar.webp)"></span>
-          <span class="coat-band" style="--sw:url(/assets/img/finishes/tile-light-oak.webp)"></span>
-          <span class="coat-band" style="--sw:url(/assets/img/finishes/tile-golden-oak.webp)"></span>
-          <span class="coat-band" style="--sw:url(/assets/img/finishes/tile-teak.webp)"></span>
-          <span class="coat-band" style="--sw:url(/assets/img/finishes/tile-dark-oak.webp)"></span>
-          <span class="coat-band" style="--sw:url(/assets/img/finishes/tile-rosewood.webp)"></span>
-          <span class="coat-band" style="--sw:url(/assets/img/finishes/tile-chestnut.webp)"></span>
-          <span class="coat-band" style="--sw:url(/assets/img/finishes/tile-ebony.webp)"></span>
-          <span class="coat-band" style="--sw:url(/assets/img/finishes/tile-corten.webp)"></span>
-          <span class="coat-band" style="--sw:url(/assets/img/finishes/tile-bronze.webp)"></span>
-          <span class="coat-band" style="--sw:url(/assets/img/finishes/tile-anthracite.webp)"></span>
-          <span class="coat-band" style="--sw:url(/assets/img/finishes/tile-moss.webp)"></span>
-          <span class="coat-band" style="--sw:url(/assets/img/finishes/tile-ivory.webp)"></span>
-          <span class="coat-band" style="--sw:url(/assets/img/finishes/tile-platinum.webp)"></span>
-        </div>
-
-        <!-- the resolve: the surface becomes a building -->
-        <div class="coat-arch" id="coatArch" aria-hidden="true">
-          <img src="/assets/img/case-knights.jpg" alt="" loading="lazy" />
-        </div>
-
-        <div class="coat-veil" id="coatVeil" aria-hidden="true"></div>
-
-        <!-- the product, re-coated by the same edge -->
-        <figure class="coat-panel" id="coatPanel">
-          <img class="coat-panel-l" id="panelBase" src="/assets/img/finishes/panel-raw.webp" alt="A VulcaLap panel shown with its cladding rails and helping-hand brackets" width="500" height="650" />
-          <img class="coat-panel-l coat-panel-pour" id="panelPour" src="/assets/img/finishes/panel-cedar.webp" alt="" aria-hidden="true" width="500" height="650" />
+        <figure class="coat-panel">
+          <img id="coatPanel" src="/assets/img/finishes/panel-cedar.webp" alt="A VulcaLap panel in Western Red Cedar, shown with its cladding rails and helping-hand brackets" width="500" height="650" />
         </figure>
-
-        <!-- the pour edge itself -->
-        <span class="coat-edge" id="coatEdge" aria-hidden="true"></span>
-
-        <!-- headline + readout, duplicated so the same edge crosses the type -->
-        <div class="coat-copy" id="copyBase">
-          <h2 class="coat-h">Coat it in <strong>anything.</strong></h2>
-          <p class="coat-sub">Eleven wood-effect coats, the full RAL range, anodised and stone to order &mdash; on one unchanged aluminium extrusion.</p>
-          <p class="coat-read"><strong data-read="name">Uncoated extrusion</strong><span data-read="spec">Mill finish &mdash; before coating</span></p>
-        </div>
-        <div class="coat-copy coat-copy-pour" id="copyPour" aria-hidden="true">
-          <h2 class="coat-h">Coat it in <strong>anything.</strong></h2>
-          <p class="coat-sub">Eleven wood-effect coats, the full RAL range, anodised and stone to order &mdash; on one unchanged aluminium extrusion.</p>
-          <p class="coat-read"><strong data-read="name">Western Red Cedar</strong><span data-read="spec">Wood-effect powder coat &middot; A2 fire-rated</span></p>
-        </div>
-
-        <!-- the closing statement, on the finished building -->
-        <p class="coat-close" id="coatClose" aria-hidden="true">Same extrusion.<br /><strong>Any elevation you draw.</strong></p>
-
-        <!-- the whole range, always reachable: hover or tap to coat the wall -->
-        <div class="coat-rail" id="coatRail">
-          <span class="coat-rail-lede">The range</span>
-          <div class="coat-sws" role="group" aria-label="Preview a VulcaLap finish">
-            <button type="button" class="coat-sw" data-coat="raw" style="--sw:url(/assets/img/finishes/tile-raw.webp)" aria-label="Preview Uncoated"><span class="coat-sw-name">Uncoated</span></button>
-            <button type="button" class="coat-sw" data-coat="cedar" style="--sw:url(/assets/img/finishes/tile-cedar.webp)" aria-label="Preview Western Red Cedar"><span class="coat-sw-name">Western Red Cedar</span></button>
-            <button type="button" class="coat-sw" data-coat="light-oak" style="--sw:url(/assets/img/finishes/tile-light-oak.webp)" aria-label="Preview Light Oak"><span class="coat-sw-name">Light Oak</span></button>
-            <button type="button" class="coat-sw" data-coat="golden-oak" style="--sw:url(/assets/img/finishes/tile-golden-oak.webp)" aria-label="Preview Golden Oak"><span class="coat-sw-name">Golden Oak</span></button>
-            <button type="button" class="coat-sw" data-coat="teak" style="--sw:url(/assets/img/finishes/tile-teak.webp)" aria-label="Preview Teak"><span class="coat-sw-name">Teak</span></button>
-            <button type="button" class="coat-sw" data-coat="dark-oak" style="--sw:url(/assets/img/finishes/tile-dark-oak.webp)" aria-label="Preview Dark Oak"><span class="coat-sw-name">Dark Oak</span></button>
-            <button type="button" class="coat-sw" data-coat="rosewood" style="--sw:url(/assets/img/finishes/tile-rosewood.webp)" aria-label="Preview Rosewood"><span class="coat-sw-name">Rosewood</span></button>
-            <button type="button" class="coat-sw" data-coat="chestnut" style="--sw:url(/assets/img/finishes/tile-chestnut.webp)" aria-label="Preview Chestnut"><span class="coat-sw-name">Chestnut</span></button>
-            <button type="button" class="coat-sw" data-coat="ebony" style="--sw:url(/assets/img/finishes/tile-ebony.webp)" aria-label="Preview Ebony"><span class="coat-sw-name">Ebony</span></button>
-            <button type="button" class="coat-sw" data-coat="corten" style="--sw:url(/assets/img/finishes/tile-corten.webp)" aria-label="Preview Weathered Steel"><span class="coat-sw-name">Weathered Steel</span></button>
-            <button type="button" class="coat-sw" data-coat="bronze" style="--sw:url(/assets/img/finishes/tile-bronze.webp)" aria-label="Preview Anodised Bronze"><span class="coat-sw-name">Anodised Bronze</span></button>
-            <button type="button" class="coat-sw" data-coat="anthracite" style="--sw:url(/assets/img/finishes/tile-anthracite.webp)" aria-label="Preview RAL 7016 Anthracite"><span class="coat-sw-name">RAL 7016 Anthracite</span></button>
-            <button type="button" class="coat-sw" data-coat="moss" style="--sw:url(/assets/img/finishes/tile-moss.webp)" aria-label="Preview RAL 7003 Moss Grey"><span class="coat-sw-name">RAL 7003 Moss Grey</span></button>
-            <button type="button" class="coat-sw" data-coat="ivory" style="--sw:url(/assets/img/finishes/tile-ivory.webp)" aria-label="Preview RAL 1015 Ivory"><span class="coat-sw-name">RAL 1015 Ivory</span></button>
-            <button type="button" class="coat-sw" data-coat="platinum" style="--sw:url(/assets/img/finishes/tile-platinum.webp)" aria-label="Preview RAL 7036 Platinum"><span class="coat-sw-name">RAL 7036 Platinum</span></button>
-          </div>
-        </div>
-
       </div>
     </section>
 
@@ -836,7 +686,7 @@
           <p data-reveal>Request a VulcaLap sample in your finish &mdash; it arrives with the datasheet and the fire classification in the same envelope.</p>
           <!-- Placeholder CTA: contact page + name/number capture to Pipedrive at dev stage -->
           <div class="contact-cta-wrap" data-reveal>
-            <button type="button" class="btn btn-solid btn-xl" data-enquire data-magnetic>Request a VulcaLap sample <span class="btn-arrow" aria-hidden="true">&rarr;</span></button>
+            <button type="button" class="btn btn-solid btn-xl" data-enquire>Request a VulcaLap sample <span class="btn-arrow" aria-hidden="true">&rarr;</span></button>
           </div>
         </div>
       </div>
@@ -876,7 +726,7 @@
           <a href="mailto:sales@vulcansystems.co.uk">sales@vulcansystems.co.uk</a>
           <p class="footer-clock">Croydon, UK &mdash; <span id="footer-time">--:--</span></p>
         </div>
-        <button type="button" class="footer-up" data-magnetic aria-label="Back to top">
+        <button type="button" class="footer-up" aria-label="Back to top">
           <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 12V2M2.5 6.5 7 2l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
         </button>
       </div>

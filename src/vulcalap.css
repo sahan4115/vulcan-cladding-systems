@@ -196,22 +196,9 @@ html.reduced .phero-pin { display: flex; flex-direction: column; }
 .pd-points i { flex: none; width: 9px; height: 11px; margin-top: 0.42em; background: var(--blue); transform: skewX(-18deg); }
 .pd-points b { font-weight: 700; }
 
-/* the section drawing: engineering documentation, drawn by scroll */
-.pd-draw { position: relative; }
-.pd-draw svg { width: 100%; height: auto; display: block; }
-.pd-draw .dwg-line { stroke: var(--ink); stroke-width: 1.6; fill: none; }
-.pd-draw .dwg-line.lite { stroke-width: 1; opacity: 0.55; }
-.pd-draw .dwg-fill { fill: rgba(0, 87, 150, 0.07); }
-.pd-draw .dwg-accent { stroke: var(--blue); stroke-width: 1.6; fill: none; }
-.pd-draw .dwg-rail { fill: rgba(0, 87, 150, 0.16); }
-.pd-draw .dwg-brk { stroke: var(--muted); stroke-width: 1; fill: none; opacity: 0.5; }
-.pd-draw .dwg-dim { stroke: var(--muted); stroke-width: 1; fill: none; }
-.pd-draw .dwg-dim-t {
-  font-family: var(--font); font-size: 13px; font-weight: 600; letter-spacing: 0.08em;
-  fill: var(--muted); text-transform: uppercase;
-}
-.pd-draw .dwg-note { font-family: var(--font); font-size: 13.5px; font-weight: 700; fill: var(--ink); }
-.pd-draw .dwg-sub { font-family: var(--font); font-size: 12px; font-weight: 400; fill: var(--muted); }
+/* the product shot (Vulcan's build-up render, transparent-white ground) */
+.pd-shot { justify-self: center; max-width: 560px; }
+.pd-shot img { width: 100%; height: auto; display: block; }
 /* 0.9: at 0.8 this composites to 4.36:1 on white, under AA for 12.5px text */
 .pd-footnote { margin-top: 1.1rem; font-size: 0.78rem; color: var(--muted); opacity: 0.9; }
 
@@ -335,13 +322,9 @@ html:not(.js) .iv-play,
 html:not(.js) .iv-bar,
 html:not(.js) .iv-chapters { display: none; }
 
-/* ---------- 03 PERFORMANCE (the record plate) --------------------------
-   A machined aluminium plate on the navy. The claims are engraved into it —
-   dark cut face, light lower lip — and scroll runs a cutting pass that files
-   each line in. Selecting a line picks the document that evidences the claim,
-   which is what the section is actually for.
-   Contrast: cut face #232b33 on the plate's darkest tone #a9b0b7 is ~6.5:1;
-   secondary #333c45 is ~4.7:1. Keep them at least this dark.
+/* ---------- 03 PERFORMANCE (the evidence schedule) ---------------------
+   Five claims on a white schedule over the navy. Selecting a line picks the
+   document that evidences the claim, which is what the section is for.
    --------------------------------------------------------------------- */
 .rec { background: var(--navy); padding: clamp(4.5rem, 8.5vw, 7.5rem) var(--pad); }
 .rec-inner {
@@ -363,106 +346,59 @@ html:not(.js) .iv-chapters { display: none; }
 .rec-cta[disabled] { opacity: 0.4; cursor: not-allowed; }
 .rec-hint { margin: 0; font-size: 0.82rem; color: rgba(255, 255, 255, 0.6); max-width: 34ch; }
 
-/* ---- the plate ---- */
-.rec-plate {
-  position: relative; margin: 0; padding: clamp(1.4rem, 2.4vw, 2.2rem) clamp(1.2rem, 2.4vw, 2.4rem) clamp(1rem, 2vw, 1.8rem);
-  /* brushed aluminium: fine horizontal grain over a raking sheen */
-  background:
-    linear-gradient(107deg, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0) 26%, rgba(0, 0, 0, 0.07) 52%, rgba(255, 255, 255, 0.22) 74%, rgba(0, 0, 0, 0.05) 100%),
-    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.055) 0 1px, rgba(0, 0, 0, 0.045) 1px 2px, transparent 2px 4px),
-    linear-gradient(168deg, #cbd1d7 0%, #b4bbc2 46%, #a9b0b7 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.75), inset 0 -1px 0 rgba(0, 0, 0, 0.28),
-    inset 1px 0 0 rgba(255, 255, 255, 0.3), inset -1px 0 0 rgba(0, 0, 0, 0.18),
-    0 28px 60px rgba(1, 16, 27, 0.55), 0 2px 0 rgba(1, 16, 27, 0.5);
-  transform-style: preserve-3d; will-change: transform;
-}
-/* countersunk fixings, one at each corner — it is a plate, not a panel */
-.rec-fix {
-  position: absolute; width: 11px; height: 11px; border-radius: 50%;
-  background: radial-gradient(circle at 34% 30%, #6f767d, #2f363d 62%, #8b9299 100%);
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.5);
-}
-.rec-fix-tl { left: 12px; top: 12px; }
-.rec-fix-tr { right: 12px; top: 12px; }
-.rec-fix-bl { left: 12px; bottom: 12px; }
-.rec-fix-br { right: 12px; bottom: 12px; }
-
+/* ---- the schedule: a plain document list (was a machined metal plate; Alfie, 16 Oct:
+   "a bit over the top", keep it simple) ---- */
+.rec-plate { margin: 0; background: var(--white); padding: clamp(1.2rem, 2vw, 1.8rem) 0 0.4rem; }
 .rec-plate-head {
   display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
-  padding: 0 1.6rem 0.9rem; margin-bottom: 0.4rem;
-  border-bottom: 1px solid rgba(1, 16, 27, 0.22);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
-  font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
-  color: #333c45; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  padding: 0 1.6rem 0.9rem; border-bottom: 1px solid var(--hairline);
+  font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
 }
 .rec-plate-head sup { font-size: 0.7em; }
 
 .rec-lines { list-style: none; }
-.rec-line { position: relative; --cut: 0%; border-bottom: 1px solid rgba(1, 16, 27, 0.16); box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4); }
-.rec-line:last-child { border-bottom: 0; box-shadow: none; }
+.rec-line { border-bottom: 1px solid var(--hairline); }
+.rec-line:last-child { border-bottom: 0; }
 
 .rec-hit {
   display: block; width: 100%; background: none; border: 0; cursor: pointer;
   font-family: var(--font); text-align: left; padding: 0; border-radius: 0;
   transition: background-color 0.3s var(--ease);
 }
-.rec-hit:hover { background: rgba(255, 255, 255, 0.22); }
+.rec-hit:hover { background: var(--paper); }
 .rec-hit:focus-visible { outline: 2px solid var(--blue); outline-offset: -3px; }
 
-/* the engraved content; the cut sweeps in from the left as the tool passes */
 .rec-cut {
   display: grid; align-items: baseline;
   grid-template-columns: minmax(120px, 0.5fr) minmax(0, 1fr) minmax(0, 0.9fr) minmax(0, 1fr);
   gap: 0.4rem clamp(0.8rem, 1.8vw, 1.8rem);
-  padding: clamp(1.1rem, 2vw, 1.75rem) 1.6rem;
-  clip-path: inset(0 var(--cut) 0 0);
+  padding: clamp(1.1rem, 2vw, 1.5rem) 1.6rem;
 }
 .rec-fig {
   font-size: clamp(1.8rem, 2.9vw, 3.05rem); font-weight: 300; line-height: 1;
-  letter-spacing: -0.035em; color: #232b33; white-space: nowrap;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.62), 0 -1px 1px rgba(0, 0, 0, 0.3);
+  letter-spacing: -0.035em; color: var(--ink); white-space: nowrap;
 }
 .rec-fig i { font-style: normal; font-size: 0.38em; font-weight: 600; letter-spacing: 0.02em; }
-.rec-claim {
-  font-size: clamp(1rem, 1.25vw, 1.18rem); font-weight: 700; letter-spacing: -0.01em; color: #232b33;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55), 0 -1px 1px rgba(0, 0, 0, 0.22);
-}
-.rec-std {
-  font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em; color: #333c45;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-}
+.rec-claim { font-size: clamp(1rem, 1.25vw, 1.18rem); font-weight: 700; letter-spacing: -0.01em; color: var(--ink); }
+.rec-std { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em; color: var(--muted); }
 .rec-doc {
   display: flex; align-items: center; gap: 0.55rem; justify-self: end;
-  font-size: 0.84rem; font-weight: 600; color: #333c45;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  font-size: 0.84rem; font-weight: 600; color: var(--muted);
   transition: color 0.3s var(--ease);
 }
-/* the tick is struck into the metal when the document is chosen */
 .rec-tick {
   flex: none; width: 17px; height: 17px; position: relative;
-  border: 1px solid rgba(1, 16, 27, 0.4); background: rgba(1, 16, 27, 0.07);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.22), 0 1px 0 rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(14, 36, 52, 0.52); background: var(--white);
   transition: background-color 0.3s var(--ease), border-color 0.3s var(--ease);
 }
 .rec-tick::after {
   content: ''; position: absolute; left: 4px; top: 4px; width: 8px; height: 4px;
   border-left: 2px solid var(--white); border-bottom: 2px solid var(--white);
-  transform: rotate(-45deg) scale(0.4); opacity: 0;
-  transition: transform 0.35s var(--ease), opacity 0.25s var(--ease);
+  transform: rotate(-45deg); opacity: 0; transition: opacity 0.25s var(--ease);
 }
-.rec-hit[aria-pressed="true"] .rec-tick { background: var(--blue); border-color: var(--blue-deep); }
-.rec-hit[aria-pressed="true"] .rec-tick::after { transform: rotate(-45deg) scale(1); opacity: 1; }
-.rec-hit[aria-pressed="true"] .rec-doc { color: #16324a; }
-
-/* the cutter: a hot point travelling at the edge of the cut */
-.rec-tool {
-  position: absolute; top: 6%; bottom: 6%; left: calc(100% - var(--cut));
-  width: 2px; opacity: 0; pointer-events: none;
-  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.95) 22%, rgba(255, 255, 255, 0.95) 78%, transparent);
-  box-shadow: 0 0 16px 2px rgba(255, 255, 255, 0.8), 0 0 40px 6px rgba(0, 87, 150, 0.5);
-}
-.rec-line.cutting .rec-tool { opacity: 1; }
+.rec-hit[aria-pressed="true"] .rec-tick { background: var(--blue); border-color: var(--blue); }
+.rec-hit[aria-pressed="true"] .rec-tick::after { opacity: 1; }
+.rec-hit[aria-pressed="true"] .rec-doc { color: var(--ink); }
 
 @media (max-width: 1024px) {
   .rec-inner { grid-template-columns: 1fr; }
@@ -479,10 +415,6 @@ html:not(.js) .iv-chapters { display: none; }
   .rec-plate-head { padding: 0 1.1rem 0.8rem; font-size: 0.62rem; }
   .rec-plate-head span:last-child { display: none; }
 }
-
-/* reduced motion / no JS: the plate is already fully engraved (--cut defaults
-   to 0), so nothing is gated behind the cutting pass */
-html.reduced .rec-tool { display: none; }
 
 /* ---------- 04 WHERE IT BELONGS ---------------------------------------
    One photograph per application, full bleed. The transition re-clads the
@@ -587,194 +519,45 @@ html.reduced .wb-fallback { display: grid; }
   }
 }
 
-/* ---------- 05 THE COAT ------------------------------------------------
-   A pinned, full-viewport composition. The stage IS the surface: a wall of the
-   real coated material, the product panel in front of it, and one hard pour
-   edge that crosses wall + panel + headline together. Per-coat values arrive
-   as custom properties from JS (--coat-a/--coat-b = the two coats in play,
-   --pour = 0..1, --ink-a/--ink-b = legible type colour for each coat).
-   ---------------------------------------------------------------------- */
-.coat { position: relative; background: var(--paper); }
-.coat-pin {
-  position: relative; height: 100dvh; overflow: hidden;
-  --pour: 0;                 /* 0 = base coat only, 1 = new coat fully poured */
-  --edge: 0%;                /* the pour edge, as a % down the stage */
-  --ink-a: var(--white);
-  --ink-b: var(--white);
+/* ---------- 05 FINISHES ------------------------------------------------
+   One panel and the range beside it; hovering a finish shows it. No pin, no
+   pour, no colour bars (simplified after the 16 Oct review).
+   --------------------------------------------------------------------- */
+.coat { background: var(--paper); padding: clamp(4.5rem, 9vw, 7.5rem) var(--pad); }
+.coat-inner {
+  max-width: 1560px; margin: 0 auto;
+  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(2.5rem, 6vw, 6rem); align-items: center;
 }
-
-/* ---- the wall: real plank face, repeated at cladding scale ---- */
-.coat-wall { position: absolute; inset: 0; z-index: 0; background: var(--navy); }
-.coat-wall-l {
-  position: absolute; inset: 0;
-  background-image: var(--coat-a);
-  /* The tile is now ONE course pitch (see the finishes asset note), so this sets the
-     course height directly: width x 0.908. ~110-175px gives a course of ~100-159px,
-     which reads as laid cladding and roughly matches the panel in front. The old
-     420px was tuned for a tile that held several courses. */
-  background-size: clamp(110px, 9vw, 175px) auto;
-  background-repeat: repeat;
-  will-change: clip-path;
+.coat-sub { color: var(--muted); margin-top: 1.4rem; }
+.coat-read { margin-top: 2rem; display: grid; gap: 0.2rem; }
+.coat-read strong { font-size: clamp(1.3rem, 2vw, 1.7rem); font-weight: 600; letter-spacing: -0.02em; color: var(--ink); }
+.coat-read span { font-size: 0.86rem; color: var(--muted); }
+.coat-sws {
+  list-style: none; margin-top: 1.4rem;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(11.5rem, 1fr)); gap: 0.15rem 1rem;
 }
-/* the wall fills the stage, so a stage-relative % is already correct here.
-   The coat floods DOWNWARD from the top, the way a wall is actually coated. */
-.coat-wall-pour { background-image: var(--coat-b); clip-path: inset(0 0 calc(100% - var(--edge)) 0); }
-/* course lines: the wall reads as laid cladding, not wallpaper */
-.coat-courses {
-  position: absolute; inset: 0; pointer-events: none;
-  background:
-    repeating-linear-gradient(to bottom,
-      rgba(255, 255, 255, 0.07) 0, rgba(255, 255, 255, 0.07) 1px,
-      transparent 1px, transparent 3px,
-      rgba(1, 16, 27, 0.16) calc(clamp(52px, 5.2vw, 96px) - 2px),
-      rgba(1, 16, 27, 0.3) clamp(52px, 5.2vw, 96px));
-}
-/* vignette + a raking gradient so the wall has light on it, never flat */
-.coat-veil {
-  position: absolute; inset: 0; z-index: 3; pointer-events: none;
-  background:
-    linear-gradient(104deg, rgba(4, 38, 61, 0.82) 0%, rgba(4, 38, 61, 0.42) 34%, rgba(4, 38, 61, 0) 62%),
-    radial-gradient(120% 90% at 78% 18%, rgba(255, 255, 255, 0.16), transparent 55%),
-    linear-gradient(to top, rgba(4, 38, 61, 0.6), transparent 34%);
-}
-
-/* ---- every coat at once ---- */
-.coat-spectrum {
-  position: absolute; inset: 0; z-index: 2; display: flex; opacity: 0; pointer-events: none;
-}
-.coat-band {
-  flex: 1; background-image: var(--sw); background-size: cover; background-position: center;
-  transform: scaleY(0); transform-origin: bottom center; will-change: transform;
-}
-
-/* ---- the resolve ---- */
-.coat-arch { position: absolute; inset: 0; z-index: 2; opacity: 0; clip-path: inset(100% 0 0 0); }
-.coat-arch img { width: 100%; height: 100%; object-fit: cover; }
-
-/* ---- the product ---- */
-.coat-panel {
-  position: absolute; z-index: 4; margin: 0;
-  right: clamp(-3rem, -1vw, 0rem); bottom: clamp(-4rem, -3vh, -1rem);
-  width: clamp(300px, 44vw, 660px); aspect-ratio: 500 / 650;
-  filter: drop-shadow(-34px 44px 64px rgba(1, 16, 27, 0.55)) drop-shadow(0 2px 3px rgba(1, 16, 27, 0.35));
-  will-change: transform;
-}
-.coat-panel-l { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
-/* panel + copy sit anywhere in the stage, so their cut line is set in px by
-   JS (clip-path % would resolve against the element, not the stage, and the
-   edges would drift apart). */
-.coat-panel-pour { clip-path: inset(0 0 100% 0); }
-
-/* ---- the pour edge ---- */
-.coat-edge {
-  position: absolute; left: 0; right: 0; top: var(--edge); z-index: 6;
-  height: 2px; pointer-events: none; opacity: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.92) 18%, rgba(255, 255, 255, 0.92) 82%, transparent);
-  box-shadow: 0 6px 26px rgba(255, 255, 255, 0.32), 0 1px 0 rgba(255, 255, 255, 0.5);
-}
-
-/* ---- headline + readout (two stacked copies; the edge crosses the type) ---- */
-.coat-copy {
-  position: absolute; z-index: 5; left: var(--gutter); right: var(--pad);
-  top: 50%; transform: translateY(-50%);
-  max-width: min(52vw, 760px); color: var(--ink-a);
-  display: grid; gap: clamp(1.1rem, 2vh, 1.8rem); pointer-events: none;
-}
-.coat-copy-pour { color: var(--ink-b); clip-path: inset(0 0 100% 0); }
-.coat-h {
-  font-size: clamp(3rem, 7.6vw, 8rem); line-height: 0.94; letter-spacing: -0.05em;
-  color: inherit; max-width: 11ch;
-}
-.coat-sub {
-  font-size: clamp(0.95rem, 1.15vw, 1.15rem); font-weight: 300; line-height: 1.62;
-  color: inherit; opacity: 0.82; max-width: 40ch;
-  padding-left: 1.35rem; border-left: 1px solid currentColor;
-}
-.coat-read { display: grid; gap: 0.2rem; color: inherit; }
-.coat-read strong { font-size: clamp(1.05rem, 1.5vw, 1.35rem); font-weight: 700; letter-spacing: -0.015em; }
-.coat-read span { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.72; }
-
-.coat-close {
-  position: absolute; z-index: 5; left: var(--gutter); bottom: clamp(7rem, 16vh, 11rem);
-  margin: 0; opacity: 0; pointer-events: none;
-  font-size: clamp(2rem, 4.4vw, 4.2rem); font-weight: 300; line-height: 1.06;
-  letter-spacing: -0.045em; color: var(--white); max-width: 16ch;
-  text-shadow: 0 2px 40px rgba(1, 16, 27, 0.5);
-}
-.coat-close strong { font-weight: 700; }
-
-/* ---- the range, as a spectrum rail ---- */
-.coat-rail {
-  position: absolute; z-index: 7; left: 0; right: 0; bottom: 0;
-  display: flex; align-items: flex-end; gap: clamp(0.9rem, 2vw, 1.8rem);
-  padding: 0 var(--gutter) clamp(1.1rem, 2.4vh, 1.8rem);
-}
-.coat-rail-lede {
-  flex: none; padding-bottom: 0.5rem;
-  font-size: 0.68rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.72);
-}
-.coat-sws { flex: 1; display: flex; align-items: flex-end; gap: 3px; min-width: 0; }
-/* the bar grows on hover, but the BUTTON does not: animating height here
-   re-laid out all 15 siblings on every hover and made the hit target slide out
-   from under the cursor. --h drives a compositor-only scaleY instead, and the
-   hit area stays constant. */
-@property --h { syntax: '<number>'; inherits: false; initial-value: 0.45; }
 .coat-sw {
-  position: relative; flex: 1; height: clamp(46px, 6vh, 72px); --h: 0.45;
-  background: none; border: 0; border-radius: 0; padding: 0; cursor: pointer;
-  transition: --h 0.4s var(--ease);
+  display: flex; align-items: center; gap: 0.7rem; width: 100%; min-height: 42px;
+  background: none; border: 0; padding: 0.35rem 0.4rem; cursor: pointer; text-align: left;
+  font: inherit; font-size: 0.9rem; color: var(--ink);
 }
-.coat-sw::before {
-  content: ''; position: absolute; inset: 0;
-  background-image: var(--sw); background-size: cover; background-position: center;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
-  transform: scaleY(var(--h)); transform-origin: bottom center;
-  transition: box-shadow 0.3s var(--ease);
+.coat-sw:hover, .coat-sw:focus-visible { background: var(--white); }
+.coat-sw:focus-visible { outline: 2px solid var(--blue); outline-offset: 1px; }
+.coat-sw.is-on { font-weight: 700; }
+.coat-chip {
+  flex: none; width: 26px; height: 26px;
+  background: var(--sw) center / cover, #c9ced3;
+  box-shadow: inset 0 0 0 1px rgba(14, 36, 52, 0.18);
 }
-.coat-sw::after {
-  content: ''; position: absolute; left: 0; right: 0; height: 3px;
-  top: calc((1 - var(--h)) * 100% - 5px);
-  background: var(--white); transform: skewX(-24deg) scaleX(0);
-  transition: transform 0.35s var(--ease);
-}
-.coat-sw:hover, .coat-sw:focus-visible, .coat-sw.is-on { --h: 1; }
-.coat-sw:hover::before, .coat-sw:focus-visible::before { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5); }
-.coat-sw.is-on::after { transform: skewX(-24deg) scaleX(1); }
-.coat-sw-name {
-  position: absolute; left: 50%; bottom: calc(100% + 12px); transform: translateX(-50%);
-  white-space: nowrap; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.02em;
-  color: var(--white); background: rgba(4, 38, 61, 0.9); padding: 0.3rem 0.6rem;
-  opacity: 0; transition: opacity 0.25s var(--ease); pointer-events: none;
-}
-.coat-sw:hover .coat-sw-name, .coat-sw:focus-visible .coat-sw-name { opacity: 1; }
-
-/* ---- no JS / reduced motion: a static, complete version of the same idea ---- */
-html:not(.js) .coat-pin, html.reduced .coat-pin { height: auto; min-height: 100dvh; padding: clamp(5rem, 10vw, 8rem) 0 0; }
-html:not(.js) .coat-copy, html.reduced .coat-copy { position: relative; top: auto; transform: none; padding-bottom: clamp(16rem, 34vh, 26rem); }
-html.reduced .coat-copy { clip-path: none !important; }
-html:not(.js) .coat-copy-pour, html.reduced .coat-copy-pour,
-html:not(.js) .coat-edge, html.reduced .coat-edge,
-html:not(.js) .coat-spectrum, html.reduced .coat-spectrum,
-html:not(.js) .coat-arch, html.reduced .coat-arch,
-html:not(.js) .coat-close, html.reduced .coat-close { display: none; }
-html.reduced .coat-panel { bottom: 4rem; }
-
+.coat-sw.is-on .coat-chip { box-shadow: 0 0 0 2px var(--paper), 0 0 0 3px var(--ink); }
+.coat-note { margin-top: 1.6rem; font-size: 0.84rem; color: var(--muted); }
+.coat-link { background: none; border: 0; padding: 0; font: inherit; color: var(--blue); text-decoration: underline; cursor: pointer; }
+.coat-panel { margin: 0; justify-self: center; width: min(100%, 460px); }
+.coat-panel img { width: 100%; height: auto; display: block; }
 @media (max-width: 900px) {
-  .coat-pin { height: 100svh; }
-  .coat-copy { top: clamp(5.5rem, 13vh, 8rem); transform: none; max-width: none; right: var(--pad); left: var(--pad); }
-  .coat-h { font-size: clamp(2.9rem, 13vw, 4.6rem); max-width: 9ch; }
-  .coat-sub { display: none; }               /* the wall and the panel carry it on small screens */
-  .coat-panel { width: min(92vw, 460px); right: -12%; bottom: clamp(3.5rem, 9vh, 6rem); }
-  .coat-close { left: var(--pad); bottom: clamp(8rem, 20vh, 12rem); font-size: clamp(1.9rem, 8.5vw, 2.8rem); }
-  .coat-rail { padding: 0 var(--pad) 1rem; gap: 0.7rem; }
-  .coat-rail-lede { display: none; }
-  .coat-sw { height: clamp(22px, 3vh, 30px); }
-  .coat-veil {
-    background:
-      linear-gradient(to bottom, rgba(4, 38, 61, 0.88) 0%, rgba(4, 38, 61, 0.34) 46%, rgba(4, 38, 61, 0.05) 62%),
-      linear-gradient(to top, rgba(4, 38, 61, 0.72), transparent 30%);
-  }
+  .coat-inner { grid-template-columns: 1fr; }
+  .coat-panel { order: -1; width: min(70%, 340px); }
 }
 
 /* ---------- 06 THE SPEC BENCH -----------------------------------------
@@ -890,7 +673,7 @@ html.reduced .coat-panel { bottom: 4rem; }
 @media (max-width: 900px) {
   .po-split { grid-template-columns: 1fr; }
   .pd-inner { grid-template-columns: 1fr; }
-  .pd-draw { order: 2; }
+  .pd-shot { order: 2; }
   .iv-head { grid-template-columns: 1fr; align-items: start; }
   /* five columns would give each chapter ~70px; wrap instead of scroll so no
      chapter can hide off-screen */
