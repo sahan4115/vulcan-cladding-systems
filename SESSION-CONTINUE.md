@@ -22,7 +22,13 @@ is on the branch; `main` (which auto-deploys to Pages) is untouched.
   it). His boot mark + shutters replace the slat **preloader**, which is removed from the
   homepage (two curtain reveals back to back otherwise). His reel is byte-identical to
   `hero (1).mp4`, the client clip already in the repo as the faststart remux, so no new video.
-  Secondary CTA is "Start a conversation" → contact.html (his said "Full site").
+  Secondary CTA is "Start a conversation" → contact.html (his said "Full site"). Anton +
+  IBM Plex Mono are self-hosted via @fontsource (his file used Google Fonts). Reduced
+  motion holds the film on its poster.
+- **Homepage finishes** (the 21:00 item, "remove inaccurate/complex colour component"): the
+  cutaway no longer recolours its planks through a filter + wood mask (Dark Oak just
+  darkened it and left gaps). The render stays as shot; the range is a static swatch strip
+  from the client's finish renders + "See every finish" → vulcalap.html#finishes.
 - **Homepage plank** (`plank.js`) now extrudes the real **TG150 section** from Nick's DWG,
   316 points in `src/tg150-profile.js` (lifted from Alfie's `TG150_viewer.html`), flipped
   face-side to camera. VulcaBar / VulcaFrame are still procedural.
@@ -39,8 +45,12 @@ is on the branch; `main` (which auto-deploys to Pages) is untouched.
 ### Still open — decisions, not code
 - **VulcaLap first fold** (the scroll build-up with callouts): Fathom's summary says remove
   the "pop-out" animation, but Alfie never clearly rejected it in the transcript. Ask him.
-- **Homepage** still has the cursor-lit contact wall, magnetic CTAs and the finishes
-  swatcher. The client has seen the homepage; Alfie's comments were about the inner pages.
+- **Homepage** still has the cursor-lit contact wall and magnetic CTAs; Alfie's spotlight /
+  wobble comments were made on the VulcaLap page.
+- **Lost hero copy (SEO)**: the Vendo schedule's hero sub-line ("…designed, extruded and
+  finished in Britain, for performance that matters") and the "A2-s1,d0 classified · CWCT
+  tested" strip went with the old hero. Alfie's kicker reads "A2 fire-rated · CWCT tested".
+  Decide whether his hero should carry the sub-line.
 - **Case studies are still placeholder schemes with generated images.** Alfie: no stock
   images at all. Real photos must NOT go under invented names, so this needs the client's
   real project list + photos (ask Nick). Known real projects from their files: Mace

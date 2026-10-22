@@ -18,9 +18,15 @@ const SHOTS = [
 
 const KICKERS = ['A2 fire-rated · CWCT tested', 'The character of natural timber'];
 
-export function initShowreel(stage) {
+export function initShowreel(stage, { reduce = false } = {}) {
   if (!stage) return;
   const v = stage.querySelector('video');
+  /* reduced motion: hold the film on its poster (frame 0, the aluminium act) */
+  if (reduce) {
+    v.removeAttribute('autoplay');
+    v.pause();
+    return;
+  }
   const beats = [stage.querySelector('[data-beat="alu"]'), stage.querySelector('[data-beat="timber"]')];
   const kick = stage.querySelector('.sr-kicker');
 

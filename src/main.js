@@ -2,6 +2,9 @@ import '@fontsource/open-sans/300.css';
 import '@fontsource/open-sans/400.css';
 import '@fontsource/open-sans/600.css';
 import '@fontsource/open-sans/700.css';
+import '@fontsource/anton/400.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
 import './styles.css';
 import './hero-showreel.css';
 
@@ -34,7 +37,7 @@ const scrollToPos = (target) => {
 };
 
 /* ---------- Hero: Alfie's showreel stage (its boot mark + shutters replace the old preloader) ---------- */
-initShowreel(document.querySelector('.sr-stage'));
+initShowreel(document.querySelector('.sr-stage'), { reduce });
 
 /* ---------- Nav: solid after hero, hides down / shows up ---------- */
 const nav = document.querySelector('.nav');
@@ -477,43 +480,6 @@ if (projSec) {
     };
   });
 }
-
-/* ---------- Finishes: diagonal wipe swatcher ---------- */
-const wood = document.querySelector('.finish-wood');
-const woodTint = document.querySelector('.finish-wood-tint');
-const wipe = document.querySelector('.finish-wipe');
-/* Only the wood planks recolour (the .finish-wood layer); the rest of the cutaway stays put.
-   cedar/oak/anthracite via a filter on the planks; RAL via a colour multiplied onto the
-   grayscale planks through the wood-shaped mask. */
-const FINISHES = {
-  cedar:      { filter: 'none',                                           tint: 'transparent' },
-  oak:        { filter: 'brightness(0.72) saturate(1.15) contrast(1.05)', tint: 'transparent' },
-  anthracite: { filter: 'grayscale(1) brightness(0.6) contrast(1.05)',    tint: 'transparent' },
-  ral:        { filter: 'grayscale(1) brightness(1.12) contrast(0.95)',   tint: 'rgba(0, 87, 150, 0.85)' },
-};
-let wiping = false;
-const applyFinish = (key) => {
-  const f = FINISHES[key];
-  wood.style.filter = f.filter;
-  woodTint.style.backgroundColor = f.tint;
-};
-document.querySelectorAll('.finish-chip').forEach((chip) => {
-  chip.addEventListener('click', () => {
-    if (chip.classList.contains('is-active') || wiping) return;
-    document.querySelectorAll('.finish-chip').forEach((c) => c.classList.remove('is-active'));
-    chip.classList.add('is-active');
-    if (reduce) {
-      applyFinish(chip.dataset.finish);
-      return;
-    }
-    wiping = true;
-    gsap.timeline({ onComplete: () => (wiping = false) })
-      .fromTo(wipe, { xPercent: -125 }, { xPercent: 0, duration: 0.5, ease: 'power3.in' })
-      .add(() => applyFinish(chip.dataset.finish))
-      .to(wipe, { xPercent: 125, duration: 0.55, ease: 'power3.out' })
-      .set(wipe, { xPercent: -125 });
-  });
-});
 
 /* ---------- Magnetic primary CTAs (desktop, motion allowed) ---------- */
 if (!reduce && fine) {

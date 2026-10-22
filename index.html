@@ -19,10 +19,6 @@
   <meta name="twitter:description" content="A2-s1,d0 fire-rated aluminium cladding systems with the character of natural timber. Plank, bar and modular rainscreen. Made in Britain." />
   <meta name="twitter:image" content="/assets/img/hero.jpg" />
   <link rel="icon" href="/assets/logo.png" />
-  <!-- Hero showreel type: Anton (display) + IBM Plex Mono (HUD) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@400;500&display=swap" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -484,28 +480,29 @@
       </div>
     </section>
 
-    <!-- ============ FINISHES (immersive swatcher) ============ -->
+    <!-- ============ FINISHES ============
+         The cutaway used to recolour its planks through a CSS filter and a mask, which
+         could never match the real coats (16 Oct review: inaccurate, simplify). The render
+         now stays as photographed and the range is shown as swatches cut from the
+         client's own finish renders, linking through to the full range on VulcaLap. -->
     <section class="finishes" id="finishes">
       <div class="finish-stage">
         <div class="finish-media">
           <img id="finish-img" src="/assets/img/finish-scene.jpg" alt="Vulcan cladding system shown in cutaway" loading="lazy" />
-          <!-- Recolour layer: the planks isolated from the scene, registered on top so ONLY the
-               wood changes colour. finish-wood.png shares the scene's exact dimensions, so both
-               stay aligned under object-fit:cover at every viewport. -->
-          <img class="finish-wood" src="/assets/img/finish-wood.png" alt="" aria-hidden="true" />
-          <div class="finish-wood-tint" aria-hidden="true"></div>
         </div>
-        <div class="finish-wipe" aria-hidden="true"></div>
         <div class="finish-overlay">
           <p class="eyebrow">Timber-effect &amp; RAL finishes</p>
           <h2>Choose the look.<br /><strong>Keep the certainty.</strong></h2>
           <p>Authentic wood-grain finishes on smooth coated aluminium, or solid colours across the full RAL range.</p>
-          <div class="finish-controls" role="group" aria-label="Preview finishes">
-            <button type="button" class="finish-chip is-active" data-finish="cedar"><i style="--chip:#a26a41"></i>Western Red Cedar</button>
-            <button type="button" class="finish-chip" data-finish="oak"><i style="--chip:#4a3423"></i>Dark Oak</button>
-            <button type="button" class="finish-chip" data-finish="anthracite"><i style="--chip:#3a3f43"></i>Anthracite</button>
-            <button type="button" class="finish-chip" data-finish="ral"><i style="--chip:#4d79a9"></i>Any RAL colour</button>
-          </div>
+          <ul class="finish-range" aria-label="A few of the VulcaLap finishes">
+            <li><i style="--sw:url(/assets/img/finishes/tile-cedar.webp)" aria-hidden="true"></i>Western Red Cedar</li>
+            <li><i style="--sw:url(/assets/img/finishes/tile-golden-oak.webp)" aria-hidden="true"></i>Golden Oak</li>
+            <li><i style="--sw:url(/assets/img/finishes/tile-dark-oak.webp)" aria-hidden="true"></i>Dark Oak</li>
+            <li><i style="--sw:url(/assets/img/finishes/tile-anthracite.webp)" aria-hidden="true"></i>Anthracite</li>
+            <li><i style="--sw:url(/assets/img/finishes/tile-ivory.webp)" aria-hidden="true"></i>Light Ivory</li>
+            <li><i style="--sw:url(/assets/img/finishes/tile-bronze.webp)" aria-hidden="true"></i>Bronze</li>
+          </ul>
+          <a class="finish-more" href="vulcalap.html#finishes">See every finish <span aria-hidden="true">&rarr;</span></a>
           <p class="finish-creds">Qualicoat approved &middot; 25-year finish warranty</p>
         </div>
       </div>

@@ -627,26 +627,11 @@ p.eyebrow {
   position: absolute; inset: 0; width: 100%; height: 100%;
   object-fit: cover; object-position: 100% 50%;
 }
-#finish-img { z-index: 0; } /* scene stays fixed */
-.finish-wood { z-index: 1; transition: filter 0.5s var(--ease); } /* only the planks recolour */
-/* colour tint clipped to the plank shape (same asset as the mask) — used for arbitrary RAL.
-   Mask position must match the imgs' object-position to stay registered. */
-.finish-wood-tint {
-  position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none;
-  -webkit-mask: url(/assets/img/finish-wood.png) 100% 50% / cover no-repeat;
-  mask: url(/assets/img/finish-wood.png) 100% 50% / cover no-repeat;
-  background: transparent; mix-blend-mode: multiply;
-  transition: background-color 0.5s var(--ease);
-}
 /* navy grade anchored to the BOTTOM of the stage only (was a mid-image scrim on the overlay) */
 .finish-stage::after {
   content: ''; position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
   height: clamp(110px, 20%, 190px); pointer-events: none;
   background: linear-gradient(to top, rgba(4, 38, 61, 0.6), transparent);
-}
-.finish-wipe {
-  position: absolute; inset: -2% -20%; background: var(--navy); z-index: 4;
-  transform: translateX(-125%) skewX(-12deg); pointer-events: none;
 }
 .finish-overlay {
   position: relative; z-index: 3; color: var(--white);
@@ -655,18 +640,21 @@ p.eyebrow {
 }
 .finish-overlay h2 { color: var(--white); }
 .finish-overlay p { margin-top: 1.4rem; color: rgba(255, 255, 255, 0.9); line-height: 1.7; max-width: 42ch; }
-/* capped width wraps the chips 2×2 — copy column stays inside the dark left zone */
-.finish-controls { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 2.1rem; max-width: 24rem; }
-.finish-chip {
-  display: inline-flex; align-items: center; gap: 0.6rem;
-  font-family: var(--font); font-size: 0.9rem; font-weight: 600; color: var(--white);
-  background: rgba(4, 38, 61, 0.35); border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 0;
-  padding: 0.7rem 1.15rem; cursor: pointer;
-  transition: border-color 0.25s, background-color 0.25s;
+/* the range as swatches, two columns so the list stays inside the dark left zone */
+.finish-range {
+  list-style: none; margin-top: 2.1rem; max-width: 23rem;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem 1.4rem;
 }
-.finish-chip i { width: 14px; height: 14px; background: var(--chip); display: inline-block; transform: skewX(-12deg); }
-.finish-chip:hover { border-color: var(--white); }
-.finish-chip.is-active { border-color: var(--white); background: rgba(255, 255, 255, 0.16); }
+.finish-range li { display: flex; align-items: center; gap: 0.65rem; font-size: 0.9rem; font-weight: 600; color: var(--white); }
+.finish-range i {
+  flex: none; width: 22px; height: 22px; background: var(--sw) center / cover, #6b7480;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+}
+.finish-more {
+  display: inline-block; margin-top: 1.8rem; color: var(--white); font-weight: 600; font-size: 0.95rem;
+  text-decoration: none; border-bottom: 1px solid rgba(255, 255, 255, 0.5); padding-bottom: 0.2rem;
+}
+.finish-more:hover { border-bottom-color: var(--white); }
 
 /* ---------- Contact ("the facade answers" finale) ----------
    Navy end-wall of canvas-drawn cladding courses; the cursor is raking light
