@@ -1,6 +1,6 @@
 /*
  * Case studies — the register (cases.html) and the project files (case-*.html).
- * Loads after styles.css; page-scoped prefixes: reg- = register, cs- / tx- / gal-
+ * Loads after styles.css; page-scoped prefixes: reg- = register, cs- / gal-
  * = case study. (Do not write a star followed by a slash in here — it closes the
  * comment early and the rest of the header parses as CSS.)
  *
@@ -160,61 +160,6 @@ html:not(.js) .tabs { display: none; }
 .cs-constraint-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(1.6rem, 5vw, 5.5rem); margin-top: clamp(2rem, 4vw, 3.2rem); }
 .cs-constraint-body p { grid-column: 2; color: rgba(244, 247, 250, 0.86); font-size: clamp(1.02rem, 1.5vw, 1.2rem); line-height: 1.7; max-width: 54ch; }
 
-/* ---------- 03 The answer: THE TRANSFORMATION ---------------------------
-   The page's signature. The wipe runs BOTTOM-UP and its divider is a course
-   line with a lit leading edge, so the reveal reads as cladding going on —
-   not as a generic before/after slider lying on its side.
-   Scroll-triggered once, then the reader takes over (drag the stage, or use
-   the range input, which is what carries the keyboard and ARIA). */
-.tx { background: var(--paper); padding: clamp(5rem, 10vw, 8.5rem) var(--pad); }
-.tx-inner { max-width: 1560px; margin: 0 auto; }
-.tx-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(1.6rem, 5vw, 5.5rem); align-items: end; margin-bottom: clamp(1.6rem, 3vw, 2.6rem); }
-.tx-head h2 { font-size: clamp(2rem, 4.2vw, 3.6rem); margin-top: 0.8rem; }
-.tx-head p { color: var(--muted); max-width: 52ch; }
-
-.tx-stage {
-  position: relative; margin: 0; overflow: hidden; background: var(--navy);
-  border: 1px solid var(--hairline); aspect-ratio: 16 / 9;
-  /* 0 = all BEFORE, 100% = all AFTER. It defaults to the FINISHED building so
-     the no-JS reader gets the completed elevation, not a building site. */
-  --y: 100%;
-}
-/* dragging the stage is a FINE-POINTER affordance only: on touch a vertical
-   drag here would fight the page scroll, so those users get the range input */
-@media (pointer: fine) { .tx-stage { cursor: ns-resize; } }
-.tx-stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
-/* the clad state is revealed from the bottom up */
-.tx-after { clip-path: inset(calc(100% - var(--y)) 0 0 0); }
-.tx-line {
-  position: absolute; left: 0; right: 0; bottom: var(--y); height: 2px; background: var(--lblue);
-  box-shadow: 0 0 18px rgba(167, 172, 216, 0.55); pointer-events: none;
-}
-.tx-line::after { /* the grip: a course-end mark, not a round handle */
-  content: ''; position: absolute; right: clamp(0.8rem, 2vw, 1.6rem); bottom: -9px;
-  width: 34px; height: 20px; background: var(--white); border: 1px solid var(--hairline);
-}
-.tx-tag {
-  position: absolute; left: 0; padding: 0.55rem 1rem; background: var(--navy); color: var(--white);
-  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
-  pointer-events: none; transition: opacity 0.4s var(--ease);
-}
-.tx-tag--before { top: 0; opacity: calc(1 - (var(--yn, 1) * 0.85)); }
-.tx-tag--after { bottom: 0; background: var(--blue); opacity: var(--yn, 1); }
-/* the accessible control: it IS the slider, visually seated under the stage */
-.tx-ctl { display: flex; align-items: center; gap: clamp(0.7rem, 1.6vw, 1.2rem); margin-top: 0.9rem; }
-.tx-ctl label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); flex: none; }
-.tx-range {
-  flex: 1 1 auto; min-width: 0; height: 40px; margin: 0; padding: 0;
-  -webkit-appearance: none; appearance: none; background: transparent; cursor: pointer; --p: 0%;
-}
-.tx-range::-webkit-slider-runnable-track { height: 3px; background: linear-gradient(to right, var(--blue) var(--p), var(--hairline) var(--p)); }
-.tx-range::-moz-range-track { height: 3px; background: var(--hairline); }
-.tx-range::-moz-range-progress { height: 3px; background: var(--blue); }
-/* playhead tick, matching the install film's control (no round handles on this site) */
-.tx-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 4px; height: 15px; margin-top: -6px; border-radius: 0; background: var(--blue); border: 0; }
-.tx-range::-moz-range-thumb { width: 4px; height: 15px; border-radius: 0; background: var(--blue); border: 0; }
-.tx-cap { margin-top: 0.8rem; font-size: 0.78rem; color: var(--muted); opacity: 0.9; }
-
 /* ---------- The plates: the folder's photography, numbered -------------- */
 .gal { background: var(--white); padding: clamp(5rem, 10vw, 8.5rem) var(--pad); }
 .gal-inner { max-width: 1560px; margin: 0 auto; }
@@ -240,28 +185,6 @@ html:not(.js) .tabs { display: none; }
 .cs-record td { font-size: 1rem; color: var(--ink); font-variant-numeric: tabular-nums; }
 .cs-record td small { display: block; font-size: 0.78rem; color: var(--muted); margin-top: 0.25rem; }
 .cs-record-note { margin-top: 1rem; font-size: 0.78rem; color: var(--muted); opacity: 0.9; max-width: 64ch; }
-
-/* ---------- The survey: the drone slot ---------------------------------- */
-.cs-survey { background: var(--navy); padding: clamp(5rem, 10vw, 8.5rem) var(--pad); }
-.cs-survey-inner { max-width: 1280px; margin: 0 auto; }
-.cs-survey-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; margin-bottom: clamp(1.4rem, 2.6vw, 2rem); }
-.cs-survey h2 { color: var(--white); font-size: clamp(2rem, 4.2vw, 3.6rem); }
-.cs-survey-head p { color: var(--lblue); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
-.cs-survey-stage { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid var(--hairline-light); }
-.cs-survey-stage img { width: 100%; height: 100%; object-fit: cover; display: block; }
-html.js:not(.reduced) .cs-survey-stage img { animation: cs-drift 26s ease-in-out infinite alternate; }
-@keyframes cs-drift { from { transform: scale(1) translate(0, 0); } to { transform: scale(1.08) translate(-1.6%, 1.2%); } }
-.cs-survey-tag {
-  position: absolute; left: 0; bottom: 0; display: inline-flex; align-items: center; gap: 0.55rem;
-  padding: 0.6rem 1rem; background: var(--navy); color: var(--white);
-  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
-}
-.cs-survey-tag i { width: 8px; height: 10px; background: var(--lblue); transform: skewX(-18deg); }
-.cs-survey-stage.is-pending { display: grid; place-items: center; background: var(--navy-2); }
-.cs-survey-pending { text-align: center; padding: 2rem; }
-.cs-survey-pending strong { display: block; color: var(--white); font-size: clamp(1.2rem, 2vw, 1.6rem); font-weight: 300; letter-spacing: -0.02em; }
-.cs-survey-pending span { display: block; margin-top: 0.7rem; color: var(--lblue); font-size: 0.8rem; letter-spacing: 0.05em; }
-.cs-survey-note { margin-top: 1rem; font-size: 0.78rem; color: rgba(244, 247, 250, 0.72); max-width: 70ch; }
 
 /* ---------- Specify this build-up ---------------------------------------- */
 .cs-spec { background: var(--white); padding: clamp(5rem, 10vw, 8.5rem) var(--pad); }
@@ -294,7 +217,7 @@ html.js:not(.reduced) .cs-survey-stage img { animation: cs-drift 26s ease-in-out
   .cs-block dl { grid-template-columns: repeat(2, 1fr); }
   .cs-block .cell { border-left: 0; border-top: 1px solid var(--hairline); padding-left: 0; }
   .cs-block .cell:last-child { border-right: 0; }
-  .cs-open-inner, .tx-head, .cs-spec-inner { grid-template-columns: 1fr; }
+  .cs-open-inner, .cs-spec-inner { grid-template-columns: 1fr; }
   .cs-constraint-body { grid-template-columns: 1fr; }
   .cs-constraint-body p { grid-column: 1; }
   .gal-grid { grid-template-columns: repeat(2, 1fr); }
@@ -305,5 +228,4 @@ html.js:not(.reduced) .cs-survey-stage img { animation: cs-drift 26s ease-in-out
   .tabs-inner { gap: 1.15rem; }
   .gal-grid { grid-template-columns: 1fr; }
   .gal-item--wide img { aspect-ratio: 4 / 3; }
-  .tx-stage { aspect-ratio: 4 / 3; }
 }

@@ -189,65 +189,6 @@ if (ccGrid) {
   window.__reg = { apply, cards, tabs };
 }
 
-/* ---------- THE TRANSFORMATION: a bottom-up course wipe --------------------
-   The wipe runs BOTTOM-UP and its divider is a lit course line, so the reveal
-   reads as cladding going on rather than as a slider lying on its side.
-   It runs itself once on scroll-in, then the reader owns it: the range input
-   carries keyboard + ARIA, and on fine pointers the stage itself is draggable.
-   Drag is NOT bound on touch — a vertical drag there would fight page scroll. */
-const txStage = document.getElementById('txStage');
-if (txStage) {
-  const range = document.getElementById('txRange');
-  let dragging = false;
-  let reveal = null;
-
-  const setY = (n) => {
-    const v = Math.min(1, Math.max(0, n));
-    txStage.style.setProperty('--y', `${(v * 100).toFixed(2)}%`);
-    txStage.style.setProperty('--yn', v.toFixed(3));
-    range.style.setProperty('--p', `${(v * 100).toFixed(2)}%`);
-    if (!dragging && document.activeElement !== range) range.value = String(Math.round(v * 1000));
-  };
-
-  setY(reduce ? 1 : 0);
-  if (reduce) range.value = '1000';
-
-  range.addEventListener('input', () => {
-    if (reveal) { reveal.kill(); reveal = null; }
-    setY(Number(range.value) / 1000);
-  });
-
-  if (fine) {
-    const fromEvent = (e) => {
-      const r = txStage.getBoundingClientRect();
-      return (r.bottom - e.clientY) / r.height;
-    };
-    txStage.addEventListener('pointerdown', (e) => {
-      if (reveal) { reveal.kill(); reveal = null; }
-      dragging = true;
-      txStage.setPointerCapture(e.pointerId);
-      setY(fromEvent(e));
-    });
-    txStage.addEventListener('pointermove', (e) => { if (dragging) setY(fromEvent(e)); });
-    const end = () => { dragging = false; };
-    txStage.addEventListener('pointerup', end);
-    txStage.addEventListener('pointercancel', end);
-  }
-
-  if (!reduce) {
-    const o = { v: 0 };
-    ScrollTrigger.create({
-      trigger: txStage, start: 'top 74%', once: true,
-      onEnter: () => {
-        reveal = gsap.to(o, { v: 1, duration: 1.7, ease: 'power2.inOut', onUpdate: () => setY(o.v) });
-      },
-    });
-  }
-
-  /* QA: rAF is suspended while the pane is not compositing, so drive it here */
-  window.__tx = { setY, stage: txStage, range };
-}
-
 /* ---------- PROJECT FILE: conversion events ---------- */
 document.querySelectorAll('[data-spec-request]').forEach((a) => {
   a.addEventListener('click', () => {
