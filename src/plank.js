@@ -15,31 +15,25 @@ import {
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { gsap } from 'gsap';
+import { TG150_PROFILE } from './tg150-profile.js';
 
 /*
- * Rotating system profiles, procedurally extruded.
- * Stand-ins for the client's CAD sections; swap each shape() for the real
- * CAD file (GLTF export) when it arrives.
+ * Rotating system profiles, extruded from their sections.
+ * VulcaLap is the real TG150 section from the client's DWG; VulcaBar and VulcaFrame are
+ * still procedural stand-ins until their CAD files arrive.
  */
 const PROFILES = {
-  /* T&G weatherboard cross-section: tongue on the right edge, groove on the left */
+  /* The real TG150 section from the client's DWG (see tg150-profile.js). Units here are 10 mm,
+     so the 173.8 mm board runs along x and its 14 mm depth along y (flipped so the face, not the
+     grooved back, turns towards the camera); a 300 mm length. */
   vulcalap: {
-    scale: 0.9,
+    scale: 0.78,
     depth: 30,
+    bevel: false,
     shape() {
       const s = new Shape();
-      s.moveTo(0, 0);
-      s.lineTo(15, 0);
-      s.lineTo(15, 0.45);
-      s.lineTo(15.8, 0.45);
-      s.lineTo(15.8, 0.95);
-      s.lineTo(15, 0.95);
-      s.lineTo(15, 1.4);
-      s.lineTo(0, 1.4);
-      s.lineTo(0, 0.95);
-      s.lineTo(0.7, 0.95);
-      s.lineTo(0.7, 0.45);
-      s.lineTo(0, 0.45);
+      const pt = ([t, w]) => [w / 10, (14 - t) / 10];
+      TG150_PROFILE.forEach((p, i) => (i ? s.lineTo(...pt(p)) : s.moveTo(...pt(p))));
       s.closePath();
       return s;
     },
@@ -105,7 +99,7 @@ const buildGeo = (key) => {
     ? p.build()
     : new ExtrudeGeometry(p.shape(), {
         depth: p.depth,
-        bevelEnabled: true,
+        bevelEnabled: p.bevel !== false,
         bevelThickness: 0.05,
         bevelSize: 0.05,
         bevelSegments: 2,
