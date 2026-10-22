@@ -3,10 +3,12 @@ import '@fontsource/open-sans/400.css';
 import '@fontsource/open-sans/600.css';
 import '@fontsource/open-sans/700.css';
 import './styles.css';
+import './hero-showreel.css';
 
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
+import { initShowreel } from './hero-showreel.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -31,181 +33,15 @@ const scrollToPos = (target) => {
   else target.scrollIntoView();
 };
 
-/* ---------- Preloader: bars fix into place, wall lifts, hero enters ---------- */
-const preloader = document.querySelector('.preloader');
-const heroVideo = document.querySelector('.hero-media-el');
-if (reduce && heroVideo) heroVideo.pause();
-
-/* wrap each word so letters never break mid-word, chars still animate individually */
-const spanify = (text) =>
-  text
-    .split(/(\s+)/)
-    .map((tok) =>
-      /^\s+$/.test(tok)
-        ? ' '
-        : `<span class="word">${[...tok].map((ch) => `<span class="ch">${ch}</span>`).join('')}</span>`
-    )
-    .join('');
-
-/* split a masked headline into characters (screen readers get the aria-label) */
-const splitTitle = (title) => {
-  if (!title || title.dataset.split) return;
-  title.dataset.split = '1';
-  title.setAttribute('aria-label', title.textContent.trim().replace(/\s+/g, ' '));
-  title.querySelectorAll('.line-inner').forEach((inner) => {
-    inner.setAttribute('aria-hidden', 'true');
-    inner.innerHTML = [...inner.childNodes]
-      .map((n) => (n.nodeType === 3 ? spanify(n.textContent) : `<strong>${spanify(n.textContent)}</strong>`))
-      .join('');
-  });
-};
-
-const heroTitle = document.querySelector('.hero-title');
-if (!reduce) splitTitle(heroTitle);
-
-/* ---------- Hero headline follows the film (desktop split state) ----------
-   The film alternates anthracite and woodgrain buildings. Each entry is the time (s) a run of
-   shots begins and the phrase that names it; re-measure these if hero.mp4 is ever re-cut
-   (ffmpeg scene detect: select='gt(scene,0.15)'). */
-const HERO_CUTS = [
-  [0, 'alu'],
-  [5.205, 'timber'],
-  [10.21, 'alu'],
-  [15.215, 'timber'],
-];
-const SWAP_LEAD = 0.25; // old words leave just before the cut so the new ones land on it
-const heroSync = window.matchMedia('(min-width: 861px) and (prefers-reduced-motion: no-preference)');
-const phraseChars = (key) => heroTitle.querySelectorAll(`[data-phrase="${key}"] .ch`);
-/* the full-bleed second beat carries the same pair, line by line */
-const revealLines = (key) => document.querySelectorAll(`.reveal-phrase[data-phrase="${key}"] .swap`);
-const otherPhrase = (key) => (key === 'alu' ? 'timber' : 'alu');
-const phraseAt = (t) => HERO_CUTS.reduce((key, [start, k]) => (t >= start ? k : key), HERO_CUTS[0][1]);
-const upcomingPhrase = () => {
-  const dur = heroVideo.duration || 0;
-  return phraseAt(dur ? (heroVideo.currentTime + SWAP_LEAD) % dur : heroVideo.currentTime);
-};
-let heroPhrase = null;
-let heroSwap = null;
-
-const showPhrase = (key) => {
-  if (key === heroPhrase) return;
-  const prev = heroPhrase;
-  const leaving = prev && phraseChars(prev);
-  heroPhrase = key;
-  if (heroSwap) heroSwap.kill();
-  heroSwap = gsap.timeline();
-  if (leaving) {
-    heroSwap.to(leaving, { yPercent: -120, duration: 0.32, stagger: 0.006, ease: 'power2.in', overwrite: 'auto' }, 0);
-    heroSwap.to(revealLines(prev), { yPercent: -120, duration: 0.32, stagger: 0.05, ease: 'power2.in', overwrite: 'auto' }, 0);
-  } else {
-    gsap.set(revealLines(otherPhrase(key)), { yPercent: 120 });
-  }
-  heroSwap.fromTo(
-    revealLines(key),
-    { yPercent: 120 },
-    { yPercent: 0, duration: 0.8, stagger: 0.08, ease: 'power4.out', overwrite: 'auto' },
-    leaving ? SWAP_LEAD : 0
-  );
-  heroSwap.fromTo(
-    phraseChars(key),
-    { yPercent: 120 },
-    { yPercent: 0, duration: 0.8, stagger: 0.014, ease: 'power4.out', overwrite: 'auto' },
-    leaving ? SWAP_LEAD : 0
-  );
-};
-const syncTick = () => showPhrase(upcomingPhrase());
-const startHeroSync = () => {
-  if (heroSync.matches) gsap.ticker.add(syncTick);
-};
-const stopHeroSync = () => {
-  gsap.ticker.remove(syncTick);
-  if (heroSwap) heroSwap.kill();
-  heroSwap = null;
-  heroPhrase = null;
-  gsap.set(heroTitle.querySelectorAll('.ch'), { clearProps: 'transform' });
-  gsap.set('.reveal-title .swap', { clearProps: 'transform' });
-};
-/* crossing the breakpoint after the intro: mobile reads both phrases, desktop resumes the sync */
-heroSync.addEventListener('change', (e) => {
-  if (!heroIntro.progress()) return; // intro not run yet, it picks the mode itself
-  if (e.matches) {
-    gsap.set(heroTitle.querySelectorAll('.ch'), { yPercent: 120 });
-    showPhrase(upcomingPhrase());
-    startHeroSync();
-  } else {
-    stopHeroSync();
-  }
-});
-
-/* desktop: only the phrase matching the shot on screen enters; the other waits below its mask */
-const introChars = () => {
-  if (reduce || !heroSync.matches) return heroTitle.querySelectorAll('.ch');
-  heroPhrase = upcomingPhrase();
-  gsap.set(phraseChars(otherPhrase(heroPhrase)), { yPercent: 120 });
-  gsap.set(revealLines(otherPhrase(heroPhrase)), { yPercent: 120 });
-  return phraseChars(heroPhrase);
-};
-
-if (!reduce) gsap.set(heroTitle.querySelectorAll('.ch'), { yPercent: 120 });
-
-const heroIntro = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
-heroIntro
-  /* the phrase is picked when the intro plays (the film has been running under the preloader) */
-  .add(() => gsap.to(introChars(), { yPercent: 0, duration: 0.85, stagger: 0.014, ease: 'power4.out' }), 0)
-  .add(startHeroSync, 1.3)
-  .add(() => heroTitle.classList.add('filled'), 0.95)
-  .from('.hero-side > *', { y: 26, opacity: 0, duration: 0.8, stagger: 0.12 }, 0.55)
-  .from('.hero-stamp', { scale: 0.6, opacity: 0, duration: 0.9, ease: 'back.out(1.5)' }, 0.85)
-  .fromTo('.hero-media-el', { scale: 1.12 }, { scale: 1.02, duration: 2.2, ease: 'power2.out' }, 0);
-
-const finishPre = () => {
-  preloader.classList.add('done');
-  if (lenis) lenis.start();
-};
-
-if (reduce) {
-  finishPre();
-  gsap.set(['.hero-title .line-inner', '.hero-side > *', '.hero-stamp'], { clearProps: 'all' });
-  heroTitle.classList.add('filled');
-} else {
-  if (lenis) lenis.stop();
-  const pre = gsap.timeline({
-    onComplete: () => {
-      finishPre();
-      heroIntro.play();
-    },
-  });
-  pre
-    .to('.pre-bar', { scaleX: 1, duration: 0.5, stagger: 0.12, ease: 'power3.inOut' })
-    .to('.pre-logo', { opacity: 1, duration: 0.4 }, '-=0.3')
-    .to('.pre-core', { opacity: 0, duration: 0.35, delay: 0.4 })
-    /* still hidden behind the wall: rewind so the opening headline gets the whole first shot */
-    .call(() => {
-      if (!heroVideo) return;
-      heroVideo.currentTime = 0;
-      heroVideo.play().catch(() => {}); // autoplay refused: the poster shows frame 0, which matches
-    })
-    /* the wall strips away plank by plank */
-    .to('.pre-slats span', {
-      xPercent: (i) => (i % 2 ? 102 : -102),
-      duration: 0.75,
-      stagger: 0.07,
-      ease: 'power4.inOut',
-    }, '-=0.1');
-  /* failsafe: never trap the page behind the preloader */
-  setTimeout(() => {
-    if (!preloader.classList.contains('done')) {
-      pre.progress(1);
-    }
-  }, 4500);
-}
+/* ---------- Hero: Alfie's showreel stage (its boot mark + shutters replace the old preloader) ---------- */
+initShowreel(document.querySelector('.sr-stage'));
 
 /* ---------- Nav: solid after hero, hides down / shows up ---------- */
 const nav = document.querySelector('.nav');
 const mm = gsap.matchMedia();
 const navSolid = (on) => nav.classList.toggle('scrolled', on);
-/* desktop+motion: the hero pin drives nav state (see hero timeline below); otherwise at 30px */
-mm.add('(max-width: 860px), (prefers-reduced-motion: reduce)', () => {
+/* solid once the page has moved 30px */
+mm.add('all', () => {
   const st = ScrollTrigger.create({
     start: 30,
     end: 'max',
@@ -282,68 +118,6 @@ if (drops.length) {
     if (e.key === 'Escape') drops.forEach((drop) => setDrop(drop, false));
   });
 }
-
-/* ---------- Hero mouse parallax (desktop, motion allowed) ---------- */
-if (!reduce && fine) {
-  const qx = gsap.quickTo(heroVideo, 'x', { duration: 0.9, ease: 'power3.out' });
-  const qy = gsap.quickTo(heroVideo, 'y', { duration: 0.9, ease: 'power3.out' });
-  document.querySelector('.hero').addEventListener('pointermove', (e) => {
-    const nx = e.clientX / window.innerWidth - 0.5;
-    const ny = e.clientY / window.innerHeight - 0.5;
-    qx(nx * -18);
-    qy(ny * -12);
-  });
-}
-
-/* ---------- Hero: media wedge expands to full bleed, second beat reveals (desktop) ---------- */
-mm.add('(min-width: 861px) and (prefers-reduced-motion: no-preference)', () => {
-  document.body.classList.add('hero-a');
-  /* clip geometry lives in CSS (driven by --clip-p); 0 = split state, 1 = full bleed */
-  gsap.set('.hero-media', { '--clip-p': 0 });
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: '.hero',
-      start: 'top top',
-      end: '+=130%',
-      pin: true,
-      scrub: 0.6,
-      onUpdate: (self) => {
-        document.body.classList.toggle('hero-a', self.progress < 0.45);
-        navSolid(self.progress >= 1);
-      },
-      onLeave: () => navSolid(true),
-      onEnterBack: () => navSolid(false),
-    },
-  });
-  tl.to('.hero-media', { '--clip-p': 1, duration: 0.5, ease: 'power2.inOut' }, 0)
-    .to('.hero-content', { x: -90, opacity: 0, duration: 0.35, ease: 'power1.in' }, 0.02)
-    /* fromTo: explicit start so a mid-page reload can't lock these at the intro's opacity 0 */
-    .fromTo('.hero-stamp', { opacity: 1 }, { opacity: 0, duration: 0.25, ease: 'power1.in' }, 0.02)
-    .to('.hero-scrim', { opacity: 1, duration: 0.35, ease: 'none' }, 0.2)
-    .to('.hero-reveal', { opacity: 1, duration: 0.2, ease: 'none' }, 0.52)
-    .from('.hero-reveal .line-inner', { yPercent: 112, duration: 0.3, stagger: 0.09, ease: 'power2.out' }, 0.55);
-  return () => {
-    document.body.classList.remove('hero-a');
-    if (tl.scrollTrigger) tl.scrollTrigger.kill();
-    tl.kill();
-    gsap.set(['.hero-media', '.hero-content', '.hero-stamp', '.hero-scrim', '.hero-reveal', '.hero-reveal .line-inner'], { clearProps: 'all' });
-  };
-});
-
-/* ---------- Hero exits with depth as the story starts (mobile) ---------- */
-mm.add('(max-width: 860px) and (prefers-reduced-motion: no-preference)', () => {
-  const t = gsap.to('.hero-content', {
-    yPercent: -16,
-    opacity: 0.15,
-    ease: 'none',
-    scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom 30%', scrub: true },
-  });
-  return () => {
-    if (t.scrollTrigger) t.scrollTrigger.kill();
-    t.kill();
-    gsap.set('.hero-content', { clearProps: 'all' });
-  };
-});
 
 /* ---------- Statement: words light up as they are read ---------- */
 const stmt = document.querySelector('[data-words]');

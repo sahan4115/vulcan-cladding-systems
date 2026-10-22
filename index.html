@@ -19,6 +19,10 @@
   <meta name="twitter:description" content="A2-s1,d0 fire-rated aluminium cladding systems with the character of natural timber. Plank, bar and modular rainscreen. Made in Britain." />
   <meta name="twitter:image" content="/assets/img/hero.jpg" />
   <link rel="icon" href="/assets/logo.png" />
+  <!-- Hero showreel type: Anton (display) + IBM Plex Mono (HUD) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@400;500&display=swap" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -148,22 +152,6 @@
     </symbol>
   </svg>
 
-  <!-- Preloader: cladding bars fix into place, then the wall strips away in slats -->
-  <div class="preloader" aria-hidden="true">
-    <div class="pre-slats">
-      <span></span><span></span><span></span><span></span><span></span>
-    </div>
-    <div class="pre-core">
-      <div class="pre-bars">
-        <span class="pre-bar"></span>
-        <span class="pre-bar"></span>
-        <span class="pre-bar"></span>
-        <span class="pre-bar"></span>
-      </div>
-      <svg class="pre-logo" viewBox="0 0 184 61" width="150" height="50" aria-hidden="true"><use href="#vulcan-logo"/></svg>
-    </div>
-  </div>
-
   <header class="nav" id="top">
     <!-- Utility rail: contact + social. Social hrefs are PLACEHOLDERS — swap for the client's real profile URLs. -->
     <div class="nav-utility">
@@ -255,76 +243,62 @@
 
   <main id="main">
 
-    <!-- ============ HERO ============ -->
-    <section class="hero">
-      <div class="hero-media" aria-hidden="true">
-        <!-- MEDIA SLOT: generated drone film placeholder; swap the <source>
-             for the client's real drone footage when it is shot. -->
-        <video class="hero-media-el" autoplay muted loop playsinline poster="/assets/img/hero.jpg">
+    <!-- ============ HERO: Alfie's showreel stage (src/hero-showreel.*) ============ -->
+    <section class="sr-stage" aria-label="Vulcan Cladding Systems">
+      <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <symbol id="sr-logo" viewBox="0 0 184 35">
+          <path d="M0.128821 0.366228L14.7953 34.4824H23.2855L37.4367 0.109375H29.2041L18.9104 24.6055L8.36142 0.109375H0L0.128821 0.366228Z" fill="currentColor"/>
+          <path d="M53.9043 34.9936C68.442 34.9936 68.442 24.8621 68.442 24.8621V0.00927734H60.2094V22.8097C60.2094 22.8097 60.3382 27.8112 54.162 27.8112H53.1338C46.9575 27.8112 47.0864 22.8097 47.0864 22.8097V0.00927734H38.8538V24.8621C38.8538 24.8621 38.8538 34.9936 53.3914 34.9936H53.9067H53.9043Z" fill="currentColor"/>
+          <path d="M71.4 0.030446H79.8903V23.4516C79.8903 23.4516 79.7614 26.9144 84.0078 26.9144H94.1703V34.2251H80.4055C80.4055 34.2251 71.4 34.551 71.4 23.9653V0.0185547V0.030446Z" fill="currentColor"/>
+          <path d="M94.9408 10.7543V23.3234C94.9408 23.3234 95.1984 34.097 107.42 34.097H152.831L138.425 0.0449549H129.806L120.984 23.9632H129.291L134.179 10.2406L141.125 26.5293H108.45C108.45 26.5293 103.305 26.7862 103.305 21.5278V11.268C103.305 11.268 103.305 7.03468 108.708 7.03468H121.96V0.0235506H107.167C107.167 0.0235506 94.9456 -1.01813 94.9456 10.7543H94.9408Z" fill="currentColor"/>
+          <path d="M153.79 34.0901V0.0237995H163.786L175.222 19.9584V0.019043H183.717V34.0259H174.309L162.023 12.9235V34.0901H153.79Z" fill="currentColor"/>
+        </symbol>
+      </svg>
+
+      <div class="sr-film" aria-hidden="true">
+        <video autoplay muted loop playsinline poster="/assets/img/hero.jpg">
           <source src="/assets/video/hero.mp4" type="video/mp4" />
         </video>
-        <div class="hero-scrim"></div>
+        <div class="sr-vignette"></div>
+        <div class="sr-grain"></div>
       </div>
-      <div class="hero-content">
-        <!-- Two phrases. Desktop stacks them in one cell and main.js swaps them on the
-             film's cuts (timber line over woodgrain shots, aluminium line over anthracite);
-             mobile and reduced motion read them in sequence. -->
-        <h1 class="hero-title" aria-label="The warmth of timber. The certainty of aluminium.">
-          <span class="hero-phrase" data-phrase="timber">
-            <span class="line"><span class="line-inner">The warmth</span></span>
-            <span class="line"><span class="line-inner">of <strong>timber.</strong></span></span>
-          </span>
-          <span class="hero-phrase" data-phrase="alu">
-            <span class="line"><span class="line-inner">The certainty</span></span>
-            <span class="line"><span class="line-inner">of <strong>aluminium.</strong></span></span>
-          </span>
-        </h1>
-        <div class="hero-side">
-          <p class="hero-sub">A2 fire-rated aluminium cladding with the character of natural timber &mdash; designed, extruded and finished in Britain, for performance that matters.</p>
-          <div class="hero-ctas">
-            <a class="btn btn-solid" href="#systems" data-magnetic>Explore the range</a>
-            <!-- Placeholder: company overview / warehouse fly-through film pending -->
-            <button type="button" class="link-cta" title="Film in production">
-              Watch the film
-              <svg class="link-arrow" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 11.5 11.5 2.5M4.5 2.5h7v7" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
-            </button>
-          </div>
-          <!-- Credentials cue: specifier-facing authority, built from certs we already assert
-               (certs section + footer). Replaced the consumer Google-reviews strip. -->
-          <div class="hero-proof">
-            <svg class="proof-ico" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 3 5 5.6v5.2c0 4.2 2.8 7.4 7 8.6 4.2-1.2 7-4.4 7-8.6V5.6L12 3Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
-              <path d="m9 11.8 2.1 2.1L15 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            <span class="proof-note"><strong>A2-s1,d0 classified</strong> &middot; CWCT tested</span>
+
+      <div class="sr-shutter top" aria-hidden="true"><span class="sr-seam"></span></div>
+      <div class="sr-shutter bot" aria-hidden="true"><span class="sr-seam"></span></div>
+      <div class="sr-boot" aria-hidden="true"><svg viewBox="0 0 184 35"><use href="#sr-logo"/></svg></div>
+
+      <div class="sr-hud">
+        <div class="sr-mid">
+          <p class="sr-kicker">A2 fire-rated &middot; CWCT tested</p>
+          <h1 class="sr-beats" aria-label="The certainty of aluminium. The warmth of timber.">
+            <span class="sr-beat" data-beat="alu">
+              <span class="sr-bl"><span>The certainty</span></span>
+              <span class="sr-bl"><span>of <em>aluminium.</em></span></span>
+            </span>
+            <span class="sr-beat off" data-beat="timber" aria-hidden="true">
+              <span class="sr-bl"><span>The warmth</span></span>
+              <span class="sr-bl"><span>of <em>timber.</em></span></span>
+            </span>
+          </h1>
+        </div>
+
+        <div class="sr-hud-bot">
+          <div class="sr-ctas">
+            <a class="sr-btn" href="#systems">Explore the range</a>
+            <a class="sr-btn sr-btn-ghost" href="contact.html">Start a conversation</a>
           </div>
         </div>
       </div>
-      <!-- Rotating stamp badge: straddles the media wedge edge (desktop split state only) -->
-      <div class="hero-stamp" aria-hidden="true">
+
+      <div class="sr-stamp" aria-hidden="true">
         <svg viewBox="0 0 120 120">
-          <circle class="stamp-disc" cx="60" cy="60" r="60" />
-          <g class="stamp-rotor">
-            <defs><path id="stamp-arc" d="M60 60m-44 0a44 44 0 1 1 88 0a44 44 0 1 1 -88 0" /></defs>
-            <text class="stamp-text"><textPath href="#stamp-arc" textLength="276" lengthAdjust="spacingAndGlyphs">A2 FIRE RATED &middot; MADE IN BRITAIN &middot; VULCAN &middot;&#160;</textPath></text>
+          <circle cx="60" cy="60" r="58"/>
+          <g class="sr-rotor">
+            <defs><path id="sr-arc" d="M60 60m-45 0a45 45 0 1 1 90 0a45 45 0 1 1 -90 0"/></defs>
+            <text><textPath href="#sr-arc" textLength="282" lengthAdjust="spacingAndGlyphs">A2 FIRE RATED &middot; MADE IN BRITAIN &middot; VULCAN &middot;&#160;</textPath></text>
           </g>
-          <polygon class="stamp-mark" points="63,45 71,45 57,75 49,75" />
+          <polygon class="sr-mark" points="63,45 71,45 57,75 49,75"/>
         </svg>
-      </div>
-      <!-- Second beat: revealed as the media wedge expands to full bleed (desktop scroll) -->
-      <div class="hero-reveal" aria-hidden="true">
-        <!-- same two phrases as the h1, swapped on the same cuts (.swap moves on the film's
-             cuts; .line-inner keeps the scroll entrance) -->
-        <p class="reveal-title">
-          <span class="reveal-phrase" data-phrase="timber">
-            <span class="line"><span class="line-inner"><span class="swap">The warmth</span></span></span>
-            <span class="line"><span class="line-inner"><span class="swap">of <strong>timber.</strong></span></span></span>
-          </span>
-          <span class="reveal-phrase" data-phrase="alu">
-            <span class="line"><span class="line-inner"><span class="swap">The certainty</span></span></span>
-            <span class="line"><span class="line-inner"><span class="swap">of <strong>aluminium.</strong></span></span></span>
-          </span>
-        </p>
       </div>
     </section>
 

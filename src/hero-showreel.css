@@ -1,0 +1,139 @@
+/* ===========================================================================
+   Homepage hero: Alfie's showreel stage (vulcan-showreel.html, "Hero
+   exploration 02"), ported as a drop-in section. Every selector is scoped to
+   .sr-* so nothing leaks into styles.css.
+
+   Removed at Alfie's request (Fathom call, 2026-10-16): the SHOWREEL / REEL 01
+   tag, the timecode + acts readout, the SHOT nn/09 slate, the clickable shot
+   index, and the design-note strip under the fold. The HUD's own logo row is
+   dropped too: the site nav already carries the logo over this stage.
+   =========================================================================== */
+
+/* Layout: one full-viewport cinema stage; HUD pinned to its edges; film is the ground, type is the figure. */
+.sr-stage {
+  --sr-bg: #04080c;
+  --sr-ink: #edf3f7;
+  --sr-ink-dim: rgba(237, 243, 247, 0.62);
+  --sr-steel: #8db9dd;      /* aluminium act accent */
+  --sr-amber: #e0a44c;      /* timber act accent */
+  --sr-accent: var(--sr-steel);
+  --sr-hairline: rgba(237, 243, 247, 0.18);
+  --sr-bar: #010304;
+  --sr-font-display: "Anton", Impact, "Arial Narrow", sans-serif;
+  --sr-font-hud: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --sr-nav-h: 114px;        /* utility rail + nav row: the fixed site nav sits over the stage */
+  color-scheme: dark;
+  position: relative; height: 100svh; min-height: 540px; overflow: hidden;
+  background: var(--sr-bg); color: var(--sr-ink);
+}
+.sr-stage *, .sr-stage *::before, .sr-stage *::after { box-sizing: border-box; }
+
+/* ---- film plane ---- */
+.sr-film { position: absolute; inset: 0; }
+.sr-film video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sr-vignette {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(130% 90% at 50% 42%, transparent 52%, rgba(1, 4, 6, 0.55) 100%),
+    linear-gradient(to top, rgba(1, 4, 6, 0.72) 0%, transparent 34%),
+    linear-gradient(to bottom, rgba(1, 4, 6, 0.55) 0%, transparent 26%);
+}
+.sr-grain {
+  position: absolute; inset: -100px; pointer-events: none; opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.9'/%3E%3C/svg%3E");
+  animation: sr-grain 1.2s steps(4) infinite;
+}
+@keyframes sr-grain {
+  0% { transform: translate(0, 0); } 25% { transform: translate(-32px, 18px); }
+  50% { transform: translate(20px, -28px); } 75% { transform: translate(-14px, -12px); } 100% { transform: translate(0, 0); }
+}
+
+/* ---- letterbox shutters: open like cladding panels sliding apart ---- */
+.sr-shutter { position: absolute; left: 0; right: 0; background: var(--sr-bar); z-index: 30; pointer-events: none; }
+.sr-shutter.top { top: 0; height: 50.5%; animation: sr-shut-top 1.5s cubic-bezier(0.76, 0, 0.2, 1) 0.9s forwards; }
+.sr-shutter.bot { bottom: 0; height: 50.5%; animation: sr-shut-bot 1.5s cubic-bezier(0.76, 0, 0.2, 1) 0.9s forwards; }
+@keyframes sr-shut-top { to { height: 0; } }
+@keyframes sr-shut-bot { to { height: 0; } }
+.sr-shutter .sr-seam { position: absolute; left: 0; right: 0; height: 1px; background: rgba(237, 243, 247, 0.25); }
+.sr-shutter.top .sr-seam { bottom: 0; }
+.sr-shutter.bot .sr-seam { top: 0; }
+
+/* boot mark: visible in the first frame, clears itself on pure CSS */
+.sr-boot {
+  position: absolute; inset: 0; z-index: 31; display: flex; align-items: center; justify-content: center;
+  pointer-events: none; animation: sr-boot-out 0.6s ease 0.9s forwards;
+}
+.sr-boot svg { width: min(190px, 44vw); color: var(--sr-ink); opacity: 0; animation: sr-boot-in 0.5s ease 0.1s forwards; }
+@keyframes sr-boot-in { to { opacity: 1; } }
+@keyframes sr-boot-out { to { opacity: 0; visibility: hidden; } }
+
+/* ---- HUD chrome ---- */
+.sr-hud {
+  position: absolute; inset: 0; z-index: 20; display: flex; flex-direction: column;
+  justify-content: space-between; pointer-events: none;
+  padding: calc(var(--sr-nav-h) + clamp(16px, 3vw, 36px)) clamp(16px, 3.4vw, 44px) clamp(16px, 3vw, 36px);
+}
+.sr-hud a, .sr-hud button { pointer-events: auto; }
+
+/* ---- headline: two beats, swapped by the film ---- */
+.sr-mid { position: relative; margin-block: auto; }
+.sr-beats { position: relative; width: max-content; max-width: 100%; margin: 0; font-weight: 400; }
+.sr-beat {
+  display: block; font-family: var(--sr-font-display); text-transform: uppercase;
+  font-size: clamp(44px, 8.6vw, 124px); line-height: 0.92; letter-spacing: 0.005em; text-wrap: balance;
+  text-shadow: 0 2px 36px rgba(1, 4, 6, 0.45);
+}
+.sr-beat em { font-style: normal; color: var(--sr-accent); transition: color 0.8s; }
+.sr-beat .sr-bl { display: block; overflow: hidden; }
+.sr-beat .sr-bl span { display: block; transform: translateY(0); transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.sr-beat.off { position: absolute; inset: 0; visibility: hidden; }
+.sr-beat.off .sr-bl span { transform: translateY(110%); transition: none; }
+.sr-beat .sr-bl:nth-child(2) span { transition-delay: 0.08s; }
+.sr-kicker {
+  font-family: var(--sr-font-hud); font-size: 12px; letter-spacing: 0.3em; color: var(--sr-accent);
+  margin: 0 0 18px; transition: color 0.8s; text-transform: uppercase;
+}
+.sr-kicker::before {
+  content: ""; display: inline-block; width: 34px; height: 1px; background: currentColor;
+  vertical-align: middle; margin-right: 12px;
+}
+
+/* ---- bottom rail ---- */
+.sr-hud-bot { display: flex; align-items: flex-end; justify-content: flex-end; gap: 24px; flex-wrap: wrap; }
+.sr-ctas { display: flex; gap: 12px; align-items: center; }
+.sr-btn {
+  font-family: var(--sr-font-hud); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+  text-decoration: none; color: var(--sr-bg); background: var(--sr-ink); padding: 14px 22px; white-space: nowrap;
+  transition: transform 0.25s, background 0.25s;
+}
+.sr-btn:hover { transform: translateY(-2px); }
+.sr-btn-ghost { color: var(--sr-ink); background: transparent; border: 1px solid var(--sr-hairline); }
+.sr-btn-ghost:hover { border-color: var(--sr-ink); }
+.sr-btn:focus-visible { outline: 2px solid var(--sr-accent); outline-offset: 3px; }
+
+/* rotating certification stamp */
+.sr-stamp {
+  position: absolute; right: clamp(16px, 3.4vw, 44px); top: 50%; transform: translateY(-50%);
+  width: clamp(84px, 9vw, 118px); z-index: 20; opacity: 0.92; pointer-events: none;
+}
+.sr-stamp svg { display: block; width: 100%; height: auto; }
+.sr-stamp .sr-rotor { animation: sr-spin 26s linear infinite; transform-origin: 50% 50%; }
+@keyframes sr-spin { to { transform: rotate(360deg); } }
+.sr-stamp text { font-family: var(--sr-font-hud); font-size: 10.5px; letter-spacing: 0.26em; fill: var(--sr-ink); }
+.sr-stamp circle { fill: rgba(1, 4, 6, 0.42); stroke: var(--sr-hairline); }
+.sr-stamp .sr-mark { fill: var(--sr-accent); transition: fill 0.8s; }
+
+@media (max-width: 860px) {
+  .sr-stage { --sr-nav-h: 100px; }
+  .sr-stamp { display: none; }
+  .sr-beat { font-size: clamp(40px, 12.5vw, 64px); }
+  .sr-hud { padding-inline: 16px; padding-bottom: 14px; }
+  .sr-hud-bot { gap: 14px; }
+  .sr-ctas { width: 100%; }
+  .sr-btn { flex: 1; text-align: center; padding: 13px 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sr-shutter, .sr-boot { animation-duration: 0.01s; animation-delay: 0s; }
+  .sr-grain, .sr-stamp .sr-rotor { animation: none; }
+  .sr-beat .sr-bl span { transition: none; }
+}
