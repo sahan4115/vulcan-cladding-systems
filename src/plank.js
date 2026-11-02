@@ -16,46 +16,61 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { gsap } from 'gsap';
 import { TG150_PROFILE } from './tg150-profile.js';
+import { TGS125_PROFILE } from './tgs125-profile.js';
+import { VUL400_PROFILE } from './vul400-profile.js';
+import { VUL850_OUTER, VUL850_CAVITY } from './vul850-profile.js';
+
+/* trace a section's points (mm, mapped by pt) into a closed Shape or Path */
+const trace = (Curve, points, pt) => {
+  const c = new Curve();
+  points.forEach((p, i) => (i ? c.lineTo(...pt(p)) : c.moveTo(...pt(p))));
+  c.closePath();
+  return c;
+};
 
 /*
  * Rotating system profiles, extruded from their sections.
- * VulcaLap is the real TG150 section from the client's DWG; VulcaBar and VulcaFrame are
- * still procedural stand-ins until their CAD files arrive.
+ * VulcaLap and VulcaBar are the real sections from the client's DWGs, in units of 10 mm and turned
+ * so the face, not the fixing side, comes towards the camera; all are shown as a 300 mm length at
+ * the same scale, so their sizes compare true. VulcaFrame is still a procedural stand-in until its CAD file arrives.
  */
 const PROFILES = {
-  /* The real TG150 section from the client's DWG (see tg150-profile.js). Units here are 10 mm,
-     so the 173.8 mm board runs along x and its 14 mm depth along y (flipped so the face, not the
-     grooved back, turns towards the camera); a 300 mm length. */
+  /* T&G150 (see tg150-profile.js): the 173.8 mm board runs along x, its 14 mm depth along y. */
   vulcalap: {
     scale: 0.78,
     depth: 30,
     bevel: false,
     shape() {
-      const s = new Shape();
-      const pt = ([t, w]) => [w / 10, (14 - t) / 10];
-      TG150_PROFILE.forEach((p, i) => (i ? s.lineTo(...pt(p)) : s.moveTo(...pt(p))));
-      s.closePath();
-      return s;
+      return trace(Shape, TG150_PROFILE, ([t, w]) => [w / 10, (14 - t) / 10]);
     },
   },
-  /* hollow rectangular bar section — one closed extrusion, nothing hidden */
-  vulcabar: {
-    scale: 1.05,
+  /* TG125 (see tgs125-profile.js): 149.8 x 13.9 mm. */
+  'vulcalap-tg125': {
+    scale: 0.78,
     depth: 30,
+    bevel: false,
     shape() {
-      const s = new Shape();
-      s.moveTo(0, 0);
-      s.lineTo(7, 0);
-      s.lineTo(7, 3);
-      s.lineTo(0, 3);
-      s.closePath();
-      const hole = new Path();
-      hole.moveTo(0.4, 0.4);
-      hole.lineTo(0.4, 2.6);
-      hole.lineTo(6.6, 2.6);
-      hole.lineTo(6.6, 0.4);
-      hole.closePath();
-      s.holes.push(hole);
+      return trace(Shape, TGS125_PROFILE, ([t, w]) => [w / 10, (13.9 - t) / 10]);
+    },
+  },
+  /* 400 Series plank (see vul400-profile.js): a 92 x 20 mm lipped channel, open side away. */
+  'vulcalap-400': {
+    scale: 0.78,
+    depth: 30,
+    bevel: false,
+    shape() {
+      return trace(Shape, VUL400_PROFILE, ([w, d]) => [w / 10, (20 - d) / 10]);
+    },
+  },
+  /* VUL850 bar (see vul850-profile.js): 100 x 21.5 mm, hollow, with its two screw ports. */
+  vulcabar: {
+    scale: 0.78,
+    depth: 30,
+    bevel: false,
+    shape() {
+      const pt = ([d, w]) => [w / 10, d / 10];
+      const s = trace(Shape, VUL850_OUTER, pt);
+      s.holes.push(trace(Path, VUL850_CAVITY, pt));
       return s;
     },
   },
@@ -145,7 +160,7 @@ export function initPlank(canvas, { reduce, profile = 'vulcalap' } = {}) {
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     /* pull back on narrow stages so the full plank stays in frame */
-    camera.position.z = camera.aspect < 1 ? 58 : camera.aspect < 1.6 ? 48 : 40;
+    camera.position.z = camera.aspect < 1 ? 72 : camera.aspect < 1.6 ? 48 : 40;
     camera.lookAt(0, 0, 0);
     camera.updateProjectionMatrix();
   };

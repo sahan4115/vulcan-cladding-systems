@@ -503,7 +503,13 @@ const plankStage = document.querySelector('.plank-stage');
 if (plankStage) {
   let plankApi = null;
   const plankTabs = gsap.utils.toArray('.plank-tab');
-  const activeProfile = () => document.querySelector('.plank-tab.is-active').dataset.profile;
+  const plankVariants = document.querySelector('.plank-variants');
+  const variantBtns = gsap.utils.toArray('.plank-variant');
+  /* VulcaLap comes in several sections; the other systems have one each */
+  const activeProfile = () => {
+    const key = document.querySelector('.plank-tab.is-active').dataset.profile;
+    return key === 'vulcalap' ? document.querySelector('.plank-variant.is-active').dataset.profile : key;
+  };
   const io = new IntersectionObserver(
     (entries) => {
       if (entries.some((e) => e.isIntersecting)) {
@@ -523,7 +529,18 @@ if (plankStage) {
         t.classList.toggle('is-active', t === tab);
         t.setAttribute('aria-pressed', String(t === tab));
       });
-      if (plankApi) plankApi.setProfile(tab.dataset.profile);
+      plankVariants.classList.toggle('is-off', tab.dataset.profile !== 'vulcalap');
+      if (plankApi) plankApi.setProfile(activeProfile());
+    });
+  });
+  variantBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (btn.classList.contains('is-active')) return;
+      variantBtns.forEach((b) => {
+        b.classList.toggle('is-active', b === btn);
+        b.setAttribute('aria-pressed', String(b === btn));
+      });
+      if (plankApi) plankApi.setProfile(activeProfile());
     });
   });
 }
