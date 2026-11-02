@@ -5,11 +5,68 @@ for the original project context, **but note it is stale in places** (it still d
 constellation contact, product-name marquee, factory band, "400 Series" and wedge clip-paths —
 all replaced this session; trust this file and the code over it).
 
-Last session: 2026-10-22. Live URL: https://sahan4115.github.io/vulcan-cladding-systems/
+Last session: 2026-11-02. Live URL: https://sahan4115.github.io/vulcan-cladding-systems/
 
 ---
 
-## 2026-10-22 (latest) — ALFIE'S 16 OCT REVIEW APPLIED (branch `alfie-feedback-2026-10-16`, NOT deployed)
+## 2026-11-02 (latest) — AI IMAGES REPLACED WITH THE CLIENT'S PROJECT PHOTOS
+
+Source: https://drive.google.com/drive/u/0/folders/1DeVslVcu3MDktK_zN0lunqMqcWnUOOzJ ("Project photos", 29 project
+folders; folder names carry project, system and finish). The Drive connector cannot list it; the built-in browser can.
+
+- **New `img/projects/`** holds the case and carousel images. Old `cases/`, `float/`, `case-*.jpg` and the about
+  stand-ins are deleted. `apps/app-*.webp`, `about/ab-hero.webp` and `vulcaframe.jpg` keep their names with new photos.
+- **Kept, verified real by aligning them to the Drive files:** `vulcabar.jpg` is an exact crop of Merle Court `4 IMG_1072.JPG`;
+  `vulcalap.jpg` is an exact, darkened crop of `Titanic - Greggs Soffit.jpg`. Earlier notes calling all
+  rasters generated were wrong. The old "Meridian Works" image was Azure, Plymouth, and "Leamington" was Hornsey Street.
+- **VulcaLap hero is now static** (Sahan's call, 2026-11-02): Vulcan's own `vulcalap-buildup.webp` beside the headline,
+  with the three-line legend under it. The AI frame sequence, `src/buildup.js`, the pin, the callouts and the scroll
+  rail are gone (`facade.js`, the older procedural hero, stays on disk but is not imported). This also settles the
+  open "first fold" question below. The render is only 591x710, so **get a high-res copy from Nick**. Section 02
+  now shows the real Stanley Road close-up, so the render is not repeated.
+- **Possibly AI, unconfirmed:** `finish-scene.jpg` (homepage cutaway) came from a client `hf_...` render, so it may be AI-assisted; confirm.
+- **No delivery or factory photos exist in the folder.** About's racking, cut-end and hiab shots became real plank and
+  bar close-ups and a scaffold-level shot; two captions changed. The hero is Fairmont's finished panel in the workshop.
+
+**Facts had to change with the photos, because real buildings cannot carry invented records:**
+- Merle Court is really VulcaBar 70 x 42 in RAL 1001 (was VulcaLap T&G150 Dark Oak, 18 occupied storeys, EWS1 story).
+  Knights Hill is VulcaLap TG150 in RAL (was TG125 Western Red Cedar, planning story).
+- Both case pages: invented story, area, programme, value and dates removed; replaced with a short description of what
+  the photos show. **This copy is a stopgap for the real project story; ask Vulcan.**
+- Register and carousel: Ashdown, Meridian, Riverside, Harbour View and Elmwood replaced by Oakfield, Azure, Greenwich
+  Peninsula, Winnipeg & Hanover and Underwood Road. "Completed" column dropped (no real dates).
+
+**To confirm with the client:** real project stories and figures; RAL numbers for Azure, Knights Hill and Greenwich
+Peninsula; the exact Leamington Court location (shown as London, from the skyline in its photos); VCS file references
+(still indicative); permission to name Mace or other parties (not named on the site). Trident Point has a strong
+professional shoot but no system in its folder name, so it is unused; if confirmed, it is a great hero candidate.
+
+---
+
+## 2026-11-02 — HOMEPAGE 3D STAGE: REAL SECTIONS FROM THE CLIENT DWGS
+
+The four DWGs (`VULTG150`, `VULTGS125`, `VUL400`, `VUL850`) are **2D sections, not 3D models**;
+`plank.js` extrudes them to a 300 mm length, all at scale 0.78 so their sizes compare true.
+- **VulcaBar tab** = VUL850 (100 x 21.5 mm, hollow, two screw ports). `src/vul850-profile.js`.
+- **VulcaLap tab** gets a section switch (`.plank-variants`, only shown on that tab): T&G150
+  (unchanged; the DWG's 144 vertices sit within 0.0005 mm of `tg150-profile.js`), TG125
+  (`tgs125-profile.js`) and 400 Series (`vul400-profile.js`). 400 Series sits here because the
+  client confirmed it is a VulcaLap sub-variant (2026-07-21) and the DWG is labelled "Plank VUL400".
+- **VulcaFrame is still the procedural framed screen**: none of the four is a VulcaFrame drawing,
+  and the frame was a client correction, so it was not swapped for an extrusion.
+- Portrait stages pull the camera back (z 58 → 72); no profile clips on a phone at any angle.
+
+**Extraction:** none of this needs a CAD install. `@mlightcad/libredwg-web` (GPL, so keep it out of
+this repo) reads the LWPOLYLINEs and their bulges; VULTG150 is a single-face ASM region that
+LibreDWG skips, so its SAB was read from the `AcDsPrototype_1b` section. Drawing quirks to expect:
+VUL400's polyline retraces its first leg, and VUL850's cavity spans two overlapping polylines.
+
+**Open with the client:** vulcalap.html calls 400 Series the option "for wider layouts", but the
+VUL400 plank is 92 mm wide, narrower than TG125 and T&G150. Still needed: a VulcaFrame drawing.
+
+---
+
+## 2026-10-22 — ALFIE'S 16 OCT REVIEW APPLIED (branch `alfie-feedback-2026-10-16`, NOT deployed)
 
 Source: the Fathom recording of the 16 Oct call with Alfie ("Vulcan Inner pages"). All work
 is on the branch; `main` (which auto-deploys to Pages) is untouched.

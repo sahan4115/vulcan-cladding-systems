@@ -44,18 +44,9 @@
     ]
   }
   </script>
-  <!-- No-JS: the hero canvas never paints and the animated furniture is meaningless,
-       so hide both and surface the same static legend the reduced-motion path uses.
-       Mirrors the html.reduced rules in vulcalap.css — keep the two in step. -->
+  <!-- No-JS: hide the install film's custom furniture. -->
   <noscript>
     <style>
-      .phero-canvas, .phero-hint, .phero-rail, .phero-beat, .phero-labels { display: none; }
-      .phero-pin { height: auto; display: flex; flex-direction: column; }
-      .phero-copy { position: relative; padding-top: 150px; padding-bottom: 2rem; width: auto; max-width: 900px; }
-      .phero-legend {
-        display: flex; flex-wrap: wrap; gap: 0.5rem 1.8rem;
-        padding: 1rem var(--gutter) 3rem; font-size: 0.85rem; color: var(--muted);
-      }
       /* the install film keeps its native controls; our custom furniture would
          be dead buttons over them (mirrors the html:not(.js) rules) */
       .iv-play, .iv-bar, .iv-chapters { display: none; }
@@ -246,14 +237,11 @@
 
   <main id="main">
 
-    <!-- ============ HERO — THE SYSTEM EXPERIENCE ============
-         A full VulcaLap rainscreen build-up in WebGL. Scroll opens the system into an
-         exploded view (planks → rails → membrane → insulation → sheathing), one course
-         draws out of the bond like a length leaving the die, the components are named,
-         then the wall closes again. Procedural stand-in for the client CAD (src/facade.js). -->
-    <section class="phero" aria-label="VulcaLap, the system opened">
-      <div class="phero-pin" id="pheroPin">
-        <canvas class="phero-canvas" id="phero-canvas" role="img" aria-label="Animation of the VulcaLap rainscreen build-up being clad course by course, from bare substructure to the finished wall"></canvas>
+    <!-- ============ HERO ============
+         Vulcan's own build-up render beside the headline. It replaces a scroll-scrubbed
+         frame sequence that was AI-generated from this same render. -->
+    <section class="phero" aria-label="VulcaLap">
+      <div class="phero-main">
 
         <div class="phero-copy" id="pheroCopy">
           <h1 class="phero-title">VulcaLap<sup>&reg;</sup></h1>
@@ -271,24 +259,10 @@
             </a>
           </div>
         </div>
-
-        <!-- projected component callouts (positioned from the 3D scene each frame) -->
-        <div class="phero-labels" aria-hidden="true">
-          <div class="plabel flip" data-key="plank" data-a="0.50"><div class="plabel-in"><strong>VulcaLap&reg; plank</strong><span>One extrusion &mdash; no core, no laminate</span></div></div>
-          <div class="plabel" data-key="fix" data-a="0.60"><div class="plabel-in"><strong>Concealed fixing</strong><span>Driven through the tongue, then hidden</span></div></div>
-          <div class="plabel" data-key="rail" data-a="0.54"><div class="plabel-in"><strong>Vertical rails</strong><span>At 600mm centres</span></div></div>
-          <div class="plabel flip" data-key="buildup" data-a="0.57"><div class="plabel-in"><strong>Ventilated build-up</strong><span>Membrane &middot; insulation &middot; sheathing</span></div></div>
-        </div>
-
-        <p class="phero-hint" id="pheroHint">Scroll &mdash; the system opens</p>
-        <div class="phero-rail" aria-hidden="true">
-          <span class="phero-stageword" id="pheroStage">Assembled</span>
-          <span class="phero-rail-track"><span class="phero-rail-fill" id="pheroFill"></span></span>
-        </div>
-
-        <p class="phero-beat" id="pheroBeat" aria-hidden="true">Every layer, <strong>accounted for.</strong></p>
+        <figure class="phero-shot">
+          <img src="/assets/img/vulcalap-buildup.webp" alt="VulcaLap rainscreen build-up: planks fixed over vertical rails and helping-hand brackets, with insulation, membrane and sheathing behind" width="591" height="710" fetchpriority="high" />
+        </figure>
       </div>
-      <!-- reduced-motion / no-JS legend, in place of the animated callouts -->
       <div class="phero-legend">
         <span>VulcaLap&reg; planks &mdash; single extrusions, secret fixed</span>
         <span>Vertical rails at 600mm centres</span>
@@ -305,7 +279,7 @@
     </section>
     <div class="po-split">
       <figure class="po-media" data-clip>
-        <img src="/assets/img/vulcalap.jpg" alt="VulcaLap plank cladding in Western Red Cedar wood-effect finish" data-parallax loading="lazy" />
+        <img src="/assets/img/vulcalap.jpg" alt="VulcaLap wood-effect soffit lining above a shopfront" data-parallax loading="lazy" />
       </figure>
       <div class="po-copy">
         <h2 data-reveal>The plank, <strong>solved.</strong></h2>
@@ -330,11 +304,10 @@
             <li data-reveal><i aria-hidden="true"></i><span><b>Matching trims</b> &mdash; corners, closers and reveals extruded and coated in the same finish.</span></li>
           </ul>
         </div>
-        <!-- Product image in place of the scroll-drawn section (Alfie, 16 Oct: the page was
-             jumping into tech detail; show the product). Vulcan's own build-up render, from
-             their live VulcaLap page; ask Nick for a high-res copy. -->
+        <!-- A real close-up of the courses. The build-up render that used to sit here now
+             leads the page, so it is not shown twice. -->
         <figure class="pd-shot" data-reveal>
-          <img src="/assets/img/vulcalap-buildup.webp" alt="VulcaLap planks fixed over their cladding rails and helping-hand brackets, with insulation behind" width="591" height="710" loading="lazy" />
+          <img src="/assets/img/projects/stanley-road-detail.webp" alt="VulcaLap plank courses and shadow lines in Dark Oak at Stanley Road, Wimbledon" width="1120" height="1284" loading="lazy" />
         </figure>
       </div>
 
