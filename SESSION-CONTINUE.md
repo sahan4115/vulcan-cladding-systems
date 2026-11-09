@@ -9,7 +9,77 @@ Last session: 2026-11-09. Live URL: https://sahan4115.github.io/vulcan-cladding-
 
 ---
 
-## 2026-11-09 (latest) — VULCABAR AND VULCAFRAME PRODUCT PAGES BUILT
+## 2026-11-09 (latest) — IMAGE AUDIT: NO AI IMAGERY LEFT; CASE STUDIES REBUILT FROM VULCAN'S OWN RECORDS
+
+Sahan's brief: every image a real photograph from the client's Drive folder, placed where its content matches the copy;
+every case study a real project with only facts Vulcan has published. Phase 1 report (what was AI, the Drive catalogue,
+the case-study check) is at `C:\IPS\vulcan-image-audit\PHASE1-REPORT.md`.
+
+### What was AI, and what replaced it
+- **Homepage finishes cutaway** `finish-scene.jpg` (Higgsfield render + client cutout) → `projects/oakfield-2.webp`,
+  Oakfield Covered Hall in its three oaks (client photo). Alt and the credentials line changed: "Qualicoat approved ·
+  25-year finish warranty" was NOT on Vulcan's site; now "10-year warranty against fade · 25-year life expectancy to
+  ISO 12944-6", both of which are.
+- **Finish chips** `tile-*.webp` (two client renders upscaled 6.3× with Higgsfield) on the homepage (6) and VulcaLap
+  (15) → Vulcan's own WOOD swatches (`finishes/wood/*.webp`, downloaded from their WOOD page) where the finish exists
+  there; flat RAL colours (hex from our RAL page: 7016 #383e42, 7003 #7a7b6f, 1015 #e6d2b5, 7036 #97959a) for the RAL
+  chips; and the client-render `panel-*.webp` (alpha-keyed, no generation) for Light Oak, Teak, Uncoated and Bronze,
+  which have no swatch on Vulcan's site. ⚠️ `--sw` is consumed as `background-image`, so the value must be a bare
+  `url()` or `linear-gradient()`; `url() center/cover` is invalid and renders nothing.
+- **Deleted** (36 files, all unused): `finish-scene.jpg`, `finish-macro.jpg`, `finish-wood.png`, `apps/app-*.webp`,
+  `finishes/tile-*.webp`, `finishes/fin-*.webp`. `panel-*.webp` stay (the VulcaLap finish picker builds their URLs in JS).
+
+### The Drive folder, read properly
+29 folders; names carry project · system · finish and the client's own notes. Listed with the Drive connector
+(`search_files` with `parentId = '<folder id>'`; pageSize is honoured), thumbnails and full files fetched with plain
+curl because the folder is public: `https://drive.google.com/thumbnail?id=<id>&sz=w1000` and
+`https://drive.google.com/uc?export=download&id=<id>`. Manifest of ids + picks: session scratchpad `drive/manifest.json`,
+`picks.json`, `outmap.json`. **Empty for us:** Bolanachi (Phase 1/2), Greenwich Square, Prospect & Hicks, North Street;
+the client marks the first three "already on website", so Bolanachi and Greenwich Square use Vulcan's published
+photos (`bolanachi-1/2`, `greenwich-square`). **Avoid** `Designer (1).png`/`(2).png` in the Underwood folder: Microsoft
+Designer output, i.e. AI.
+
+51 new photos in `img/projects/` (1920 px long edge, WebP q80, EXIF-rotated): millard-road-* (6), fairmont-* (5),
+brampton-* (3), canada-water-* (3), clapham-road-* (3), islington-gardens-* (3), piccadilly-heights-* (3),
+hornsey-street-* (2), seren-park-* (3), easter-house, grosvenor-waterside-* (2), miles-platting-* (2), oakfield-samples /
+oakfield-detail / oakfield-2, underwood-road-1..4 (the professional dsc set), greenwich-peninsula-2..4, titanic-detail,
+winnipeg-hanover-2, bolanachi-1/2, greenwich-square.
+
+### Facts the file names settled
+- Merle Court **70 × 42 mm** is real: file "Merle Court, VulcaBar 70x42, RAL1001.jpg". Kept.
+- Stanley Road is **VL125 Dark Oak**: file "Stanley Road, VL 125 Dark Oak.jpg". About caption stands.
+- Winnipeg & Hanover **English Oak**: in three file names. Stands.
+- Easter House: file "Easter House-VUL855, Rosewood" (so VUL855 is a VulcaBar profile code too).
+- Fairmont House: "VulcaBar-sheet, Chestnut" and "complete panels" photographed in the workshop = framed bar panels
+  with a backing sheet, built off site. The client's own folder name asks "(VulcaFrame?)". Shown on the VulcaFrame page
+  as "framed panels with backing sheet" — **ask Vulcan whether to call it VulcaFrame.** Same for Brampton.
+- Millard Road: the client's folder says "VulcaLap and VulcaFrame (on VF page)"; Vulcan's gallery caption says
+  "VulcaLap TG125, Rosewood, Millard Road – installed by Rayell"; their VulcaBar page: timber balcony frames replaced
+  quickly, frames assembled off site. All used; nothing else claimed.
+
+### Case studies
+- `cases.html`: invented file numbers (VCS-0xx) removed from every card; 14 cards added (22 total: VulcaLap 9,
+  VulcaBar 9, VulcaFrame 4; counts derive from the cards). New cards carry only system / finish / location from the
+  folder or file names, or Vulcan's captions. Leamington Court finish corrected to Rosewood (Vulcan's caption).
+- `case-knights-hill.html`: now "28 Knights Hill", installer Pooch (Vulcan's caption), file number gone.
+- `case-merle-court.html`: file number gone; 70 × 42 kept (sourced).
+- **New** `case-millard-road.html` (Drive photos + Vulcan captions) and `case-bolanachi.html` (every fact and both
+  photos from Vulcan's VulcaBar page: 139 apartments, Martin Arnold, glue-line fire test, phased over six months;
+  location deliberately not stated because Vulcan does not state it). Generated by `make_cases.py` (scratchpad) from the
+  Merle Court template; chain of "next" links: Merle → Knights Hill → Millard Road → Bolanachi → Merle.
+- VulcaFrame page: overview photo is now the Fairmont workshop panel (proves "built off site"); projects = Greenwich
+  Peninsula feature + Millard Road + Fairmont tiles (`.prj-more`). VulcaBar page: the courtyard-screens card now shows
+  the Bolanachi courtyard it describes. Homepage carousel gained Islington Gardens and Millard Road.
+
+### Still to ask Vulcan
+Titanic Quarter on the homepage/VulcaLap page now or hold (their folder: "ongoing… separate webpage, launch?");
+Fairmont and Brampton as VulcaFrame or not; Trident Point system; Bolanachi location and finish name; finish names
+for Clapham Road, Islington Gardens, Piccadilly Heights, Hornsey Street, Seren Park, Miles Platting (folders say only
+WOOD); Prospect & Hicks and Greenwich Square photos (empty folders).
+
+---
+
+## 2026-11-09 — VULCABAR AND VULCAFRAME PRODUCT PAGES BUILT
 
 `vulcabar.html` + `src/vulcabar.js`, `vulcaframe.html` + `src/vulcaframe.js`. Shared chrome and the two-step enquiry
 dialog live in **`src/product-common.js`** (lifted from vulcalap.js, which deliberately keeps its own copy so the

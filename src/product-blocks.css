@@ -233,3 +233,12 @@ html:not(.js) .prj-shot, html.reduced .prj-shot { clip-path: none; }
   .fhero-stage { height: clamp(340px, 50vh, 460px); }
   .fhero-row .plank-variant { padding: 0.45rem 0.7rem; font-size: 0.74rem; }
 }
+
+/* more VulcaFrame projects under the feature */
+.prj-more { grid-column: 1 / -1; list-style: none; margin: clamp(1.5rem, 3vw, 2.5rem) 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--hairline); border: 1px solid var(--hairline); }
+.prj-more a { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 1rem; align-items: center; background: var(--white); padding: 0.9rem; text-decoration: none; color: var(--ink); }
+.prj-more img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.prj-more strong { display: block; font-weight: 700; letter-spacing: -0.01em; }
+.prj-more em { display: block; font-style: normal; font-size: 0.85rem; color: var(--muted); margin-top: 0.3rem; }
+.prj-more a:hover strong { color: var(--blue); }
+@media (max-width: 760px) { .prj-more { grid-template-columns: 1fr; } .prj-more a { grid-template-columns: 120px minmax(0, 1fr); } }
