@@ -46,7 +46,7 @@ decision). Export with merged vertices and no normals; let the material flat-sha
 
 ### Open with the client
 - **Ray's choice**: which configuration and sheet/no sheet. Comparison sheets for him are in
-  `C:\IPSulcan-3d-review\compare-*.jpg` (neutral grey, not a Vulcan finish). Once he picks, make it the default
+  `C:\IPS\vulcan-3d-review\compare-*.jpg` (neutral grey, not a Vulcan finish). Once he picks, make it the default
   and decide whether the other options stay on the site.
 - Sheet 5 mm vs 2 mm: correct the CAD or thin it ourselves (at stage scale it is invisible either way).
 - Only 600 mm panels supplied; the labels "Square bar / Flat bar / Batten screen" are ours and need Vulcan's names.
