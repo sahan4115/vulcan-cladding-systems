@@ -1,0 +1,52 @@
+[
+ {
+  "glb": "vf-batten-open.glb",
+  "tris": 23970,
+  "kb": 403
+ },
+ {
+  "glb": "vf-batten-sheet.glb",
+  "tris": 23982,
+  "kb": 382
+ },
+ {
+  "glb": "vf-flat-horizontal-open.glb",
+  "tris": 17592,
+  "kb": 322
+ },
+ {
+  "glb": "vf-flat-horizontal-sheet.glb",
+  "tris": 17604,
+  "kb": 323
+ },
+ {
+  "glb": "vf-flat-vertical-open.glb",
+  "tris": 9312,
+  "kb": 171
+ },
+ {
+  "glb": "vf-flat-vertical-sheet.glb",
+  "tris": 9324,
+  "kb": 171
+ },
+ {
+  "glb": "vf-square-horizontal-open.glb",
+  "tris": 19320,
+  "kb": 356
+ },
+ {
+  "glb": "vf-square-horizontal-sheet.glb",
+  "tris": 19332,
+  "kb": 356
+ },
+ {
+  "glb": "vf-square-vertical-open.glb",
+  "tris": 10680,
+  "kb": 188
+ },
+ {
+  "glb": "vf-square-vertical-sheet.glb",
+  "tris": 10692,
+  "kb": 189
+ }
+]

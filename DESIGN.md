@@ -80,21 +80,22 @@ Warm, raking-light photography of the material and the facility — racked extru
 coated planks, cut plank ends, dispatch, offload. A navy scrim sits over hero photography
 so type holds contrast.
 
-**Raster provenance — every shipping image is generated; none are client photographs.**
-Nothing in `public/assets/img/` is a real Vulcan photograph yet. All of it is to be swapped
-for the client's own photography when supplied.
+**Raster provenance.** Building photography now comes from Vulcan's own project archive
+(the "Project photos" Drive folder, shared by the client), so it may be named and captioned
+as a record of that project. State only what the folder or file name supports.
 
-| Set | Generator | Status |
+| Set | Source | Status |
 |---|---|---|
-| `img/about/ab-*.webp` (5) | Higgsfield `soul_location` | Stand-in. `ab-pack.webp` currently unused. |
-| Case tiles and plates | Higgsfield `soul_location` | Stand-in, alongside placeholder scheme records |
-| Case "before" states | `nano_banana_2` image-to-image, seeded from their own "after" | Derived — which is why the course wipe registers |
-| Coat wall tiles (`tile-*.webp`) | Rebuilt in-project | Texture, not photography |
+| `img/projects/*.webp` | Client Drive: one folder per project | Real, named after the project |
+| `img/apps/app-*.webp` | Client Drive: Titanic Quarter, Islington Gardens, Oakfield | Real |
+| `img/about/ab-*.webp` | Client Drive: Fairmont, Underwood Rd, Stanley Rd | Real |
+| `vulcalap.jpg`, `vulcabar.jpg`, `vulcaframe.jpg` | Client photos: Titanic Quarter, Merle Court, Greenwich Peninsula | Real |
+| `hero.mp4`, `hero.jpg`, `tg150-install.*` | Client footage | Real |
+| `vulcalap-buildup.webp` (VulcaLap hero), `finishes/panel-*` | Client renders | Render, not a photograph |
+| `finish-scene.jpg` | Client render, source named `hf_...` | Render, possibly AI-assisted; confirm. No photo shows this cutaway. |
+| `finishes/tile-*` | Rebuilt in-project | Texture, not photography |
 
-Because the imagery is generated, it must never be captioned or presented as a record of a
-specific real project. The same rule governs the scheme records in `cases.html`, which are
-placeholder: they must not be used as factual claims — no coverage map, no project counts,
-no "where we have worked" geography.
+Do not caption a building with a system or finish its Drive folder does not name.
 
 ## Anti-references
 

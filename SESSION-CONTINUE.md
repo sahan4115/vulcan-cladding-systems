@@ -5,11 +5,293 @@ for the original project context, **but note it is stale in places** (it still d
 constellation contact, product-name marquee, factory band, "400 Series" and wedge clip-paths —
 all replaced this session; trust this file and the code over it).
 
-Last session: 2026-10-22. Live URL: https://sahan4115.github.io/vulcan-cladding-systems/
+Last session: 2026-11-09. Live URL: https://sahan4115.github.io/vulcan-cladding-systems/
 
 ---
 
-## 2026-10-22 (latest) — ALFIE'S 16 OCT REVIEW APPLIED (branch `alfie-feedback-2026-10-16`, NOT deployed)
+## 2026-11-09 (latest) — ABOUT PAGE REBUILT: NEW LAYOUT, ONLY VULCAN'S PUBLISHED FACTS
+
+Sahan: "I don't like the whole page... find all the facts and the true facts and redo the about us page." Rebuilt from
+scratch with the product-page toolchain (scratchpad `pages/build_pages.py` + `about.spec.json` + `about.main.html`):
+`about.html`, `src/about.css` (all new `.au-*` classes), `src/about.js` (now just `initEnquiry` from product-common.js;
+the 330-line duplicate chrome is gone).
+
+### Sections, top to bottom
+Navy split hero (Fairmont workshop panel) → four published figures (30+ years · 10–12 weeks · A2-s1,d0 · 4,000 m+
+VulcaBar at Whitechapel, from the Alifit testimonial) → statement + "What we do, and what we don't" (supply only, with
+Vulcan's three principles) → "From your drawings to our van" (their four steps + in-the-delivery vs from-your-installer)
+→ "Delivered to the programme" (their distribution facts) → six sectors (photos only where we have the project: Merle,
+Canada Water, Oakfield, Seren Park; Rail and Education are type tiles) → "Certified, on paper" (ISO 9001/14001, A2,
+CWCT, ISO 12944-6 C4, 10-year fade warranty — what is certified, never how) → five testimonials verbatim from Vulcan →
+"Come and hold a sample" (4 Imperial Way CR0 4RR, Mon–Fri 07:00–16:30, by appointment, tel/fax/email, Maps link) →
+FAQ (Vulcan's own six, answered with 10–12 weeks and the 10-year fade warranty) → contact finale.
+
+### Removed on purpose
+- **The indicative take-off schedule** and all its quantities: illustrative numbers that read as a real job.
+- Every mention of in-house manufacture; Vulcan's site says "relationships with our suppliers and manufacturing
+  facilities", so the page says supply only and nothing about who extrudes.
+- The four earlier testimonials were kept but re-checked; Dot (Skye) added so all five of Vulcan's appear.
+
+### Gotchas met
+- A `*/` inside a CSS header comment (`.po-*/`) closed it early and silently ate the first rule (`.au-hero`).
+- Page sheets must be imported **after** `product-common.js` or vulcalap.css wins (`.phero-shot` multiply blend).
+- product-common's rail ScrollTrigger needs an element with `id="overview"` after the hero; the numbers strip has it.
+- `.au-hero` needs `padding-top: 114px + …` — the header is fixed and `main` has no offset.
+
+### Still to flag to Vulcan
+Site-wide footer tag on other pages, "Every plank designed, extruded and finished in the UK", is not on Vulcan's site
+(About footer now says "Fire-rated aluminium cladding, supplied from Croydon."). Ask before changing it everywhere.
+
+---
+
+## 2026-11-09 — IMAGE AUDIT: NO AI IMAGERY LEFT; CASE STUDIES REBUILT FROM VULCAN'S OWN RECORDS
+
+Sahan's brief: every image a real photograph from the client's Drive folder, placed where its content matches the copy;
+every case study a real project with only facts Vulcan has published. Phase 1 report (what was AI, the Drive catalogue,
+the case-study check) is at `C:\IPS\vulcan-image-audit\PHASE1-REPORT.md`.
+
+### What was AI, and what replaced it
+- **Homepage finishes cutaway** `finish-scene.jpg` (Higgsfield render + client cutout) → `projects/oakfield-2.webp`,
+  Oakfield Covered Hall in its three oaks (client photo). Alt and the credentials line changed: "Qualicoat approved ·
+  25-year finish warranty" was NOT on Vulcan's site; now "10-year warranty against fade · 25-year life expectancy to
+  ISO 12944-6", both of which are.
+- **Finish chips** `tile-*.webp` (two client renders upscaled 6.3× with Higgsfield) on the homepage (6) and VulcaLap
+  (15) → Vulcan's own WOOD swatches (`finishes/wood/*.webp`, downloaded from their WOOD page) where the finish exists
+  there; flat RAL colours (hex from our RAL page: 7016 #383e42, 7003 #7a7b6f, 1015 #e6d2b5, 7036 #97959a) for the RAL
+  chips; and the client-render `panel-*.webp` (alpha-keyed, no generation) for Light Oak, Teak, Uncoated and Bronze,
+  which have no swatch on Vulcan's site. ⚠️ `--sw` is consumed as `background-image`, so the value must be a bare
+  `url()` or `linear-gradient()`; `url() center/cover` is invalid and renders nothing.
+- **Deleted** (36 files, all unused): `finish-scene.jpg`, `finish-macro.jpg`, `finish-wood.png`, `apps/app-*.webp`,
+  `finishes/tile-*.webp`, `finishes/fin-*.webp`. `panel-*.webp` stay (the VulcaLap finish picker builds their URLs in JS).
+
+### The Drive folder, read properly
+29 folders; names carry project · system · finish and the client's own notes. Listed with the Drive connector
+(`search_files` with `parentId = '<folder id>'`; pageSize is honoured), thumbnails and full files fetched with plain
+curl because the folder is public: `https://drive.google.com/thumbnail?id=<id>&sz=w1000` and
+`https://drive.google.com/uc?export=download&id=<id>`. Manifest of ids + picks: session scratchpad `drive/manifest.json`,
+`picks.json`, `outmap.json`. **Empty for us:** Bolanachi (Phase 1/2), Greenwich Square, Prospect & Hicks, North Street;
+the client marks the first three "already on website", so Bolanachi and Greenwich Square use Vulcan's published
+photos (`bolanachi-1/2`, `greenwich-square`). **Avoid** `Designer (1).png`/`(2).png` in the Underwood folder: Microsoft
+Designer output, i.e. AI.
+
+51 new photos in `img/projects/` (1920 px long edge, WebP q80, EXIF-rotated): millard-road-* (6), fairmont-* (5),
+brampton-* (3), canada-water-* (3), clapham-road-* (3), islington-gardens-* (3), piccadilly-heights-* (3),
+hornsey-street-* (2), seren-park-* (3), easter-house, grosvenor-waterside-* (2), miles-platting-* (2), oakfield-samples /
+oakfield-detail / oakfield-2, underwood-road-1..4 (the professional dsc set), greenwich-peninsula-2..4, titanic-detail,
+winnipeg-hanover-2, bolanachi-1/2, greenwich-square.
+
+### Facts the file names settled
+- Merle Court **70 × 42 mm** is real: file "Merle Court, VulcaBar 70x42, RAL1001.jpg". Kept.
+- Stanley Road is **VL125 Dark Oak**: file "Stanley Road, VL 125 Dark Oak.jpg". About caption stands.
+- Winnipeg & Hanover **English Oak**: in three file names. Stands.
+- Easter House: file "Easter House-VUL855, Rosewood" (so VUL855 is a VulcaBar profile code too).
+- Fairmont House: "VulcaBar-sheet, Chestnut" and "complete panels" photographed in the workshop = framed bar panels
+  with a backing sheet, built off site. The client's own folder name asks "(VulcaFrame?)". Shown on the VulcaFrame page
+  as "framed panels with backing sheet" — **ask Vulcan whether to call it VulcaFrame.** Same for Brampton.
+- Millard Road: the client's folder says "VulcaLap and VulcaFrame (on VF page)"; Vulcan's gallery caption says
+  "VulcaLap TG125, Rosewood, Millard Road – installed by Rayell"; their VulcaBar page: timber balcony frames replaced
+  quickly, frames assembled off site. All used; nothing else claimed.
+
+### Case studies
+- `cases.html`: invented file numbers (VCS-0xx) removed from every card; 14 cards added (22 total: VulcaLap 9,
+  VulcaBar 9, VulcaFrame 4; counts derive from the cards). New cards carry only system / finish / location from the
+  folder or file names, or Vulcan's captions. Leamington Court finish corrected to Rosewood (Vulcan's caption).
+- `case-knights-hill.html`: now "28 Knights Hill", installer Pooch (Vulcan's caption), file number gone.
+- `case-merle-court.html`: file number gone; 70 × 42 kept (sourced).
+- **New** `case-millard-road.html` (Drive photos + Vulcan captions) and `case-bolanachi.html` (every fact and both
+  photos from Vulcan's VulcaBar page: 139 apartments, Martin Arnold, glue-line fire test, phased over six months;
+  location deliberately not stated because Vulcan does not state it). Generated by `make_cases.py` (scratchpad) from the
+  Merle Court template; chain of "next" links: Merle → Knights Hill → Millard Road → Bolanachi → Merle.
+- VulcaFrame page: overview photo is now the Fairmont workshop panel (proves "built off site"); projects = Greenwich
+  Peninsula feature + Millard Road + Fairmont tiles (`.prj-more`). VulcaBar page: the courtyard-screens card now shows
+  the Bolanachi courtyard it describes. Homepage carousel gained Islington Gardens and Millard Road.
+
+### Still to ask Vulcan
+Titanic Quarter on the homepage/VulcaLap page now or hold (their folder: "ongoing… separate webpage, launch?");
+Fairmont and Brampton as VulcaFrame or not; Trident Point system; Bolanachi location and finish name; finish names
+for Clapham Road, Islington Gardens, Piccadilly Heights, Hornsey Street, Seren Park, Miles Platting (folders say only
+WOOD); Prospect & Hicks and Greenwich Square photos (empty folders).
+
+---
+
+## 2026-11-09 — VULCABAR AND VULCAFRAME PRODUCT PAGES BUILT
+
+`vulcabar.html` + `src/vulcabar.js`, `vulcaframe.html` + `src/vulcaframe.js`. Shared chrome and the two-step enquiry
+dialog live in **`src/product-common.js`** (lifted from vulcalap.js, which deliberately keeps its own copy so the
+reviewed VulcaLap bundle is untouched); shared new blocks in **`src/product-blocks.css`**. Both pages import
+`vulcalap.css` for `.phero / .po-* / .rec` and the dialog. Every VulcaBar / VulcaFrame link on the site (nav
+dropdown, footer, homepage panels' "View system") now points at the pages; two new Vite inputs.
+
+**Pages are assembled, not hand-copied:** the header, mobile menu, footer and dialog are extracted from
+`vulcalap.html` by `build_pages.py` (session scratchpad; recipe = split vulcalap.html on its section comments,
+swap `aria-current`, the CTA label, the dialog title/sub/options). Edit the shared chrome in vulcalap.html and
+re-run, or edit the three pages by hand — just keep them in step.
+
+### Content rule honoured: every fact is from vulcansystems.co.uk, reworded
+- **VulcaBar** (`/vulcabar-facade-screen-system/`): A2-s1,d0 to BS EN 13501-1; ISO 12944-6 C4, 25-year seafront
+  life; 10-year fade warranty on powder coat; concealed fixings, colour-matched trims, stainless fixings supplied;
+  one-part and two-part bars, bespoke sections matched to timber; wood / RAL / Corten / anodised; 10–12 weeks,
+  supply only from Croydon; four uses (balcony infills — Millard Road Deptford, timber replacement, façade and
+  courtyard screens — Bolanachi, new build); the four-step process; the ten FAQs (also as FAQPage JSON-LD).
+- **VulcaFrame** (`/vulcaframe/`): "Modular, A2 Fire Rated, Built Offsite"; widths 600 / 900 / 1200 + Customise;
+  substrates brick / cladding / steel / concrete; the 17 WOOD finishes (swatches downloaded from their WOOD page
+  into `img/finishes/wood/`, 70 × 350 each). The live page has no body copy at all, so the overview copy is ours and
+  stays at those facts; "assembled off site" is their claim, "Croydon works" is NOT claimed.
+- **Not claimed anywhere:** that VulcaLap's fire certificate covers VulcaFrame (Vulcan only says it covers VulcaBar,
+  on the downloads page); any mechanism of the fire classification; an NBS Source URL (their page says "listed on NBS
+  Source" but `source.thenbs.com/manufacturer/vulcan-cladding-systems-ltd` is a 404 — the NBS button opens a request
+  email until Vulcan supplies the link, then make it open in a new tab per the brief).
+
+### The 3D on the pages
+- **VulcaFrame hero layout (Sahan rejected the first pass, 9 Nov):** now `.fhero`, a full-bleed navy stage the
+  height of the viewport — copy left, the panel standing tall and nearly upright on the right (`initPlank` options
+  `tilt: 0.16, frameHeight: 20`), and the configurator as a control bar along the foot (`.fhero-bar`: label, five
+  chips, sheet switch, readout right). Four layouts were offered (A full-bleed bar, B light with side rail,
+  C model-first horizontal, D scroll-pinned); A was chosen. ⚠️ `product-blocks.css` must be imported from
+  product-common.js AFTER vulcalap.css, or vulcalap's `.phero-*` rules win over the hero overrides.
+- **VulcaBar "Turn it over"**: `plank.js` gained `bar-square` (VUL860, 42 × 42 hollow), `bar-two` (VUL825 sleeve +
+  VUL801 insert, two meshes, `explode(t)` slides the insert along the bar) and reuses `vulcabar` (VUL850 flat).
+  Sections in `src/bar-profiles.js`, sliced from the STEP solids at mid-length (trimesh `section`, shapely simplify
+  0.05 mm). Labels one-part / two-part are OUR reading of the geometry + the live gallery caption "42x42mm 2-part
+  balustrades"; confirm with Vulcan. Dialog preselects "<bar> in WOOD finish".
+- **VulcaFrame hero = the configurator**: same ten GLBs as the homepage tab, five configuration buttons + backing
+  sheet toggle, dataLayer `vulcaframe_configure` events, dialog preselects the configuration. `initPlank` starts at
+  load here (hero), not on intersection.
+
+### Lead flow (the brief: name + number to Pipedrive; booking calendar; talking-head film)
+Hero CTA → sticky rail CTA → evidence-pack request (mailto + `evidence_pack_request` event) → finishes "request a
+sample" → **booking block "Ready to discuss your project?"** → finale. Dialog step 1 fires `<page>_lead` with name /
+phone / email before the long step; `RQ_ENDPOINT` in product-common.js is the Pipedrive hook. **PLACEHOLDERS,
+clearly marked in the markup:** the calendar panel (`.book-cal`, replace with the Calendly-type embed), the
+sales-contact avatar (`.book-avatar` initials → real photo + name), and the film slot (`.talk`, poster is a client
+photo, film not shot). VulcaLap does not have the booking block yet — add it there for consistency.
+
+### Verified
+Desktop 1440: both pages load with no console errors, no missing images, no horizontal overflow; 3D bar stage swaps
+and explodes; configurator swaps and toggles; production build passes (vulcabar 91 KB / vulcaframe 78 KB HTML, page
+scripts 3–4 KB). Mobile 375 checked for layout and overflow. ⚠️ Same hidden-pane caveat as the homepage: IO-gated
+`initPlank` on vulcabar.html does not fire while the pane is hidden; init by hand to test.
+
+### Still open
+- Ray's VulcaFrame configuration + sheet choice; Vulcan's own names for the five configurations and the two bars.
+- Real sales-contact photo/name, calendar embed, film, Pipedrive endpoint, NBS Source URL.
+- Only Greenwich Peninsula has VulcaFrame photos; Vulcan's page shows three unnamed projects — ask for names/photos.
+- vulcalap.js still duplicates the chrome; fold it onto product-common.js in one commit when convenient.
+
+---
+
+## 2026-11-09 — VULCAFRAME TAB NOW SHOWS THE CLIENT'S OWN 3D MODELS
+
+Source: Liviu Sofrone's 4 Nov emails (cc Ray, Alfie, Brentleigh): a zip of ten STEP files = **all five VulcaFrame
+configurations, each with and without a backing sheet**. Second email: the sheet is **2 mm, not the 5 mm in the file
+names**. Liviu asks that **Ray sees two renders of one configuration, with and without the sheet, and confirms which
+goes on the site BEFORE it is built in**. That decision is still open, so the stage carries all ten and a toggle.
+
+### What changed
+- Homepage "One piece of aluminium" stage, VulcaFrame tab (`src/plank.js`, `src/main.js`, `index.html`, `styles.css`):
+  the procedural framed screen (`s400`) is now only the offline fallback. Keys `vf-<config>-<open|sheet>`; configs
+  `square-vertical`, `square-horizontal`, `flat-vertical`, `flat-horizontal`, `batten`. A second `.plank-variants`
+  group (`data-for="vulcaframe"`) holds five descriptive buttons (no profile codes on the homepage) and a
+  `.plank-toggle` for the backing sheet. The option groups now stack in one grid cell (`.plank-options`) so the stage
+  never jumps. Default on the tab: square bar · vertical, open.
+- GLBs in `public/assets/models/vulcaframe/` (170–400 KB each, 2.9 MB for all ten), **loaded on demand**: nothing
+  downloads until the tab is chosen, GLTFLoader is its own chunk. `plank.js` keeps one body in a `holder` group;
+  the swap tween shrinks the holder, waits for the GLB, grows it back, and a newer pick cancels an older load.
+  Frame bodies use a flat-shaded clone of the stage material (the files carry no normals), the sheet a darker clone.
+  Camera sits closer for frame bodies on portrait stages (52 vs 72) because the panel is tall, not long.
+
+### What the models are (measured from the geometry; the client's names, not a spec)
+600 × 2700 mm panel. Frame: VUL802 42 × 42 rail with the VUL804 39 × 40 insert sleeved inside. Infill: VUL860
+42 mm square bars (7 vertical / 20 horizontal), VUL850 100 × 21.5 flat bars (4 vertical / 14 horizontal), or
+VUL825 + VUL801 two-part 42 mm bars (7 vertical, on two 25 × 50 rails behind, no top/bottom rail). Sheet as
+modelled: 5 mm, 610 wide (overhangs the 600 frame by 5 each side). The live site only says 600 / 900 / 1200 mm
+widths; every file is the 600.
+
+### Conversion pipeline (no CAD licence; scripts were in the session scratchpad, recipe here)
+`pip install cadquery trimesh` → `cq.importers.importStep` → per-solid `tessellate(tol, 0.6)` with tol relative
+to each part's size → `trimesh` GLB. Drop solids whose longest side < 30 mm (36 screws/washers/nuts and, in the
+batten file, 13 clips that held 1M of its 1.5M triangles; all hidden behind the bars). **Five of the ten files are
+exported at the wrong scale (three at 10×, the batten-open file at 25.4×)**: normalise so the panel is 2700 tall.
+Orientation baked: longest axis → Y, thinnest → Z, sheet centroid on −Z (the open sibling takes the sheet file's
+decision). Export with merged vertices and no normals; let the material flat-shade.
+
+### Open with the client
+- **Ray's choice**: which configuration and sheet/no sheet. Comparison sheets for him are in
+  `C:\IPS\vulcan-3d-review\compare-*.jpg` (neutral grey, not a Vulcan finish). Once he picks, make it the default
+  and decide whether the other options stay on the site.
+- Sheet 5 mm vs 2 mm: correct the CAD or thin it ourselves (at stage scale it is invisible either way).
+- Only 600 mm panels supplied; the labels "Square bar / Flat bar / Batten screen" are ours and need Vulcan's names.
+- Finish: the stage shows raw aluminium. If Ray wants a wood or RAL finish on the frame, wire the existing swatch
+  logic to `frameMat`.
+
+### Verified
+Dev server (`vulcan-cladding` entry in `C:\IPS\.claude\launch.json`, port 5265, runs this checkout's Vite with the
+root as an argument because launch.json cannot `cd` outside the project). Desktop 1440 and 375 px: all ten GLBs load
+(200), swap, toggle, no console errors, no horizontal overflow. `npm run build` passes; the GLB URLs carry the Pages
+base path. ⚠️ The in-app browser pane is hidden while Claude drives it, so IntersectionObserver and GSAP tweens
+stall there: the lazy `initPlank` never fires and swaps freeze mid-tween. Init it by hand
+(`import('/src/plank.js')`) or verify in a visible window; it is not a site bug.
+
+---
+
+## 2026-11-02 — AI IMAGES REPLACED WITH THE CLIENT'S PROJECT PHOTOS
+
+Source: https://drive.google.com/drive/u/0/folders/1DeVslVcu3MDktK_zN0lunqMqcWnUOOzJ ("Project photos", 29 project
+folders; folder names carry project, system and finish). The Drive connector cannot list it; the built-in browser can.
+
+- **New `img/projects/`** holds the case and carousel images. Old `cases/`, `float/`, `case-*.jpg` and the about
+  stand-ins are deleted. `apps/app-*.webp`, `about/ab-hero.webp` and `vulcaframe.jpg` keep their names with new photos.
+- **Kept, verified real by aligning them to the Drive files:** `vulcabar.jpg` is an exact crop of Merle Court `4 IMG_1072.JPG`;
+  `vulcalap.jpg` is an exact, darkened crop of `Titanic - Greggs Soffit.jpg`. Earlier notes calling all
+  rasters generated were wrong. The old "Meridian Works" image was Azure, Plymouth, and "Leamington" was Hornsey Street.
+- **VulcaLap hero is now static** (Sahan's call, 2026-11-02): Vulcan's own `vulcalap-buildup.webp` beside the headline,
+  with the three-line legend under it. The AI frame sequence, `src/buildup.js`, the pin, the callouts and the scroll
+  rail are gone (`facade.js`, the older procedural hero, stays on disk but is not imported). This also settles the
+  open "first fold" question below. The render is only 591x710, so **get a high-res copy from Nick**. Section 02
+  now shows the real Stanley Road close-up, so the render is not repeated.
+- **Possibly AI, unconfirmed:** `finish-scene.jpg` (homepage cutaway) came from a client `hf_...` render, so it may be AI-assisted; confirm.
+- **No delivery or factory photos exist in the folder.** About's racking, cut-end and hiab shots became real plank and
+  bar close-ups and a scaffold-level shot; two captions changed. The hero is Fairmont's finished panel in the workshop.
+
+**Facts had to change with the photos, because real buildings cannot carry invented records:**
+- Merle Court is really VulcaBar 70 x 42 in RAL 1001 (was VulcaLap T&G150 Dark Oak, 18 occupied storeys, EWS1 story).
+  Knights Hill is VulcaLap TG150 in RAL (was TG125 Western Red Cedar, planning story).
+- Both case pages: invented story, area, programme, value and dates removed; replaced with a short description of what
+  the photos show. **This copy is a stopgap for the real project story; ask Vulcan.**
+- Register and carousel: Ashdown, Meridian, Riverside, Harbour View and Elmwood replaced by Oakfield, Azure, Greenwich
+  Peninsula, Winnipeg & Hanover and Underwood Road. "Completed" column dropped (no real dates).
+
+**To confirm with the client:** real project stories and figures; RAL numbers for Azure, Knights Hill and Greenwich
+Peninsula; the exact Leamington Court location (shown as London, from the skyline in its photos); VCS file references
+(still indicative); permission to name Mace or other parties (not named on the site). Trident Point has a strong
+professional shoot but no system in its folder name, so it is unused; if confirmed, it is a great hero candidate.
+
+---
+
+## 2026-11-02 — HOMEPAGE 3D STAGE: REAL SECTIONS FROM THE CLIENT DWGS
+
+The four DWGs (`VULTG150`, `VULTGS125`, `VUL400`, `VUL850`) are **2D sections, not 3D models**;
+`plank.js` extrudes them to a 300 mm length, all at scale 0.78 so their sizes compare true.
+- **VulcaBar tab** = VUL850 (100 x 21.5 mm, hollow, two screw ports). `src/vul850-profile.js`.
+- **VulcaLap tab** gets a section switch (`.plank-variants`, only shown on that tab): T&G150
+  (unchanged; the DWG's 144 vertices sit within 0.0005 mm of `tg150-profile.js`), TG125
+  (`tgs125-profile.js`) and 400 Series (`vul400-profile.js`). 400 Series sits here because the
+  client confirmed it is a VulcaLap sub-variant (2026-07-21) and the DWG is labelled "Plank VUL400".
+- **VulcaFrame is still the procedural framed screen**: none of the four is a VulcaFrame drawing,
+  and the frame was a client correction, so it was not swapped for an extrusion.
+- Portrait stages pull the camera back (z 58 → 72); no profile clips on a phone at any angle.
+
+**Extraction:** none of this needs a CAD install. `@mlightcad/libredwg-web` (GPL, so keep it out of
+this repo) reads the LWPOLYLINEs and their bulges; VULTG150 is a single-face ASM region that
+LibreDWG skips, so its SAB was read from the `AcDsPrototype_1b` section. Drawing quirks to expect:
+VUL400's polyline retraces its first leg, and VUL850's cavity spans two overlapping polylines.
+
+**Open with the client:** vulcalap.html calls 400 Series the option "for wider layouts", but the
+VUL400 plank is 92 mm wide, narrower than TG125 and T&G150. Still needed: a VulcaFrame drawing.
+
+---
+
+## 2026-10-22 — ALFIE'S 16 OCT REVIEW APPLIED (branch `alfie-feedback-2026-10-16`, NOT deployed)
 
 Source: the Fathom recording of the 16 Oct call with Alfie ("Vulcan Inner pages"). All work
 is on the branch; `main` (which auto-deploys to Pages) is untouched.

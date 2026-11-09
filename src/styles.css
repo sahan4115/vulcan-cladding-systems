@@ -332,6 +332,38 @@ html.js.reduced .statement-text .w { opacity: 1; }
 .plank-tab.is-active { color: var(--ink); }
 .plank-tab.is-active strong { color: var(--blue); }
 .plank-tab.is-active::after { transform: skewX(-24deg) scaleX(1); }
+/* per-system options (VulcaLap sections, VulcaFrame configurations) stacked in one grid cell, so the
+   stage never jumps between systems; the group that is off stays in flow, hidden */
+.plank-options { display: grid; justify-items: center; margin: 0.7rem auto 0; }
+.plank-options > .plank-variants { grid-area: 1 / 1; }
+.plank-variants { display: flex; flex-direction: column; align-items: center; gap: 0.1rem; }
+.plank-variants.is-off { visibility: hidden; }
+.plank-variants[data-for="vulcalap"] { flex-direction: row; justify-content: center; gap: 0.3rem; }
+.plank-variant-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 0.3rem; }
+/* the backing-sheet switch: a small pill in the same voice as the variant buttons */
+.plank-toggle {
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  background: none; border: 0; padding: 0.5rem 0.8rem; cursor: pointer;
+  font-family: var(--font); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.04em; color: var(--muted);
+  transition: color 0.3s var(--ease);
+}
+.plank-toggle i {
+  width: 30px; height: 16px; border: 1.5px solid currentColor; position: relative; flex: none;
+}
+.plank-toggle i::after {
+  content: ''; position: absolute; top: 2px; left: 2px; width: 9px; height: 9px;
+  background: currentColor; transition: transform 0.3s var(--ease);
+}
+.plank-toggle:hover { color: var(--ink); }
+.plank-toggle[aria-pressed="true"] { color: var(--blue); }
+.plank-toggle[aria-pressed="true"] i::after { transform: translateX(14px); }
+.plank-variant {
+  background: none; border: 0; padding: 0.75rem 0.8rem; cursor: pointer;
+  font-family: var(--font); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.04em; color: var(--muted);
+  transition: color 0.3s var(--ease);
+}
+.plank-variant:hover { color: var(--ink); }
+.plank-variant.is-active { color: var(--blue); }
 .plank-stage {
   position: relative; max-width: 1560px; margin: 0 auto; height: clamp(360px, 60vh, 600px);
   background: radial-gradient(58% 42% at 50% 62%, rgba(14, 36, 52, 0.09), transparent 70%);

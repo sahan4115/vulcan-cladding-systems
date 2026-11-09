@@ -39,19 +39,15 @@ body.nav-up .pnav { top: 0; }
 .pnav-cta { padding: 0.5rem 1.05rem; font-size: 0.82rem; }
 @media (max-width: 1024px) { .pnav { display: none; } }
 
-/* ---------- Hero: the system experience ---------- */
-.phero { position: relative; background: var(--paper); }
-.phero-pin { position: relative; height: 100dvh; overflow: hidden; }
-.phero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-html.reduced .phero-pin { height: auto; min-height: 100dvh; }
-
-.phero-copy {
-  position: absolute; inset: 0; z-index: 2; pointer-events: none;
-  display: grid; align-content: center; justify-items: start; gap: 1.9rem;
-  padding: 130px var(--pad) 0 var(--gutter);
-  max-width: none; width: min(56%, 760px);
+/* ---------- Hero ---------- */
+.phero { background: var(--paper); }
+.phero-main {
+  min-height: calc(100dvh - 3.4rem);
+  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: center;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  padding: 130px var(--gutter) clamp(1.5rem, 3vh, 2.5rem);
 }
-.phero-copy > * { pointer-events: auto; }
+.phero-copy { display: grid; justify-items: start; gap: 1.9rem; }
 .phero-title {
   font-size: clamp(3.2rem, 8.2vw, 8.2rem); line-height: 0.98; letter-spacing: -0.05em;
   color: var(--ink);
@@ -69,82 +65,25 @@ html.reduced .phero-pin { height: auto; min-height: 100dvh; }
 .phero-facts i { width: 8px; height: 10px; background: var(--blue); transform: skewX(-18deg); }
 .phero-ctas { display: flex; align-items: center; gap: clamp(1rem, 2vw, 1.8rem); flex-wrap: wrap; }
 .phero-ctas .link-cta { color: var(--ink); }
-
-/* scroll cue + stage readout: the engineered edge of the frame */
-.phero-hint {
-  position: absolute; left: var(--gutter); bottom: clamp(1.6rem, 4vh, 2.8rem); z-index: 2;
-  font-size: 0.78rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--muted); display: flex; align-items: center; gap: 0.7rem; pointer-events: none;
+/* multiply: the render is on white, and this drops it onto the paper background.
+   It sits on the figure because the entrance tween would isolate a blend on the img. */
+.phero-shot { margin: 0; justify-self: center; mix-blend-mode: multiply; }
+.phero-shot img {
+  display: block; width: auto; height: auto; max-width: 100%;
+  max-height: min(calc(100dvh - 210px), 710px);
 }
-.phero-hint::before { content: ''; width: 30px; height: 1px; background: var(--muted); }
-.phero-rail {
-  position: absolute; right: clamp(1.2rem, 2.5vw, 2.4rem); bottom: clamp(1.6rem, 4vh, 2.8rem);
-  z-index: 2; display: grid; justify-items: center; gap: 0.8rem; pointer-events: none;
-}
-.phero-rail-track { width: 2px; height: clamp(90px, 16vh, 150px); background: var(--hairline); position: relative; overflow: hidden; }
-.phero-rail-fill { position: absolute; inset: 0; background: var(--blue); transform: scaleY(0); transform-origin: top center; }
-.phero-stageword {
-  font-size: 0.68rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--muted); writing-mode: vertical-rl;
-}
-
-/* projected component callouts */
-.phero-labels { position: absolute; inset: 0; z-index: 3; pointer-events: none; overflow: hidden; }
-.plabel { position: absolute; left: 0; top: 0; opacity: 0; will-change: transform, opacity; }
-.plabel-in { position: relative; padding-left: 1.6rem; transform: translateY(-50%); }
-.plabel-in::before {
-  content: ''; position: absolute; left: 0; top: 50%; width: 8px; height: 8px; margin-top: -4px;
-  background: var(--blue); transform: skewX(-18deg);
-}
-.plabel-in::after {
-  content: ''; position: absolute; left: 10px; right: calc(100% - 1.45rem); top: 50%;
-  height: 1px; background: var(--ink); opacity: 0.4;
-}
-.plabel strong { display: block; font-size: 0.92rem; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; white-space: nowrap; }
-.plabel span { display: block; font-size: 0.78rem; color: var(--muted); white-space: nowrap; }
-/* halo so the text stays legible when it crosses the timber */
-.plabel strong, .plabel span { text-shadow: 0 0 8px rgba(244, 247, 250, 0.85), 0 0 2px rgba(244, 247, 250, 0.9); }
-/* labels that sit left of their anchor read right-aligned */
-.plabel.flip .plabel-in { padding-left: 0; padding-right: 1.6rem; text-align: right; transform: translate(-100%, -50%); }
-.plabel.flip .plabel-in::before { left: auto; right: 0; }
-.plabel.flip .plabel-in::after { left: calc(100% - 1.45rem); right: 10px; }
-
-/* Out in the margin the canvas-drawn leader line already reaches the box, so the
-   label drops its own long stub and keeps only the terminal mark. On narrow stages
-   `at-edge` is off and the original stub-and-dot returns. */
-.plabel.at-edge .plabel-in { padding-left: 0.95rem; }
-.plabel.at-edge .plabel-in::after { display: none; }
-.plabel.at-edge.flip .plabel-in { padding-left: 0; padding-right: 0.95rem; }
-
-/* the closing line of the experience */
-.phero-beat {
-  position: absolute; left: var(--gutter); bottom: clamp(3.2rem, 9vh, 6rem); z-index: 2;
-  opacity: 0; pointer-events: none;
-  font-size: clamp(1.8rem, 3.4vw, 3rem); font-weight: 300; line-height: 1.15;
-  letter-spacing: -0.04em; color: var(--ink); max-width: 30ch;
-}
-.phero-beat strong { font-weight: 700; }
-
-/* static legend replaces the callouts when motion is off */
-.phero-legend { display: none; }
-html.reduced .phero-legend {
+.phero-legend {
   display: flex; flex-wrap: wrap; gap: 0.5rem 1.8rem;
-  padding: 1rem var(--gutter) 2rem; font-size: 0.85rem; color: var(--muted);
+  padding: 0 var(--gutter) 2rem; font-size: 0.85rem; color: var(--muted);
 }
-html.reduced .phero-hint, html.reduced .phero-rail, html.reduced .phero-beat, html.reduced .phero-labels { display: none; }
-html.reduced .phero-copy { position: relative; padding-top: 150px; padding-bottom: 2rem; width: auto; max-width: 900px; }
-html.reduced .phero-canvas { position: relative; height: 62vh; }
-html.reduced .phero-pin { display: flex; flex-direction: column; }
 
 @media (max-width: 860px) {
-  .phero-copy { width: auto; right: 0; align-content: end; padding: 0 var(--pad) 7rem; gap: 1.3rem; }
+  .phero-main { grid-template-columns: 1fr; min-height: 0; padding: 120px var(--pad) 1.5rem; gap: 2rem; }
+  .phero-copy { gap: 1.3rem; }
   .phero-title { font-size: clamp(3.4rem, 15vw, 5.2rem); }
   .phero-strap { font-size: 1rem; max-width: 34ch; }
-  .phero-hint { left: var(--pad); bottom: 1.4rem; }
-  .phero-rail { display: none; }
-  .plabel strong { font-size: 0.8rem; }
-  .plabel span { display: none; }
-  .phero-beat { left: var(--pad); }
+  .phero-shot img { max-height: none; }
+  .phero-legend { padding: 0 var(--pad) 2rem; }
 }
 
 /* ---------- 01 Overview ---------- */

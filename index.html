@@ -198,8 +198,8 @@
           <div class="nav-drop-menu">
             <!-- Products › Rainscreen Cladding › 3 systems. VulcaLap has its page; the other two anchor to the showcase for now -->
             <a href="vulcalap.html">VulcaLap<sup>&reg;</sup><span>Plank system</span></a>
-            <a href="#systems">VulcaBar<sup>&reg;</sup><span>Bar system</span></a>
-            <a href="#systems">VulcaFrame<sup>&trade;</sup><span>Modular system</span></a>
+            <a href="vulcabar.html">VulcaBar<sup>&reg;</sup><span>Bar system</span></a>
+            <a href="vulcaframe.html">VulcaFrame<sup>&trade;</sup><span>Modular system</span></a>
           </div>
         </div>
         <a href="cases.html">Case Studies</a>
@@ -325,7 +325,7 @@
             <p>Each profile carries the same promise: the look you drew, the standard you specified.</p>
           </div>
           <article class="hpan-panel">
-            <img src="/assets/img/vulcalap.jpg" alt="VulcaLap cladding in Western Red Cedar finish" loading="lazy" />
+            <img src="/assets/img/vulcalap.jpg" alt="VulcaLap wood-effect soffit lining above a shopfront" loading="lazy" />
             <div class="hpan-info">
               <h3>VulcaLap<sup>&reg;</sup><span class="hpan-h3sub">Aluminium plank cladding</span></h3>
               <!-- D1(b): 400 Series is a VulcaLap sub-variant (confirmed by client 2026-07-21) -->
@@ -339,23 +339,23 @@
             </div>
           </article>
           <article class="hpan-panel">
-            <img src="/assets/img/vulcabar.jpg" alt="VulcaBar balustrade screening on a balcony facade" loading="lazy" />
+            <img src="/assets/img/vulcabar.jpg" alt="Vertical VulcaBar bars in RAL 1001 on the corner of Merle Court, London" loading="lazy" />
             <div class="hpan-info">
               <h3>VulcaBar<sup>&reg;</sup><span class="hpan-h3sub">Aluminium bar cladding</span></h3>
               <p class="hpan-desc">Crisp bar profiles that bring rhythm and privacy to balconies, screens and walkways.</p>
               <div class="hpan-ctas">
-                <button type="button" class="btn btn-ghost-light" title="Product page coming next">View system <span class="btn-arrow" aria-hidden="true">&rarr;</span></button>
+                <a class="btn btn-ghost-light" href="vulcabar.html">View system <span class="btn-arrow" aria-hidden="true">&rarr;</span></a>
                 <button type="button" class="btn-nbs" data-nbs="vulcabar">Copy NBS clause</button>
               </div>
             </div>
           </article>
           <article class="hpan-panel">
-            <img src="/assets/img/vulcaframe.jpg" alt="VulcaFrame modular rainscreen panels in a wood-effect finish" loading="lazy" />
+            <img src="/assets/img/vulcaframe.jpg" alt="VulcaFrame screens in a red RAL finish at Greenwich Peninsula" loading="lazy" />
             <div class="hpan-info">
               <h3>VulcaFrame<sup>&trade;</sup><span class="hpan-h3sub">Modular rainscreen cassettes</span></h3>
               <p class="hpan-desc">Modular rainscreen cassettes, built offsite and fitted fast &mdash; over brick, steel or concrete.</p>
               <div class="hpan-ctas">
-                <button type="button" class="btn btn-ghost-light" title="Product page coming next">View system <span class="btn-arrow" aria-hidden="true">&rarr;</span></button>
+                <a class="btn btn-ghost-light" href="vulcaframe.html">View system <span class="btn-arrow" aria-hidden="true">&rarr;</span></a>
                 <button type="button" class="btn-nbs" data-nbs="vulcaframe">Copy NBS clause</button>
               </div>
             </div>
@@ -380,12 +380,31 @@
         <button type="button" class="plank-tab" data-profile="vulcabar" aria-pressed="false">
           <strong>VulcaBar<sup>&reg;</sup></strong><span>Bar system</span>
         </button>
-        <button type="button" class="plank-tab" data-profile="s400" aria-pressed="false">
+        <button type="button" class="plank-tab" data-profile="vulcaframe" aria-pressed="false">
           <strong>VulcaFrame<sup>&trade;</sup></strong><span>Modular system</span>
         </button>
       </div>
+      <div class="plank-options" data-reveal>
+        <div class="plank-variants" data-for="vulcalap" aria-label="VulcaLap profiles">
+          <button type="button" class="plank-variant is-active" data-profile="vulcalap" aria-pressed="true">T&amp;G150</button>
+          <button type="button" class="plank-variant" data-profile="vulcalap-tg125" aria-pressed="false">TG125</button>
+          <button type="button" class="plank-variant" data-profile="vulcalap-400" aria-pressed="false">400 Series</button>
+        </div>
+        <!-- VulcaFrame: the client's five configurations (STEP, Nov 2026), open or with the backing sheet.
+             Labels are descriptive on purpose: no profile codes on the homepage. -->
+        <div class="plank-variants is-off" data-for="vulcaframe" aria-label="VulcaFrame configurations">
+          <div class="plank-variant-row">
+            <button type="button" class="plank-variant is-active" data-profile="square-vertical" aria-pressed="true">Square bar &middot; vertical</button>
+            <button type="button" class="plank-variant" data-profile="square-horizontal" aria-pressed="false">Square bar &middot; horizontal</button>
+            <button type="button" class="plank-variant" data-profile="flat-vertical" aria-pressed="false">Flat bar &middot; vertical</button>
+            <button type="button" class="plank-variant" data-profile="flat-horizontal" aria-pressed="false">Flat bar &middot; horizontal</button>
+            <button type="button" class="plank-variant" data-profile="batten" aria-pressed="false">Batten screen</button>
+          </div>
+          <button type="button" class="plank-toggle" aria-pressed="false"><i aria-hidden="true"></i>Backing sheet</button>
+        </div>
+      </div>
       <div class="plank-stage" data-reveal>
-        <canvas id="plank-canvas" aria-label="Interactive 3D model of a VulcaLap plank profile"></canvas>
+        <canvas id="plank-canvas" aria-label="Interactive 3D model of the selected Vulcan system"></canvas>
         <p class="plank-hint">Drag to turn</p>
       </div>
     </section>
@@ -488,22 +507,22 @@
     <section class="finishes" id="finishes">
       <div class="finish-stage">
         <div class="finish-media">
-          <img id="finish-img" src="/assets/img/finish-scene.jpg" alt="Vulcan cladding system shown in cutaway" loading="lazy" />
+          <img id="finish-img" src="/assets/img/projects/oakfield-2.webp" alt="Oakfield Covered Hall, Jersey, clad in VulcaLap planks in Veneto Oak, English Oak and Dark Oak" style="object-position: 50% 88%" loading="lazy" />
         </div>
         <div class="finish-overlay">
           <p class="eyebrow">Timber-effect &amp; RAL finishes</p>
           <h2>Choose the look.<br /><strong>Keep the certainty.</strong></h2>
           <p>Authentic wood-grain finishes on smooth coated aluminium, or solid colours across the full RAL range.</p>
           <ul class="finish-range" aria-label="A few of the VulcaLap finishes">
-            <li><i style="--sw:url(/assets/img/finishes/tile-cedar.webp)" aria-hidden="true"></i>Western Red Cedar</li>
-            <li><i style="--sw:url(/assets/img/finishes/tile-golden-oak.webp)" aria-hidden="true"></i>Golden Oak</li>
-            <li><i style="--sw:url(/assets/img/finishes/tile-dark-oak.webp)" aria-hidden="true"></i>Dark Oak</li>
-            <li><i style="--sw:url(/assets/img/finishes/tile-anthracite.webp)" aria-hidden="true"></i>Anthracite</li>
-            <li><i style="--sw:url(/assets/img/finishes/tile-ivory.webp)" aria-hidden="true"></i>Light Ivory</li>
-            <li><i style="--sw:url(/assets/img/finishes/tile-bronze.webp)" aria-hidden="true"></i>Bronze</li>
+            <li><i style="--sw:url(/assets/img/finishes/wood/western-red-cedar.webp)" aria-hidden="true"></i>Western Red Cedar</li>
+            <li><i style="--sw:url(/assets/img/finishes/wood/golden-oak.webp)" aria-hidden="true"></i>Golden Oak</li>
+            <li><i style="--sw:url(/assets/img/finishes/wood/dark-oak.webp)" aria-hidden="true"></i>Dark Oak</li>
+            <li><i style="--sw:linear-gradient(#383e42,#383e42)" aria-hidden="true"></i>Anthracite</li>
+            <li><i style="--sw:linear-gradient(#e6d2b5,#e6d2b5)" aria-hidden="true"></i>Light Ivory</li>
+            <li><i style="--sw:url(/assets/img/finishes/panel-bronze.webp)" aria-hidden="true"></i>Bronze</li>
           </ul>
           <a class="finish-more" href="vulcalap.html#finishes">See every finish <span aria-hidden="true">&rarr;</span></a>
-          <p class="finish-creds">Qualicoat approved &middot; 25-year finish warranty</p>
+          <p class="finish-creds">10-year warranty against fade &middot; 25-year life expectancy to ISO 12944-6</p>
         </div>
       </div>
     </section>
@@ -526,28 +545,36 @@
         <div class="projects-viewport">
           <div class="projects-track">
             <article class="pcard">
-              <img src="/assets/img/case-meridian-works.jpg" alt="Meridian Works office building in anodised silver aluminium planks" loading="lazy" />
-              <span class="pcard-caption"><strong>Meridian Works, Reading</strong><em>VulcaLap in Anodised Silver</em></span>
+              <img src="/assets/img/projects/azure-plymouth.webp" alt="Curved VulcaLap planks in a grey RAL finish wrapping the balconies at Azure, Plymouth" loading="lazy" />
+              <span class="pcard-caption"><strong>Azure, Plymouth</strong><em>VulcaLap in a RAL finish</em></span>
             </article>
             <article class="pcard">
-              <img src="/assets/img/cases/mc-podium.webp" alt="Merle Court residential tower entrance reclad in dark oak VulcaLap" loading="lazy" />
-              <span class="pcard-caption"><strong>Merle Court, London</strong><em>VulcaLap in Dark Oak</em></span>
+              <img src="/assets/img/projects/merle-court-1.webp" alt="Merle Court elevation with vertical VulcaBar bars in RAL 1001 between the windows" loading="lazy" />
+              <span class="pcard-caption"><strong>Merle Court, London</strong><em>VulcaBar in RAL 1001</em></span>
             </article>
             <article class="pcard">
-              <img src="/assets/img/case-leamington.jpg" alt="Leamington Court residential development" loading="lazy" />
-              <span class="pcard-caption"><strong>Leamington Court</strong><em>VulcaBar in Western Red Cedar</em></span>
+              <img src="/assets/img/projects/leamington-court.webp" alt="Aerial view of Leamington Court among trees, its upper storeys clad in wood-effect VulcaBar" loading="lazy" />
+              <span class="pcard-caption"><strong>Leamington Court</strong><em>VulcaBar in a wood finish</em></span>
             </article>
             <article class="pcard">
-              <img src="/assets/img/case-riverside-quarter.jpg" alt="Riverside residential scheme" loading="lazy" />
-              <span class="pcard-caption"><strong>Riverside Quarter, London</strong><em>VulcaFrame in Anthracite</em></span>
+              <img src="/assets/img/projects/greenwich-peninsula-tall.webp" alt="A long run of VulcaFrame screens in a red RAL finish at Greenwich Peninsula" loading="lazy" />
+              <span class="pcard-caption"><strong>Greenwich Peninsula</strong><em>VulcaFrame in a RAL finish</em></span>
             </article>
             <article class="pcard">
-              <img src="/assets/img/case-harbour-view.jpg" alt="Harbourside apartment scheme" loading="lazy" />
-              <span class="pcard-caption"><strong>Harbour View, Bristol</strong><em>VulcaLap in Dark Oak</em></span>
+              <img src="/assets/img/projects/underwood-road-tall.webp" alt="VulcaBar bars in a Corten Steel finish screening the balconies at Underwood Road" loading="lazy" />
+              <span class="pcard-caption"><strong>Underwood Road, E1</strong><em>VulcaBar in Corten Steel</em></span>
             </article>
             <article class="pcard">
-              <img src="/assets/img/case-elmwood-court.jpg" alt="Elmwood Court residences" loading="lazy" />
-              <span class="pcard-caption"><strong>Elmwood Court</strong><em>VulcaBar in Dark Oak</em></span>
+              <img src="/assets/img/projects/winnipeg-hanover.webp" alt="Winnipeg House balconies and walls clad in English Oak VulcaLap and VulcaBar" loading="lazy" />
+              <span class="pcard-caption"><strong>Winnipeg &amp; Hanover House</strong><em>VulcaLap and VulcaBar in English Oak</em></span>
+            </article>
+            <article class="pcard">
+              <img src="/assets/img/projects/islington-gardens-1.webp" alt="Wood-finish VulcaLap planks across the upper storeys at Islington Gardens" loading="lazy" />
+              <span class="pcard-caption"><strong>Islington Gardens, W1</strong><em>VulcaLap in a wood finish</em></span>
+            </article>
+            <article class="pcard">
+              <img src="/assets/img/projects/millard-road-frame-1.webp" alt="Wood-finish VulcaFrame balcony screens at Millard Road, Deptford" loading="lazy" />
+              <span class="pcard-caption"><strong>Millard Road, Deptford</strong><em>VulcaFrame balcony screens in Rosewood</em></span>
             </article>
           </div>
         </div>
@@ -637,8 +664,8 @@
         <nav class="footer-col" aria-label="Systems">
           <h3>Systems</h3>
           <a href="vulcalap.html">VulcaLap<sup>&reg;</sup></a>
-          <a href="#systems">VulcaBar<sup>&reg;</sup></a>
-          <a href="#systems">VulcaFrame<sup>&trade;</sup></a>
+          <a href="vulcabar.html">VulcaBar<sup>&reg;</sup></a>
+          <a href="vulcaframe.html">VulcaFrame<sup>&trade;</sup></a>
         </nav>
         <div class="footer-col footer-works">
           <h3>The works</h3>

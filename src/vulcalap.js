@@ -2,9 +2,8 @@
  * VulcaLap product page entry.
  * Shares the homepage's chrome (nav, mobile menu, dropdowns, reveals, magnetic CTAs,
  * contact wall, NBS copy, footer clock) — duplicated deliberately from main.js so the
- * verified homepage bundle stays untouched. Page-specific work: the 3D system hero
- * (src/facade.js), the product rail scrollspy, the scroll-traced section drawing,
- * the finish configurator and the spec ledger.
+ * verified homepage bundle stays untouched. Page-specific work: the product rail
+ * scrollspy, the scroll-traced section drawing, the finish configurator and the spec ledger.
  */
 import '@fontsource/open-sans/300.css';
 import '@fontsource/open-sans/400.css';
@@ -16,10 +15,6 @@ import './vulcalap.css';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
-/* The hero is a scroll-scrubbed frame sequence (buildup.js). facade.js is the
-   procedural 3D build-up it replaced — kept, and kept working: both export the
-   same { apply(p) } contract, so swapping this import back restores it. */
-import { initBuildup } from './buildup.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -113,49 +108,12 @@ if (drops.length) {
   });
 }
 
-/* ---------- HERO: the system experience ---------- */
-const heroCanvas = document.getElementById('phero-canvas');
-const heroPin = document.getElementById('pheroPin');
-if (heroCanvas) {
-  const labels = [...document.querySelectorAll('.plabel')].map((el) => ({
-    el,
-    key: el.dataset.key,
-    a: parseFloat(el.dataset.a),
-  }));
-  const facade = initBuildup(heroCanvas, {
-    reduce,
-    labels,
-    onProgressEls: {
-      copy: document.getElementById('pheroCopy'),
-      beat: document.getElementById('pheroBeat'),
-      hint: document.getElementById('pheroHint'),
-      progress: document.getElementById('pheroFill'),
-      stage: document.getElementById('pheroStage'),
-    },
-  });
-
-  if (!reduce) {
-    /* entrance: the title rises before the scroll takes over */
-    gsap.from('.phero-copy > *', { y: 34, opacity: 0, duration: 0.9, ease: 'power3.out', stagger: 0.1, delay: 0.15 });
-
-    const proxy = { p: 0 };
-    gsap.to(proxy, {
-      p: 1,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: heroPin,
-        start: 'top top',
-        end: '+=340%',
-        pin: true,
-        scrub: 0.55,
-        anticipatePin: 1,
-      },
-      onUpdate: () => facade.apply(proxy.p),
-    });
-  }
+/* ---------- Hero entrance ---------- */
+if (!reduce) {
+  gsap.from('.phero-copy > *, .phero-shot', { y: 34, opacity: 0, duration: 0.9, ease: 'power3.out', stagger: 0.1, delay: 0.15 });
 }
 
-/* ---------- Product rail: show after the experience, spotlight the section in view ---------- */
+/* ---------- Product rail: show after the hero, spotlight the section in view ---------- */
 if (pnav) {
   ScrollTrigger.create({
     trigger: '#overview',
