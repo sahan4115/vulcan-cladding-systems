@@ -9,7 +9,42 @@ Last session: 2026-11-09. Live URL: https://sahan4115.github.io/vulcan-cladding-
 
 ---
 
-## 2026-11-09 (latest) — IMAGE AUDIT: NO AI IMAGERY LEFT; CASE STUDIES REBUILT FROM VULCAN'S OWN RECORDS
+## 2026-11-09 (latest) — ABOUT PAGE REBUILT: NEW LAYOUT, ONLY VULCAN'S PUBLISHED FACTS
+
+Sahan: "I don't like the whole page... find all the facts and the true facts and redo the about us page." Rebuilt from
+scratch with the product-page toolchain (scratchpad `pages/build_pages.py` + `about.spec.json` + `about.main.html`):
+`about.html`, `src/about.css` (all new `.au-*` classes), `src/about.js` (now just `initEnquiry` from product-common.js;
+the 330-line duplicate chrome is gone).
+
+### Sections, top to bottom
+Navy split hero (Fairmont workshop panel) → four published figures (30+ years · 10–12 weeks · A2-s1,d0 · 4,000 m+
+VulcaBar at Whitechapel, from the Alifit testimonial) → statement + "What we do, and what we don't" (supply only, with
+Vulcan's three principles) → "From your drawings to our van" (their four steps + in-the-delivery vs from-your-installer)
+→ "Delivered to the programme" (their distribution facts) → six sectors (photos only where we have the project: Merle,
+Canada Water, Oakfield, Seren Park; Rail and Education are type tiles) → "Certified, on paper" (ISO 9001/14001, A2,
+CWCT, ISO 12944-6 C4, 10-year fade warranty — what is certified, never how) → five testimonials verbatim from Vulcan →
+"Come and hold a sample" (4 Imperial Way CR0 4RR, Mon–Fri 07:00–16:30, by appointment, tel/fax/email, Maps link) →
+FAQ (Vulcan's own six, answered with 10–12 weeks and the 10-year fade warranty) → contact finale.
+
+### Removed on purpose
+- **The indicative take-off schedule** and all its quantities: illustrative numbers that read as a real job.
+- Every mention of in-house manufacture; Vulcan's site says "relationships with our suppliers and manufacturing
+  facilities", so the page says supply only and nothing about who extrudes.
+- The four earlier testimonials were kept but re-checked; Dot (Skye) added so all five of Vulcan's appear.
+
+### Gotchas met
+- A `*/` inside a CSS header comment (`.po-*/`) closed it early and silently ate the first rule (`.au-hero`).
+- Page sheets must be imported **after** `product-common.js` or vulcalap.css wins (`.phero-shot` multiply blend).
+- product-common's rail ScrollTrigger needs an element with `id="overview"` after the hero; the numbers strip has it.
+- `.au-hero` needs `padding-top: 114px + …` — the header is fixed and `main` has no offset.
+
+### Still to flag to Vulcan
+Site-wide footer tag on other pages, "Every plank designed, extruded and finished in the UK", is not on Vulcan's site
+(About footer now says "Fire-rated aluminium cladding, supplied from Croydon."). Ask before changing it everywhere.
+
+---
+
+## 2026-11-09 — IMAGE AUDIT: NO AI IMAGERY LEFT; CASE STUDIES REBUILT FROM VULCAN'S OWN RECORDS
 
 Sahan's brief: every image a real photograph from the client's Drive folder, placed where its content matches the copy;
 every case study a real project with only facts Vulcan has published. Phase 1 report (what was AI, the Drive catalogue,
