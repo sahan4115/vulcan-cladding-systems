@@ -21,6 +21,7 @@ import { TG150_PROFILE } from './tg150-profile.js';
 import { TGS125_PROFILE } from './tgs125-profile.js';
 import { VUL400_PROFILE } from './vul400-profile.js';
 import { VUL850_OUTER, VUL850_CAVITY } from './vul850-profile.js';
+import { VUL860, VUL825, VUL801 } from './bar-profiles.js';
 
 /* trace a section's points (mm, mapped by pt) into a closed Shape or Path */
 const trace = (Curve, points, pt) => {
@@ -76,6 +77,30 @@ const PROFILES = {
       s.holes.push(trace(Path, VUL850_CAVITY, pt));
       return s;
     },
+  },
+  /* VulcaBar bars, sliced from the client's STEP files (bar-profiles.js). The homepage tab keeps
+     `vulcabar` (the 100 x 21.5 flat bar); the VulcaBar page adds the square bars. */
+  'bar-square': {
+    scale: 0.78,
+    depth: 30,
+    bevel: false,
+    shape() {
+      const pt = ([x, y]) => [x / 10, y / 10];
+      const s = trace(Shape, VUL860.outer, pt);
+      VUL860.holes.forEach((h) => s.holes.push(trace(Path, h, pt)));
+      return s;
+    },
+  },
+  /* the two-part bar: VUL825 sleeve with the VUL801 insert inside it. Two meshes, so the page
+     can slide the insert out (`explode`). */
+  'bar-two': {
+    scale: 0.78,
+    depth: 30,
+    bevel: false,
+    parts: [
+      { key: 'sleeve', shape: () => trace(Shape, VUL825.outer, ([x, y]) => [x / 10, y / 10]) },
+      { key: 'insert', shape: () => trace(Shape, VUL801.outer, ([x, y]) => [x / 10, y / 10]), explode: true },
+    ],
   },
   /* VulcaFrame (key kept as `s400`): the modular screen — NOT a single extruded
      profile like the plank/bar, but a prefabricated, offsite-built framed panel:
@@ -208,6 +233,19 @@ export function initPlank(canvas, { reduce, profile = 'vulcalap' } = {}) {
       g.scale.setScalar(FRAME_HEIGHT / size.y);
       return g;
     }
+    if (p.parts) {
+      const g = new Group();
+      p.parts.forEach((part) => {
+        const geo = new ExtrudeGeometry(part.shape(), { depth: p.depth, bevelEnabled: false });
+        geo.center();
+        const m = new Mesh(geo, mat);
+        m.userData.explode = !!part.explode;
+        m.userData.depth = p.depth;
+        g.add(m);
+      });
+      g.scale.setScalar(p.scale);
+      return g;
+    }
     const m = new Mesh(buildGeo(key), mat);
     m.scale.setScalar(p.scale);
     return m;
@@ -308,8 +346,18 @@ export function initPlank(canvas, { reduce, profile = 'vulcalap' } = {}) {
   /* QA hook (harmless, mirrors window.__wall): hold the model at a chosen angle and
      render one still, so headless/preview captures don't depend on where the idle
      turntable happens to be. Only ever invoked manually. */
+  /* slide a two-part bar's insert out of its sleeve: t in 0..1 */
+  const explode = (t) => {
+    if (!body) return;
+    body.traverse((o) => {
+      if (o.isMesh && o.userData.explode) o.position.z = o.userData.depth * 0.75 * t;
+    });
+    if (reduce) renderer.render(scene, camera);
+  };
+
   window.__plank = {
     setProfile,
+    explode,
     body: () => body,
     active: () => active,
     still(ry = 0.3, rx = 0.26) {
@@ -322,7 +370,7 @@ export function initPlank(canvas, { reduce, profile = 'vulcalap' } = {}) {
 
   if (reduce) {
     renderer.render(scene, camera);
-    return { setProfile };
+    return { setProfile, explode };
   }
 
   /* render only while on screen */
@@ -332,9 +380,17 @@ export function initPlank(canvas, { reduce, profile = 'vulcalap' } = {}) {
   });
   io.observe(canvas);
 
+  let phase = 0;
   const tick = () => {
     if (visible) {
-      if (!dragging) targetY += 0.0035; /* idle turntable */
+      /* idle motion: planks turn through; the thin VulcaFrame panel would read edge-on twice a
+         turn, so it swings gently about the front instead */
+      if (!dragging) {
+        if (PROFILES[active].glb) {
+          phase += 0.005;
+          targetY = 0.42 + Math.sin(phase) * 0.5;
+        } else targetY += 0.0035;
+      }
       group.rotation.y += (targetY - group.rotation.y) * 0.08;
       group.rotation.x += (targetX - group.rotation.x) * 0.08;
       renderer.render(scene, camera);
@@ -343,5 +399,5 @@ export function initPlank(canvas, { reduce, profile = 'vulcalap' } = {}) {
   };
   tick();
 
-  return { setProfile };
+  return { setProfile, explode };
 }

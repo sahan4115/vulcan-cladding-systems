@@ -14,6 +14,8 @@ export default defineConfig(({ command }) => ({
       input: {
         main: resolve(__dirname, 'index.html'),
         vulcalap: resolve(__dirname, 'vulcalap.html'),
+        vulcabar: resolve(__dirname, 'vulcabar.html'),
+        vulcaframe: resolve(__dirname, 'vulcaframe.html'),
         cases: resolve(__dirname, 'cases.html'),
         about: resolve(__dirname, 'about.html'),
         contact: resolve(__dirname, 'contact.html'),

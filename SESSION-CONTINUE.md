@@ -9,7 +9,67 @@ Last session: 2026-11-09. Live URL: https://sahan4115.github.io/vulcan-cladding-
 
 ---
 
-## 2026-11-09 (latest) — VULCAFRAME TAB NOW SHOWS THE CLIENT'S OWN 3D MODELS
+## 2026-11-09 (latest) — VULCABAR AND VULCAFRAME PRODUCT PAGES BUILT
+
+`vulcabar.html` + `src/vulcabar.js`, `vulcaframe.html` + `src/vulcaframe.js`. Shared chrome and the two-step enquiry
+dialog live in **`src/product-common.js`** (lifted from vulcalap.js, which deliberately keeps its own copy so the
+reviewed VulcaLap bundle is untouched); shared new blocks in **`src/product-blocks.css`**. Both pages import
+`vulcalap.css` for `.phero / .po-* / .rec` and the dialog. Every VulcaBar / VulcaFrame link on the site (nav
+dropdown, footer, homepage panels' "View system") now points at the pages; two new Vite inputs.
+
+**Pages are assembled, not hand-copied:** the header, mobile menu, footer and dialog are extracted from
+`vulcalap.html` by `build_pages.py` (session scratchpad; recipe = split vulcalap.html on its section comments,
+swap `aria-current`, the CTA label, the dialog title/sub/options). Edit the shared chrome in vulcalap.html and
+re-run, or edit the three pages by hand — just keep them in step.
+
+### Content rule honoured: every fact is from vulcansystems.co.uk, reworded
+- **VulcaBar** (`/vulcabar-facade-screen-system/`): A2-s1,d0 to BS EN 13501-1; ISO 12944-6 C4, 25-year seafront
+  life; 10-year fade warranty on powder coat; concealed fixings, colour-matched trims, stainless fixings supplied;
+  one-part and two-part bars, bespoke sections matched to timber; wood / RAL / Corten / anodised; 10–12 weeks,
+  supply only from Croydon; four uses (balcony infills — Millard Road Deptford, timber replacement, façade and
+  courtyard screens — Bolanachi, new build); the four-step process; the ten FAQs (also as FAQPage JSON-LD).
+- **VulcaFrame** (`/vulcaframe/`): "Modular, A2 Fire Rated, Built Offsite"; widths 600 / 900 / 1200 + Customise;
+  substrates brick / cladding / steel / concrete; the 17 WOOD finishes (swatches downloaded from their WOOD page
+  into `img/finishes/wood/`, 70 × 350 each). The live page has no body copy at all, so the overview copy is ours and
+  stays at those facts; "assembled off site" is their claim, "Croydon works" is NOT claimed.
+- **Not claimed anywhere:** that VulcaLap's fire certificate covers VulcaFrame (Vulcan only says it covers VulcaBar,
+  on the downloads page); any mechanism of the fire classification; an NBS Source URL (their page says "listed on NBS
+  Source" but `source.thenbs.com/manufacturer/vulcan-cladding-systems-ltd` is a 404 — the NBS button opens a request
+  email until Vulcan supplies the link, then make it open in a new tab per the brief).
+
+### The 3D on the pages
+- **VulcaBar "Turn it over"**: `plank.js` gained `bar-square` (VUL860, 42 × 42 hollow), `bar-two` (VUL825 sleeve +
+  VUL801 insert, two meshes, `explode(t)` slides the insert along the bar) and reuses `vulcabar` (VUL850 flat).
+  Sections in `src/bar-profiles.js`, sliced from the STEP solids at mid-length (trimesh `section`, shapely simplify
+  0.05 mm). Labels one-part / two-part are OUR reading of the geometry + the live gallery caption "42x42mm 2-part
+  balustrades"; confirm with Vulcan. Dialog preselects "<bar> in WOOD finish".
+- **VulcaFrame hero = the configurator**: same ten GLBs as the homepage tab, five configuration buttons + backing
+  sheet toggle, dataLayer `vulcaframe_configure` events, dialog preselects the configuration. `initPlank` starts at
+  load here (hero), not on intersection.
+
+### Lead flow (the brief: name + number to Pipedrive; booking calendar; talking-head film)
+Hero CTA → sticky rail CTA → evidence-pack request (mailto + `evidence_pack_request` event) → finishes "request a
+sample" → **booking block "Ready to discuss your project?"** → finale. Dialog step 1 fires `<page>_lead` with name /
+phone / email before the long step; `RQ_ENDPOINT` in product-common.js is the Pipedrive hook. **PLACEHOLDERS,
+clearly marked in the markup:** the calendar panel (`.book-cal`, replace with the Calendly-type embed), the
+sales-contact avatar (`.book-avatar` initials → real photo + name), and the film slot (`.talk`, poster is a client
+photo, film not shot). VulcaLap does not have the booking block yet — add it there for consistency.
+
+### Verified
+Desktop 1440: both pages load with no console errors, no missing images, no horizontal overflow; 3D bar stage swaps
+and explodes; configurator swaps and toggles; production build passes (vulcabar 91 KB / vulcaframe 78 KB HTML, page
+scripts 3–4 KB). Mobile 375 checked for layout and overflow. ⚠️ Same hidden-pane caveat as the homepage: IO-gated
+`initPlank` on vulcabar.html does not fire while the pane is hidden; init by hand to test.
+
+### Still open
+- Ray's VulcaFrame configuration + sheet choice; Vulcan's own names for the five configurations and the two bars.
+- Real sales-contact photo/name, calendar embed, film, Pipedrive endpoint, NBS Source URL.
+- Only Greenwich Peninsula has VulcaFrame photos; Vulcan's page shows three unnamed projects — ask for names/photos.
+- vulcalap.js still duplicates the chrome; fold it onto product-common.js in one commit when convenient.
+
+---
+
+## 2026-11-09 — VULCAFRAME TAB NOW SHOWS THE CLIENT'S OWN 3D MODELS
 
 Source: Liviu Sofrone's 4 Nov emails (cc Ray, Alfie, Brentleigh): a zip of ten STEP files = **all five VulcaFrame
 configurations, each with and without a backing sheet**. Second email: the sheet is **2 mm, not the 5 mm in the file
