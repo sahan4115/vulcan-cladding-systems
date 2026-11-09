@@ -11,6 +11,7 @@ import '@fontsource/open-sans/600.css';
 import '@fontsource/open-sans/700.css';
 import './styles.css';
 import './vulcalap.css';
+import './product-blocks.css'; /* after vulcalap.css so its overrides win */
 
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';

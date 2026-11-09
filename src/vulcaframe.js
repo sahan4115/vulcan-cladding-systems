@@ -3,7 +3,6 @@
  * this file owns the configurator in the hero (the client's GLBs via plank.js), the
  * finish strip and the project reveal.
  */
-import './product-blocks.css';
 import { gsap, reduce, initEnquiry } from './product-common.js';
 
 /* ---------- HERO CONFIGURATOR ---------- */
@@ -21,7 +20,7 @@ let frameApi = null;
 const key = () => `vf-${config}-${sheet ? 'sheet' : 'open'}`;
 if (cfg) {
   const variants = gsap.utils.toArray('.cfg-controls .plank-variant');
-  const toggle = cfg.querySelector('.plank-toggle');
+  const toggle = document.querySelector('.cfg-controls .plank-toggle'); /* the bar sits outside #configure on the hero layout */
   const nameEl = document.getElementById('cfgName');
   const lineEl = document.getElementById('cfgLine');
   const read = () => {
@@ -30,7 +29,8 @@ if (cfg) {
   };
   /* the hero is on screen at load: start the stage straight away (the GLB loads lazily inside) */
   import('./plank.js').then(({ initPlank }) => {
-    frameApi = initPlank(document.getElementById('frameCanvas'), { reduce, profile: key() });
+    /* stands tall and nearly upright: the hero stage is the whole viewport, so let it fill it */
+    frameApi = initPlank(document.getElementById('frameCanvas'), { reduce, profile: key(), tilt: 0.16, frameHeight: 20 });
   });
   variants.forEach((btn) => {
     btn.addEventListener('click', () => {

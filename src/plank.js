@@ -181,7 +181,9 @@ const buildGeo = (key) => {
   return geo;
 };
 
-export function initPlank(canvas, { reduce, profile = 'vulcalap' } = {}) {
+/* options: `tilt` = resting lean of the turntable (radians about X); `frameHeight` = how tall the
+   2.7 m VulcaFrame panel stands in stage units (the planks are ~23 long) */
+export function initPlank(canvas, { reduce, profile = 'vulcalap', tilt = 0.52, frameHeight = FRAME_HEIGHT } = {}) {
   const renderer = new WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.toneMapping = ACESFilmicToneMapping;
@@ -230,7 +232,7 @@ export function initPlank(canvas, { reduce, profile = 'vulcalap' } = {}) {
         if (o.isMesh) o.material = o.name.startsWith('sheet') ? sheetMat : frameMat;
       });
       const size = new Box3().setFromObject(g).getSize(new Vector3());
-      g.scale.setScalar(FRAME_HEIGHT / size.y);
+      g.scale.setScalar(frameHeight / size.y);
       return g;
     }
     if (p.parts) {
@@ -262,7 +264,7 @@ export function initPlank(canvas, { reduce, profile = 'vulcalap' } = {}) {
   };
   const group = new Group();
   group.add(holder);
-  group.rotation.set(0.52, 0.85, 0.06);
+  group.rotation.set(tilt, 0.85, 0.06);
   scene.add(group);
   let token = 0;
   buildBody(active).then((b) => {

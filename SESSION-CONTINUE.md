@@ -38,6 +38,12 @@ re-run, or edit the three pages by hand — just keep them in step.
   email until Vulcan supplies the link, then make it open in a new tab per the brief).
 
 ### The 3D on the pages
+- **VulcaFrame hero layout (Sahan rejected the first pass, 9 Nov):** now `.fhero`, a full-bleed navy stage the
+  height of the viewport — copy left, the panel standing tall and nearly upright on the right (`initPlank` options
+  `tilt: 0.16, frameHeight: 20`), and the configurator as a control bar along the foot (`.fhero-bar`: label, five
+  chips, sheet switch, readout right). Four layouts were offered (A full-bleed bar, B light with side rail,
+  C model-first horizontal, D scroll-pinned); A was chosen. ⚠️ `product-blocks.css` must be imported from
+  product-common.js AFTER vulcalap.css, or vulcalap's `.phero-*` rules win over the hero overrides.
 - **VulcaBar "Turn it over"**: `plank.js` gained `bar-square` (VUL860, 42 × 42 hollow), `bar-two` (VUL825 sleeve +
   VUL801 insert, two meshes, `explode(t)` slides the insert along the bar) and reuses `vulcabar` (VUL850 flat).
   Sections in `src/bar-profiles.js`, sliced from the STEP solids at mid-length (trimesh `section`, shapely simplify

@@ -2,7 +2,6 @@
  * VulcaBar product page entry. Chrome + enquiry dialog come from product-common.js;
  * this file owns the 3D bar stage, the evidence schedule and the finish strip.
  */
-import './product-blocks.css';
 import { gsap, reduce, initEnquiry } from './product-common.js';
 
 /* ---------- 02 THE BAR: the client's sections, live (plank.js) ----------

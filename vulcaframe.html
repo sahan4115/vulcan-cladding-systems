@@ -250,12 +250,13 @@
   <main id="main">
 
     <!-- ============ HERO = THE CONFIGURATOR ============
-         The client's own STEP models (Liviu, 4 Nov 2026): five configurations, open or with the
-         backing sheet, turning live beside the headline. Same stage as the homepage (plank.js).
-         Ray has not yet chosen the configuration or the sheet option; all ten stay until he does. -->
-    <section class="phero phero--stage" aria-label="VulcaFrame">
-      <div class="phero-main">
-        <div class="phero-copy" id="pheroCopy">
+         Full-bleed navy stage. The client's own STEP models (Liviu, 4 Nov 2026) stand large on
+         the right; the five configurations and the backing-sheet switch run as a control bar
+         along the foot of the hero. Ray has not yet chosen the configuration or the sheet
+         option; all ten stay until he does. Same stage as the homepage (plank.js). -->
+    <section class="fhero" aria-label="VulcaFrame">
+      <div class="fhero-grid">
+        <div class="fhero-copy phero-copy" id="pheroCopy">
           <h1 class="phero-title">VulcaFrame<sup>&trade;</sup></h1>
           <p class="phero-strap">Modular aluminium screens, framed and assembled off site &mdash; A2 fire rated, in three standard widths, ready to fix to brick, cladding, steel or concrete.</p>
           <div class="phero-facts" aria-label="Key facts">
@@ -271,30 +272,25 @@
             </a>
           </div>
         </div>
-        <div class="phero-stage" id="configure">
-          <div class="cfg-stage plank-stage">
-            <canvas id="frameCanvas" aria-label="Interactive 3D model of the selected VulcaFrame configuration"></canvas>
-            <p class="plank-hint">Drag to turn</p>
-          </div>
-          <div class="cfg-controls">
-            <div class="plank-variants" aria-label="VulcaFrame configurations">
-              <div class="plank-variant-row">
-                <button type="button" class="plank-variant is-active" data-profile="square-vertical" aria-pressed="true">Square bar &middot; vertical</button>
-                <button type="button" class="plank-variant" data-profile="square-horizontal" aria-pressed="false">Square bar &middot; horizontal</button>
-                <button type="button" class="plank-variant" data-profile="flat-vertical" aria-pressed="false">Flat bar &middot; vertical</button>
-                <button type="button" class="plank-variant" data-profile="flat-horizontal" aria-pressed="false">Flat bar &middot; horizontal</button>
-                <button type="button" class="plank-variant" data-profile="batten" aria-pressed="false">Batten screen</button>
-              </div>
-              <button type="button" class="plank-toggle" aria-pressed="false"><i aria-hidden="true"></i>Backing sheet</button>
-            </div>
-            <p class="cfg-read" aria-live="polite"><strong id="cfgName">Square bar, vertical</strong><span id="cfgLine">Seven 42 mm square bars in a 600 &times; 2700 mm frame. Open, so light and air pass through.</span></p>
-          </div>
+        <div class="fhero-stage phero-stage" id="configure">
+          <canvas id="frameCanvas" aria-label="Interactive 3D model of the selected VulcaFrame configuration"></canvas>
+          <p class="fhero-hint">Drag to turn</p>
         </div>
       </div>
-      <div class="phero-legend">
-        <span>Built from Vulcan&rsquo;s own CAD, at true proportion</span>
-        <span>Shown at 600 mm; 900 and 1200 share the frame</span>
-        <span>Finish shown as raw aluminium</span>
+      <div class="fhero-bar cfg-controls">
+        <div class="fhero-opts plank-variants" aria-label="VulcaFrame configurations">
+          <span class="fhero-label">Configuration</span>
+          <div class="plank-variant-row fhero-row">
+            <button type="button" class="plank-variant is-active" data-profile="square-vertical" aria-pressed="true">Square bar &middot; vertical</button>
+            <button type="button" class="plank-variant" data-profile="square-horizontal" aria-pressed="false">Square bar &middot; horizontal</button>
+            <button type="button" class="plank-variant" data-profile="flat-vertical" aria-pressed="false">Flat bar &middot; vertical</button>
+            <button type="button" class="plank-variant" data-profile="flat-horizontal" aria-pressed="false">Flat bar &middot; horizontal</button>
+            <button type="button" class="plank-variant" data-profile="batten" aria-pressed="false">Batten screen</button>
+          </div>
+          <button type="button" class="plank-toggle" aria-pressed="false"><i aria-hidden="true"></i>Backing sheet</button>
+        </div>
+        <p class="cfg-read fhero-read" aria-live="polite"><strong id="cfgName">Square bar, vertical</strong><span id="cfgLine">Seven 42 mm square bars in a 600 &times; 2700 mm frame. Open, so light and air pass through.</span></p>
+        <p class="fhero-note">Built from Vulcan&rsquo;s own CAD at true proportion &middot; shown at 600 mm; 900 and 1200 share the frame &middot; raw aluminium</p>
       </div>
     </section>
 

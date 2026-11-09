@@ -192,3 +192,44 @@ html:not(.js) .prj-shot, html.reduced .prj-shot { clip-path: none; }
 .prj-facts dd { margin: 0.3rem 0 0; font-weight: 600; letter-spacing: -0.01em; }
 .prj-copy .link-cta { margin-top: 1.8rem; display: inline-flex; }
 @media (max-width: 900px) { .prj-inner { grid-template-columns: 1fr; } .prj-facts { grid-template-columns: 1fr; } }
+
+/* ---------- VulcaFrame hero: full-bleed navy stage with the configurator as a control bar ----------
+   The panel stands tall and nearly upright on the right (plank.js tilt 0.16, frameHeight 25); the
+   copy sits left; the five configurations + sheet switch run along the foot. Replaces .phero--stage. */
+.fhero { background: var(--navy); color: var(--white); min-height: calc(100svh - 112px); display: grid; grid-template-rows: minmax(0, 1fr) auto; }
+.fhero-grid { max-width: 1560px; width: 100%; margin: 0 auto; padding: clamp(2.5rem, 5vw, 4.5rem) var(--pad) 0; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(1.5rem, 4vw, 4rem); align-items: center; }
+.fhero-copy .phero-title { color: var(--white); }
+.fhero-copy .phero-strap { color: rgba(244, 247, 250, 0.82); border-color: rgba(167, 172, 216, 0.35); }
+.fhero-copy .phero-facts { color: var(--white); }
+.fhero-copy .phero-facts i { background: var(--lblue); }
+.fhero-copy .link-cta { color: var(--white); }
+.fhero-stage { position: relative; height: clamp(440px, 68vh, 760px); min-width: 0; background: radial-gradient(55% 48% at 50% 54%, rgba(167, 172, 216, 0.18), transparent 70%); }
+.fhero-stage canvas { width: 100%; height: 100%; display: block; touch-action: pan-y; cursor: grab; }
+.fhero-stage canvas:active { cursor: grabbing; }
+.fhero-hint { position: absolute; bottom: 0.4rem; left: 50%; transform: translateX(-50%); font-size: 0.74rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--lblue); opacity: 0.8; pointer-events: none; }
+/* the bar */
+.fhero-bar { border-top: 1px solid rgba(167, 172, 216, 0.22); background: #06324f; padding: 1rem var(--pad) 1.1rem; display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: clamp(1.5rem, 3vw, 3rem); row-gap: 0.5rem; align-items: center; max-width: none; }
+.fhero-opts.plank-variants { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; }
+.fhero-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--lblue); margin-right: 0.4rem; }
+.fhero-row { gap: 0.35rem; }
+.fhero-row .plank-variant { padding: 0.5rem 0.85rem; border: 1px solid rgba(167, 172, 216, 0.35); color: rgba(244, 247, 250, 0.78); font-size: 0.78rem; letter-spacing: 0.03em; transition: color 0.3s var(--ease), background-color 0.3s var(--ease), border-color 0.3s var(--ease); }
+.fhero-row .plank-variant:hover { color: var(--white); border-color: var(--lblue); }
+.fhero-row .plank-variant.is-active { color: var(--navy); background: var(--lblue); border-color: var(--lblue); }
+.fhero-bar .plank-toggle { color: rgba(244, 247, 250, 0.78); margin-left: 0.4rem; }
+.fhero-bar .plank-toggle:hover { color: var(--white); }
+.fhero-bar .plank-toggle[aria-pressed="true"] { color: var(--lblue); }
+.fhero-read.cfg-read { text-align: right; justify-items: end; margin: 0; }
+.fhero-read strong { color: var(--white); }
+.fhero-read span { color: rgba(244, 247, 250, 0.72); max-width: 44ch; }
+.fhero-note { grid-column: 1 / -1; margin: 0; font-size: 0.74rem; color: rgba(167, 172, 216, 0.75); letter-spacing: 0.02em; }
+@media (max-width: 1100px) {
+  .fhero-grid { grid-template-columns: 1fr; align-items: start; }
+  .fhero-stage { height: clamp(380px, 56vh, 560px); }
+  .fhero-bar { grid-template-columns: 1fr; }
+  .fhero-read.cfg-read { text-align: left; justify-items: start; }
+}
+@media (max-width: 860px) {
+  .fhero { min-height: 0; }
+  .fhero-stage { height: clamp(340px, 50vh, 460px); }
+  .fhero-row .plank-variant { padding: 0.45rem 0.7rem; font-size: 0.74rem; }
+}
