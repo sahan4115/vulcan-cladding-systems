@@ -11,6 +11,8 @@ import {
   Group,
   PMREMGenerator,
   ACESFilmicToneMapping,
+  Box3,
+  Vector3,
 } from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
@@ -32,7 +34,8 @@ const trace = (Curve, points, pt) => {
  * Rotating system profiles, extruded from their sections.
  * VulcaLap and VulcaBar are the real sections from the client's DWGs, in units of 10 mm and turned
  * so the face, not the fixing side, comes towards the camera; all are shown as a 300 mm length at
- * the same scale, so their sizes compare true. VulcaFrame is still a procedural stand-in until its CAD file arrives.
+ * the same scale, so their sizes compare true. VulcaFrame is the client's own STEP assemblies (Liviu, 4 Nov 2026),
+ * baked to GLB; the procedural `s400` screen below is kept only as the offline fallback.
  */
 const PROFILES = {
   /* T&G150 (see tg150-profile.js): the 173.8 mm board runs along x, its 14 mm depth along y. */
@@ -108,6 +111,36 @@ const PROFILES = {
   },
 };
 
+/*
+ * VulcaFrame: five configurations, each open or with the backing sheet, from the client's STEP files.
+ * GLBs are in metres, Y-up, X-wide, bars facing +Z, sheet behind, centred (see SESSION-CONTINUE.md,
+ * 2026-11-09). Nothing downloads until the VulcaFrame tab is chosen. Keys: vf-<config>-<open|sheet>.
+ * ⚠️ Asset URLs built in JS must carry import.meta.env.BASE_URL (GitHub Pages subpath).
+ */
+export const FRAME_CONFIGS = ['square-vertical', 'square-horizontal', 'flat-vertical', 'flat-horizontal', 'batten'];
+export const frameKey = (config, sheet) => `vf-${config}-${sheet ? 'sheet' : 'open'}`;
+FRAME_CONFIGS.forEach((c) =>
+  ['open', 'sheet'].forEach((v) => {
+    PROFILES[`vf-${c}-${v}`] = { glb: `${import.meta.env.BASE_URL}assets/models/vulcaframe/vf-${c}-${v}.glb` };
+  }),
+);
+/* the 2.7 m panel, in stage units: the planks are 300 mm at 0.78 of 10 mm units, so ~23 long;
+   the panel stands a touch shorter than that so it fits the tilt */
+const FRAME_HEIGHT = 19;
+
+let loaderP = null;
+const glbCache = new Map();
+const loadGlb = (url) => {
+  if (!glbCache.has(url)) {
+    loaderP ??= import('three/addons/loaders/GLTFLoader.js').then((m) => new m.GLTFLoader());
+    glbCache.set(
+      url,
+      loaderP.then((loader) => new Promise((res, rej) => loader.load(url, (g) => res(g.scene), undefined, rej))),
+    );
+  }
+  return glbCache.get(url);
+};
+
 const buildGeo = (key) => {
   const p = PROFILES[key];
   const geo = p.build
@@ -146,54 +179,105 @@ export function initPlank(canvas, { reduce, profile = 'vulcalap' } = {}) {
     envMapIntensity: 0.8,
   });
 
+  /* the GLBs ship without normals to stay small; flat shading derives them per face, which is
+     exactly right for extrusions. The backing sheet reads as a separate, duller skin behind the bars. */
+  const frameMat = mat.clone();
+  frameMat.flatShading = true;
+  const sheetMat = frameMat.clone();
+  sheetMat.color.set(0x394149);
+  sheetMat.metalness = 0.55;
+  sheetMat.roughness = 0.7;
+  sheetMat.clearcoat = 0;
+
+  /* build the object for a key: an extruded section, or the client's GLB scaled to the stage */
+  const buildBody = async (key) => {
+    const p = PROFILES[key];
+    if (p.glb) {
+      let src;
+      try {
+        src = await loadGlb(p.glb);
+      } catch (err) {
+        console.warn('[plank] VulcaFrame model unavailable, showing the stand-in', err);
+        return buildBody('s400');
+      }
+      const g = src.clone();
+      g.traverse((o) => {
+        if (o.isMesh) o.material = o.name.startsWith('sheet') ? sheetMat : frameMat;
+      });
+      const size = new Box3().setFromObject(g).getSize(new Vector3());
+      g.scale.setScalar(FRAME_HEIGHT / size.y);
+      return g;
+    }
+    const m = new Mesh(buildGeo(key), mat);
+    m.scale.setScalar(p.scale);
+    return m;
+  };
+
   let active = PROFILES[profile] ? profile : 'vulcalap';
-  const plank = new Mesh(buildGeo(active), mat);
-  plank.scale.setScalar(PROFILES[active].scale);
+  let body = null;
+  const holder = new Group(); /* what the swap tween scales; carries one body at a time */
+  const place = (b) => {
+    if (body) holder.remove(body);
+    body = b;
+    holder.add(b);
+    resize(); /* camera distance depends on the body type */
+  };
   const group = new Group();
-  group.add(plank);
+  group.add(holder);
   group.rotation.set(0.52, 0.85, 0.06);
   scene.add(group);
+  let token = 0;
+  buildBody(active).then((b) => {
+    if (token) return; /* a swap already superseded the first build */
+    place(b);
+    if (reduce) renderer.render(scene, camera);
+  });
 
   /* sizing */
-  const resize = () => {
+  function resize() {
     const { clientWidth: w, clientHeight: h } = canvas.parentElement;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
-    /* pull back on narrow stages so the full plank stays in frame */
-    camera.position.z = camera.aspect < 1 ? 72 : camera.aspect < 1.6 ? 48 : 40;
+    /* pull back on narrow stages so the full plank stays in frame; the VulcaFrame panel is tall and
+       narrow rather than long, so it can sit closer on a portrait stage */
+    const frame = !!PROFILES[active].glb;
+    camera.position.z = camera.aspect < 1 ? (frame ? 52 : 72) : camera.aspect < 1.6 ? (frame ? 44 : 48) : 40;
     camera.lookAt(0, 0, 0);
     camera.updateProjectionMatrix();
-  };
+  }
   resize();
   const ro = new ResizeObserver(resize);
   ro.observe(canvas.parentElement);
 
-  /* profile swap: spin the old section out, extrude the next one in */
+  /* profile swap: spin the old body out, bring the next one in. GLB bodies load while the old one
+     spins out; the in-tween waits for whichever is later, and a newer pick cancels an older one. */
   let swapTl = null;
   const setProfile = (key) => {
     if (key === active || !PROFILES[key]) return;
     active = key;
-    const doSwap = () => {
-      plank.geometry.dispose();
-      plank.geometry = buildGeo(key);
-    };
-    const s = PROFILES[key].scale;
+    const my = ++token;
+    const next = buildBody(key);
     if (reduce) {
-      doSwap();
-      plank.scale.setScalar(s);
-      renderer.render(scene, camera);
+      next.then((b) => {
+        if (my !== token) return;
+        place(b);
+        renderer.render(scene, camera);
+      });
       return;
     }
     if (swapTl) swapTl.kill();
-    swapTl = gsap.timeline()
-      .to(plank.scale, { x: 0.02, y: 0.02, z: 0.02, duration: 0.3, ease: 'power2.in' })
-      .to(plank.rotation, { y: '+=1.3', duration: 0.3, ease: 'power2.in' }, 0)
-      .add(() => {
-        doSwap();
-        plank.rotation.y = -1.1;
-      })
-      .to(plank.scale, { x: s, y: s, z: s, duration: 0.6, ease: 'power3.out' })
-      .to(plank.rotation, { y: 0, duration: 0.6, ease: 'power3.out' }, '<');
+    const out = gsap.timeline()
+      .to(holder.scale, { x: 0.02, y: 0.02, z: 0.02, duration: 0.3, ease: 'power2.in' })
+      .to(holder.rotation, { y: '+=1.3', duration: 0.3, ease: 'power2.in' }, 0);
+    swapTl = out;
+    Promise.all([next, new Promise((r) => out.eventCallback('onComplete', r))]).then(([b]) => {
+      if (my !== token) return;
+      place(b);
+      holder.rotation.y = -1.1;
+      swapTl = gsap.timeline()
+        .to(holder.scale, { x: 1, y: 1, z: 1, duration: 0.6, ease: 'power3.out' })
+        .to(holder.rotation, { y: 0, duration: 0.6, ease: 'power3.out' }, '<');
+    });
   };
 
   /* drag to turn, with inertia */
@@ -226,6 +310,8 @@ export function initPlank(canvas, { reduce, profile = 'vulcalap' } = {}) {
      turntable happens to be. Only ever invoked manually. */
   window.__plank = {
     setProfile,
+    body: () => body,
+    active: () => active,
     still(ry = 0.3, rx = 0.26) {
       targetY = ry;
       targetX = rx;

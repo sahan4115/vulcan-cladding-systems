@@ -5,11 +5,65 @@ for the original project context, **but note it is stale in places** (it still d
 constellation contact, product-name marquee, factory band, "400 Series" and wedge clip-paths —
 all replaced this session; trust this file and the code over it).
 
-Last session: 2026-11-02. Live URL: https://sahan4115.github.io/vulcan-cladding-systems/
+Last session: 2026-11-09. Live URL: https://sahan4115.github.io/vulcan-cladding-systems/
 
 ---
 
-## 2026-11-02 (latest) — AI IMAGES REPLACED WITH THE CLIENT'S PROJECT PHOTOS
+## 2026-11-09 (latest) — VULCAFRAME TAB NOW SHOWS THE CLIENT'S OWN 3D MODELS
+
+Source: Liviu Sofrone's 4 Nov emails (cc Ray, Alfie, Brentleigh): a zip of ten STEP files = **all five VulcaFrame
+configurations, each with and without a backing sheet**. Second email: the sheet is **2 mm, not the 5 mm in the file
+names**. Liviu asks that **Ray sees two renders of one configuration, with and without the sheet, and confirms which
+goes on the site BEFORE it is built in**. That decision is still open, so the stage carries all ten and a toggle.
+
+### What changed
+- Homepage "One piece of aluminium" stage, VulcaFrame tab (`src/plank.js`, `src/main.js`, `index.html`, `styles.css`):
+  the procedural framed screen (`s400`) is now only the offline fallback. Keys `vf-<config>-<open|sheet>`; configs
+  `square-vertical`, `square-horizontal`, `flat-vertical`, `flat-horizontal`, `batten`. A second `.plank-variants`
+  group (`data-for="vulcaframe"`) holds five descriptive buttons (no profile codes on the homepage) and a
+  `.plank-toggle` for the backing sheet. The option groups now stack in one grid cell (`.plank-options`) so the stage
+  never jumps. Default on the tab: square bar · vertical, open.
+- GLBs in `public/assets/models/vulcaframe/` (170–400 KB each, 2.9 MB for all ten), **loaded on demand**: nothing
+  downloads until the tab is chosen, GLTFLoader is its own chunk. `plank.js` keeps one body in a `holder` group;
+  the swap tween shrinks the holder, waits for the GLB, grows it back, and a newer pick cancels an older load.
+  Frame bodies use a flat-shaded clone of the stage material (the files carry no normals), the sheet a darker clone.
+  Camera sits closer for frame bodies on portrait stages (52 vs 72) because the panel is tall, not long.
+
+### What the models are (measured from the geometry; the client's names, not a spec)
+600 × 2700 mm panel. Frame: VUL802 42 × 42 rail with the VUL804 39 × 40 insert sleeved inside. Infill: VUL860
+42 mm square bars (7 vertical / 20 horizontal), VUL850 100 × 21.5 flat bars (4 vertical / 14 horizontal), or
+VUL825 + VUL801 two-part 42 mm bars (7 vertical, on two 25 × 50 rails behind, no top/bottom rail). Sheet as
+modelled: 5 mm, 610 wide (overhangs the 600 frame by 5 each side). The live site only says 600 / 900 / 1200 mm
+widths; every file is the 600.
+
+### Conversion pipeline (no CAD licence; scripts were in the session scratchpad, recipe here)
+`pip install cadquery trimesh` → `cq.importers.importStep` → per-solid `tessellate(tol, 0.6)` with tol relative
+to each part's size → `trimesh` GLB. Drop solids whose longest side < 30 mm (36 screws/washers/nuts and, in the
+batten file, 13 clips that held 1M of its 1.5M triangles; all hidden behind the bars). **Five of the ten files are
+exported at the wrong scale (three at 10×, the batten-open file at 25.4×)**: normalise so the panel is 2700 tall.
+Orientation baked: longest axis → Y, thinnest → Z, sheet centroid on −Z (the open sibling takes the sheet file's
+decision). Export with merged vertices and no normals; let the material flat-shade.
+
+### Open with the client
+- **Ray's choice**: which configuration and sheet/no sheet. Comparison sheets for him are in
+  `C:\IPSulcan-3d-review\compare-*.jpg` (neutral grey, not a Vulcan finish). Once he picks, make it the default
+  and decide whether the other options stay on the site.
+- Sheet 5 mm vs 2 mm: correct the CAD or thin it ourselves (at stage scale it is invisible either way).
+- Only 600 mm panels supplied; the labels "Square bar / Flat bar / Batten screen" are ours and need Vulcan's names.
+- Finish: the stage shows raw aluminium. If Ray wants a wood or RAL finish on the frame, wire the existing swatch
+  logic to `frameMat`.
+
+### Verified
+Dev server (`vulcan-cladding` entry in `C:\IPS\.claude\launch.json`, port 5265, runs this checkout's Vite with the
+root as an argument because launch.json cannot `cd` outside the project). Desktop 1440 and 375 px: all ten GLBs load
+(200), swap, toggle, no console errors, no horizontal overflow. `npm run build` passes; the GLB URLs carry the Pages
+base path. ⚠️ The in-app browser pane is hidden while Claude drives it, so IntersectionObserver and GSAP tweens
+stall there: the lazy `initPlank` never fires and swaps freeze mid-tween. Init it by hand
+(`import('/src/plank.js')`) or verify in a visible window; it is not a site bug.
+
+---
+
+## 2026-11-02 — AI IMAGES REPLACED WITH THE CLIENT'S PROJECT PHOTOS
 
 Source: https://drive.google.com/drive/u/0/folders/1DeVslVcu3MDktK_zN0lunqMqcWnUOOzJ ("Project photos", 29 project
 folders; folder names carry project, system and finish). The Drive connector cannot list it; the built-in browser can.

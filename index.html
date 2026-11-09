@@ -380,14 +380,28 @@
         <button type="button" class="plank-tab" data-profile="vulcabar" aria-pressed="false">
           <strong>VulcaBar<sup>&reg;</sup></strong><span>Bar system</span>
         </button>
-        <button type="button" class="plank-tab" data-profile="s400" aria-pressed="false">
+        <button type="button" class="plank-tab" data-profile="vulcaframe" aria-pressed="false">
           <strong>VulcaFrame<sup>&trade;</sup></strong><span>Modular system</span>
         </button>
       </div>
-      <div class="plank-variants" data-reveal aria-label="VulcaLap profiles">
-        <button type="button" class="plank-variant is-active" data-profile="vulcalap" aria-pressed="true">T&amp;G150</button>
-        <button type="button" class="plank-variant" data-profile="vulcalap-tg125" aria-pressed="false">TG125</button>
-        <button type="button" class="plank-variant" data-profile="vulcalap-400" aria-pressed="false">400 Series</button>
+      <div class="plank-options" data-reveal>
+        <div class="plank-variants" data-for="vulcalap" aria-label="VulcaLap profiles">
+          <button type="button" class="plank-variant is-active" data-profile="vulcalap" aria-pressed="true">T&amp;G150</button>
+          <button type="button" class="plank-variant" data-profile="vulcalap-tg125" aria-pressed="false">TG125</button>
+          <button type="button" class="plank-variant" data-profile="vulcalap-400" aria-pressed="false">400 Series</button>
+        </div>
+        <!-- VulcaFrame: the client's five configurations (STEP, Nov 2026), open or with the backing sheet.
+             Labels are descriptive on purpose: no profile codes on the homepage. -->
+        <div class="plank-variants is-off" data-for="vulcaframe" aria-label="VulcaFrame configurations">
+          <div class="plank-variant-row">
+            <button type="button" class="plank-variant is-active" data-profile="square-vertical" aria-pressed="true">Square bar &middot; vertical</button>
+            <button type="button" class="plank-variant" data-profile="square-horizontal" aria-pressed="false">Square bar &middot; horizontal</button>
+            <button type="button" class="plank-variant" data-profile="flat-vertical" aria-pressed="false">Flat bar &middot; vertical</button>
+            <button type="button" class="plank-variant" data-profile="flat-horizontal" aria-pressed="false">Flat bar &middot; horizontal</button>
+            <button type="button" class="plank-variant" data-profile="batten" aria-pressed="false">Batten screen</button>
+          </div>
+          <button type="button" class="plank-toggle" aria-pressed="false"><i aria-hidden="true"></i>Backing sheet</button>
+        </div>
       </div>
       <div class="plank-stage" data-reveal>
         <canvas id="plank-canvas" aria-label="Interactive 3D model of the selected Vulcan system"></canvas>
