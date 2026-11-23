@@ -5,7 +5,9 @@ import {
   Shape,
   Path,
   ExtrudeGeometry,
+  ShapeGeometry,
   BoxGeometry,
+  BufferAttribute,
   Mesh,
   MeshPhysicalMaterial,
   Group,
@@ -166,18 +168,155 @@ const loadGlb = (url) => {
   return glbCache.get(url);
 };
 
+/*
+ * Why the walls need help to read: these are thin-walled extrusions (1.8 mm skin on the planks,
+ * 2-3 mm walls on the bars) lit only by an environment map, which has no shadowing. Left alone, the
+ * inside of a hollow bar is as bright as its face and the cut end is the same grey as both, so the
+ * piece reads as a folded sheet with no thickness. Nothing here changes a dimension. Instead:
+ *   - each point of the section gets an occlusion value (how much open air it can see in the plane
+ *     of the section), baked into vertex colours along the length, so cavities, channels and the
+ *     hooks behind the face fall into shade, lifting again near the open ends where light gets in;
+ *   - the two cut ends get their own bright sawn-metal material (see `capMat`), so the wall shows
+ *     as a clean pale band between the finished face and the dark inside.
+ */
+const AO_RAYS = 14;
+const AO_FLOOR = 0.035; /* how dark a fully enclosed wall gets, mid-length */
+const END_REACH = 3.2; /* stage units (x10 mm) over which light from an open end dies away */
+
+/* contours of a Shape as closed point lists: [outer, ...holes] */
+const contoursOf = (shape) => {
+  const { shape: outer, holes } = shape.extractPoints(1);
+  return [outer, ...holes].map((c) => {
+    const pts = c.map((v) => [v.x, v.y]);
+    const [a, b] = [pts[0], pts[pts.length - 1]];
+    if (pts.length > 1 && Math.hypot(a[0] - b[0], a[1] - b[1]) < 1e-9) pts.pop();
+    return pts;
+  });
+};
+
+const insidePoly = (pts, x, y) => {
+  let inside = false;
+  for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+    const [xi, yi] = pts[i];
+    const [xj, yj] = pts[j];
+    if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+};
+
+/* geometry positions are float32, so both sides of the lookup round the same way */
+const lightKey = (x, y) => `${Math.fround(x)},${Math.fround(y)}`;
+
+/* per-point open-air visibility (0 = buried, 1 = fully open), keyed by the point's coordinates */
+const sectionLight = (contours) => {
+  const segs = [];
+  contours.forEach((pts) => pts.forEach((p, i) => segs.push([p, pts[(i + 1) % pts.length]])));
+  const inMetal = (x, y) => insidePoly(contours[0], x, y) && !contours.slice(1).some((h) => insidePoly(h, x, y));
+  const hits = (ox, oy, dx, dy) => {
+    for (let s = 0; s < segs.length; s++) {
+      const [[ax, ay], [bx, by]] = segs[s];
+      const ex = bx - ax;
+      const ey = by - ay;
+      const den = dx * ey - dy * ex;
+      if (Math.abs(den) < 1e-12) continue;
+      const t = ((ax - ox) * ey - (ay - oy) * ex) / den;
+      const u = ((ax - ox) * dy - (ay - oy) * dx) / den;
+      if (t > 1e-6 && u >= 0 && u <= 1) return true;
+    }
+    return false;
+  };
+  const light = new Map();
+  const EPS = 0.004;
+  contours.forEach((pts) => {
+    const n = pts.length;
+    pts.forEach((p, i) => {
+      const a = pts[(i - 1 + n) % n];
+      const b = pts[(i + 1) % n];
+      /* normal from the neighbours' chord, turned to face the air rather than the metal */
+      let nx = -(b[1] - a[1]);
+      let ny = b[0] - a[0];
+      const len = Math.hypot(nx, ny) || 1;
+      nx /= len;
+      ny /= len;
+      if (inMetal(p[0] + nx * EPS, p[1] + ny * EPS)) {
+        nx = -nx;
+        ny = -ny;
+      }
+      const ox = p[0] + nx * EPS;
+      const oy = p[1] + ny * EPS;
+      let open = 0;
+      let total = 0;
+      for (let k = 0; k < AO_RAYS; k++) {
+        const ang = ((k + 0.5) / AO_RAYS - 0.5) * Math.PI * 0.94;
+        const c = Math.cos(ang);
+        const s = Math.sin(ang);
+        total += c;
+        if (!hits(ox, oy, nx * c - ny * s, nx * s + ny * c)) open += c;
+      }
+      light.set(lightKey(p[0], p[1]), open / total);
+    });
+  });
+  return light;
+};
+
+/*
+ * ⚠️ three r175 builds NO end faces when bevels are off: ExtrudeGeometry only collects the lid
+ * outline inside its bevel loop, so with `bevelEnabled: false` both ends triangulate from an empty
+ * contour and the extrusion comes out as an open skin (the client saw exactly that: "no thickness").
+ * So the two cut ends are built here from the same section and merged in. If a later three puts its
+ * own lids back, the check below leaves them alone.
+ */
+const withEnds = (sides, shape, depth) => {
+  if (sides.groups.some((g) => g.materialIndex === 0 && g.count > 0)) return sides;
+  const front = new ShapeGeometry(shape, 1).toNonIndexed(); /* faces +z */
+  front.translate(0, 0, depth);
+  const back = new ShapeGeometry(shape, 1).toNonIndexed(); /* turned to face -z: swap two corners of each triangle */
+  for (const name of ['position', 'uv']) {
+    const { array, itemSize } = back.attributes[name];
+    for (let i = 0; i < array.length; i += itemSize * 3) {
+      for (let k = 0; k < itemSize; k++) {
+        const b = i + itemSize + k;
+        const c = i + itemSize * 2 + k;
+        [array[b], array[c]] = [array[c], array[b]];
+      }
+    }
+  }
+  const n = back.attributes.normal.array;
+  for (let i = 2; i < n.length; i += 3) n[i] = -1;
+  const ends = front.attributes.position.count + back.attributes.position.count;
+  const geo = mergeGeometries([front, back, sides], false);
+  geo.addGroup(0, ends, 0);
+  geo.addGroup(ends, sides.attributes.position.count, 1);
+  return geo;
+};
+
+/* extrude a section and bake the shading into vertex colours (group 0 = cut ends, 1 = walls) */
+const extrudeSection = (shape, depth) => {
+  const geo = withEnds(new ExtrudeGeometry(shape, { depth, bevelEnabled: false, steps: 12 }), shape, depth);
+  const light = sectionLight(contoursOf(shape));
+  const pos = geo.attributes.position;
+  const col = new Float32Array(pos.count * 3);
+  for (let i = 0; i < pos.count; i++) {
+    const open = light.get(lightKey(pos.getX(i), pos.getY(i))) ?? 1;
+    const z = pos.getZ(i);
+    const fromEnd = Math.min(z, depth - z);
+    /* shade deepens away from the ends; a point in open air stays at 1 all the way along */
+    const v = open + (1 - open) * 0.55 * Math.exp(-fromEnd / END_REACH);
+    /* squared: the eye reads this as light, and the bake is multiplied into a linear colour */
+    const shade = AO_FLOOR + (1 - AO_FLOOR) * v * v;
+    col[i * 3] = col[i * 3 + 1] = col[i * 3 + 2] = shade;
+  }
+  geo.setAttribute('color', new BufferAttribute(col, 3));
+  return geo;
+};
+
+const geoCache = new Map();
 const buildGeo = (key) => {
+  if (geoCache.has(key)) return geoCache.get(key);
   const p = PROFILES[key];
-  const geo = p.build
-    ? p.build()
-    : new ExtrudeGeometry(p.shape(), {
-        depth: p.depth,
-        bevelEnabled: p.bevel !== false,
-        bevelThickness: 0.05,
-        bevelSize: 0.05,
-        bevelSegments: 2,
-      });
+  const geo = p.build ? p.build() : extrudeSection(p.shape(), p.depth);
   geo.center();
+  geoCache.set(key, geo);
   return geo;
 };
 
@@ -205,6 +344,19 @@ export function initPlank(canvas, { reduce, profile = 'vulcalap', tilt = 0.52, f
     clearcoatRoughness: 0.5,
     envMapIntensity: 0.8,
   });
+
+  /* extruded sections: the walls carry the baked shading, the cut ends are bright sawn metal
+     (rougher and less mirror-like than the face, so they stay pale at every angle of the turn) */
+  const wallMat = mat.clone();
+  wallMat.vertexColors = true;
+  wallMat.clearcoat = 0; /* the clear coat reflects regardless of the bake and would light the cavities */
+  const capMat = new MeshPhysicalMaterial({
+    color: 0xf1f4f6,
+    metalness: 0.35,
+    roughness: 0.62,
+    envMapIntensity: 1.15,
+  });
+  const sectionMats = [capMat, wallMat];
 
   /* the GLBs ship without normals to stay small; flat shading derives them per face, which is
      exactly right for extrusions. The backing sheet reads as a separate, duller skin behind the bars. */
@@ -238,9 +390,9 @@ export function initPlank(canvas, { reduce, profile = 'vulcalap', tilt = 0.52, f
     if (p.parts) {
       const g = new Group();
       p.parts.forEach((part) => {
-        const geo = new ExtrudeGeometry(part.shape(), { depth: p.depth, bevelEnabled: false });
+        const geo = extrudeSection(part.shape(), p.depth);
         geo.center();
-        const m = new Mesh(geo, mat);
+        const m = new Mesh(geo, sectionMats);
         m.userData.explode = !!part.explode;
         m.userData.depth = p.depth;
         g.add(m);
@@ -248,7 +400,7 @@ export function initPlank(canvas, { reduce, profile = 'vulcalap', tilt = 0.52, f
       g.scale.setScalar(p.scale);
       return g;
     }
-    const m = new Mesh(buildGeo(key), mat);
+    const m = new Mesh(buildGeo(key), p.build ? mat : sectionMats);
     m.scale.setScalar(p.scale);
     return m;
   };
